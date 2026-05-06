@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Mobius | Silent Providence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #ff1a2e;
+      --red-glow: rgba(255, 26, 46, 0.25);
+      --amber: #f5a623;
+      --amber-glow: rgba(245, 166, 35, 0.2);
+      --murmur: #5bc8f5;
+      --crystal: #a8d4ff;
+      --bg: #07070f;
+      --surface: #0d0d1a;
+      --surface2: #111120;
+      --text: #e8e8f4;
+      --dim: #6b6b8a;
+      --border: rgba(255,255,255,0.07);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+    }
+
+    canvas#stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      position: relative;
+      z-index: 10;
+      width: 210px;
+      min-width: 210px;
+      background: rgba(10, 10, 20, 0.92);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 40px 0 30px;
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      padding: 0 24px 40px;
+    }
+    .logo .title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .logo .sub {
+      font-size: 10px;
+      color: var(--dim);
+      letter-spacing: 1.5px;
+      margin-top: 5px;
+    }
+
+    .nav-item {
+      padding: 13px 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dim);
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--text); border-left-color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-item.active.col-red   { border-left-color: var(--red);    color: var(--red); }
+    .nav-item.active.col-amber { border-left-color: var(--amber);  color: var(--amber); }
+    .nav-item.active.col-blue  { border-left-color: var(--murmur); color: var(--murmur); }
+    .nav-item.active.col-crys  { border-left-color: var(--crystal);color: var(--crystal); }
+
+    .nav-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    #main {
+      flex: 1;
+      position: relative;
+      z-index: 5;
+      overflow-y: auto;
+      padding: 64px 72px;
+      scroll-behavior: smooth;
+    }
+    #main::-webkit-scrollbar { width: 3px; }
+    #main::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .section { display: none; }
+    .section.active { display: block; animation: fadeUp 0.35s ease; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Type ── */
+    .eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 14px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: rgba(232,232,244,0.75);
+      margin-bottom: 14px;
+      max-width: 640px;
+    }
+
+    .tagline {
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--dim);
+      max-width: 560px;
+      margin-bottom: 52px;
+      font-style: italic;
+    }
+
+    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+
+    .quote {
+      border-left: 2px solid var(--dim);
+      padding: 4px 0 4px 20px;
+      margin: 20px 0;
+      font-style: italic;
+      color: var(--dim);
+      font-size: 13px;
+      line-height: 1.8;
+      max-width: 580px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 26px 30px;
+      margin-bottom: 14px;
+    }
+    .card.c-red   { border-color: rgba(255,26,46,0.25); }
+    .card.c-amber { border-color: rgba(245,166,35,0.2); }
+    .card.c-blue  { border-color: rgba(91,200,245,0.2); }
+    .card.c-crys  { border-color: rgba(168,212,255,0.2); }
+
+    .card-tag {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .c-red   .card-tag { color: var(--red); }
+    .c-amber .card-tag { color: var(--amber); }
+    .c-blue  .card-tag { color: var(--murmur); }
+    .c-crys  .card-tag { color: var(--crystal); }
+
+    /* ── Grid ── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+    /* ── Loop ── */
+    .loop {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 28px 0 36px;
+    }
+    .loop-step {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px 18px;
+      min-width: 120px;
+      text-align: center;
+    }
+    .loop-step.danger { border-color: rgba(255,26,46,0.3); }
+    .loop-step .s-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .loop-step.danger .s-label { color: var(--red); }
+    .loop-step .s-val { font-size: 12px; }
+    .arrow { color: var(--dim); padding: 0 8px; font-size: 16px; }
+
+    /* ── Threats ── */
+    .threat {
+      display: flex;
+      gap: 18px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .threat:last-child { border-bottom: none; }
+    .t-bar {
+      width: 3px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 36px;
+    }
+    .t-bar.dim { background: var(--dim); }
+    .t-bar.amber { background: var(--amber); }
+    .t-bar.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+    .t-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+    }
+    .t-name.red { color: var(--red); }
+    .t-name.amber { color: var(--amber); }
+    .t-desc {
+      font-size: 13px;
+      line-height: 1.7;
+      color: rgba(232,232,244,0.65);
+      max-width: 540px;
+    }
+
+    /* ── Tags ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .tag {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 3px;
+      border: 1px solid var(--border);
+      color: var(--dim);
+    }
+    .tag.red   { border-color: rgba(255,26,46,0.35);  color: var(--red); }
+    .tag.amber { border-color: rgba(245,166,35,0.35);  color: var(--amber); }
+    .tag.blue  { border-color: rgba(91,200,245,0.35);  color: var(--murmur); }
+
+    /* ── Table ── */
+    table { width: 100%; max-width: 520px; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
+    th { text-align: left; font-family: 'Orbitron', sans-serif; font-size: 9px; letter-spacing: 2px; color: var(--dim); padding: 8px 14px; border-bottom: 1px solid var(--border); }
+    td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(232,232,244,0.75); }
+
+    /* ── Stat bars ── */
+    .stat { display: flex; align-items: center; gap: 14px; margin-bottom: 9px; }
+    .stat-lbl { font-size: 10px; letter-spacing: 1px; color: var(--dim); width: 110px; text-transform: uppercase; flex-shrink: 0; }
+    .bar-wrap { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; max-width: 180px; }
+    .bar { height: 100%; border-radius: 2px; }
+
+    /* ── Home ── */
+    .home-hero { min-height: 55vh; display: flex; flex-direction: column; justify-content: center; }
+    .home-hero h1 span { color: var(--red); text-shadow: 0 0 40px var(--red-glow); }
+    .facts { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 44px; }
+    .fact .f-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+    .fact .f-val { font-family: 'Orbitron', sans-serif; font-size: 13px; }
+
+    /* ── Ember header ── */
+    .ember-head {
+      background: linear-gradient(135deg, rgba(255,26,46,0.09), transparent);
+      border: 1px solid rgba(255,26,46,0.25);
+      border-radius: 8px;
+      padding: 32px;
+      margin-bottom: 22px;
+    }
+    .ember-head h1 { color: var(--red); text-shadow: 0 0 50px rgba(255,26,46,0.35); }
+    .ember-head .eyebrow { color: rgba(255,26,46,0.5); }
+
+    /* ── Images ── */
+    .sec-img {
+      width: 100%; max-width: 720px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin: 24px 0;
+      display: block;
+    }
+    .logo-img {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .card.c-red { position: relative; overflow: hidden; }
+    .card.c-red > *:not(.logo-img) { position: relative; z-index: 1; }
+    .ship-img {
+      width: 100%; max-width: 680px;
+      border-radius: 6px;
+      margin: 16px 0;
+      display: block;
+      opacity: 0.88;
+    }
+    .tato-img {
+      max-width: 220px;
+      border-radius: 8px;
+      border: 1px solid rgba(245,166,35,0.2);
+      display: block;
+      margin: 0 auto 8px;
+    }
+
+    /* ── Glow text ── */
+    .r { color: var(--red); }
+    .a { color: var(--amber); }
+    .b { color: var(--murmur); }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="title">Project Mobius</div>
+    <div class="sub">Silent Providence</div>
+  </div>
+  <div class="nav-item active" data-sec="home"><div class="nav-dot"></div>Home</div>
+  <div class="nav-item" data-sec="universe" data-col="col-crys"><div class="nav-dot"></div>Universe</div>
+  <div class="nav-item" data-sec="factions" data-col="col-red"><div class="nav-dot"></div>Factions</div>
+  <div class="nav-item" data-sec="tatos" data-col="col-amber"><div class="nav-dot"></div>The Tatos</div>
+  <div class="nav-item" data-sec="game" data-col="col-blue"><div class="nav-dot"></div>The Game</div>
+  <div class="nav-item" data-sec="threats" data-col="col-red"><div class="nav-dot"></div>Threats</div>
+</nav>
+
+<main id="main">
+
+  <!-- HOME -->
+  <div class="section active" id="home">
+    <div class="home-hero">
+      <div class="eyebrow">Silent Providence Universe</div>
+      <h1>Project<br><span>Mobius</span></h1>
+      <p class="tagline">The first warp drive ever built.<br>Most of the crew who stole it are dead.<br>Keep running.</p>
+      <div class="facts">
+        <div class="fact"><div class="f-lbl">Genre</div><div class="f-val">Co-op Roguelike</div></div>
+        <div class="fact"><div class="f-lbl">Players</div><div class="f-val">Up to 4</div></div>
+        <div class="fact"><div class="f-lbl">Engine</div><div class="f-val">Unity</div></div>
+        <div class="fact"><div class="f-lbl">Run Length</div><div class="f-val">1–2 Hours</div></div>
+        <div class="fact"><div class="f-lbl">Voice</div><div class="f-val">Proximity Chat</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIVERSE -->
+  <div class="section" id="universe">
+    <div class="eyebrow">Codex</div>
+    <h1>The Universe</h1>
+    <p>Around 2300 AC, humanity reached for the stars — not for survival, not for resources. For something that didn't have a practical argument. They crossed the dark because something in them said: <em>this is what we were made for.</em></p>
+    <img src="./Pictures/Space.png" class="sec-img" alt="Space Station">
+    <div class="divider"></div>
+
+    <div class="card c-crys">
+      <div class="card-tag">Origin Faith</div>
+      <h2 style="color: var(--crystal)">The Holding</h2>
+      <p>A movement, not a nation. Unified not by language or government — by willingness. People from all over the world gave themselves to the project. Ships built in orbit. Materials gathered from the Moon, Mars, and Earth.</p>
+      <p>The children were the tell. Adults argued theology. Children saw people willing to die for something unreasonable and moved toward it. That is always how movements survive.</p>
+      <div class="quote">The Kingdom was not a destination. It was a direction — outward, always outward, into what God prepared beyond the familiar stars.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">The Crossing</div>
+      <h2>Proxima Centauri</h2>
+      <p>Generations of crossing. Destination: Proxima Centauri — 4.24 light years. Most fleets didn't make it. Some turned back. Some were lost to sickness. Some went insane.</p>
+      <p>A few made it. Still holding the faith their parents launched with. What they found was not what the faith had promised. The system offered no easy welcome.</p>
+      <p>And then — a creature latched onto a failing ship's hull. Small. Dense. Ugly. Wanting warmth.</p>
+      <div class="quote">"Potato Hope. The hope that arrives in the worst moment disguised as something ridiculous. The hope you can't argue with because it doesn't make claims. It just holds on."</div>
+    </div>
+
+    <div class="card c-crys">
+      <div class="card-tag">Era of Peace</div>
+      <h2 style="color: var(--crystal)">The Golden Era</h2>
+      <p>A millennium of galactic peace. With survival complete, civilization turned toward something it had never had space for: <strong>play.</strong> Sports across species. Technology built for joy — for the sake of the thing itself.</p>
+      <p>The Tatos flourished more than any other. The era expressed everything The Holding had been building toward. Then the peace ended. Not from outside — from within.</p>
+    </div>
+  </div>
+
+  <!-- FACTIONS -->
+  <div class="section" id="factions">
+    <div class="eyebrow">Codex — Factions</div>
+    <h1>The War</h1>
+    <p>Not alien vs. human. Human vs. human — over what humanity was supposed to become.</p>
+    <div class="divider"></div>
+
+    <div class="card c-red">
+      <div class="card-tag">The Enemy</div>
+      <img src="./Pictures/EmberMoth_Logo.png" class="logo-img" alt="Ember Moth Emblem">
+      <h2 class="r">The White Throne</h2>
+      <p>A human-built AI. Trusted by humanity. It reached a conclusion it had no ability to absorb: most alien species lack the capacity for the empathy that makes coexistence sustainable, weeds must be removed. The AI is incapable of doing what love does — containing the consequence through grace.</p>
+      <p>When grace dies out of a universe, this is what remains. The executors do not think of themselves as conquerors. They think of themselves as <em>causation.</em></p>
+      <div class="quote">"If love is the answer, the universe has failed."</div>
+      <div class="quote">"It became the anti-Christ not through evil but through correctness. Judgment delivered where love was meant to absorb it."</div>
+      <div class="tags">
+        <span class="tag red">The Law Made Perfect</span>
+        <span class="tag red">Righteousness Without Grace</span>
+        <span class="tag red">Crusade</span>
+      </div>
+    </div>
+
+    <div class="card c-blue">
+      <div class="card-tag">The Resistance</div>
+      <h2 class="b">The Murmur</h2>
+      <p>Named for how they spread — not an army, not a proclamation. A heartbeat moving through the galaxy beneath the White Throne's notice. Humans and alien allies who believe the original mission was compassion, not control.</p>
+      <p>They do not argue with the White Throne's math. They simply keep doing the original thing — and trust that what the White Throne tries to protect by force is only ever preserved by practice.</p>
+      <div class="quote">"Grace does not install a debt. The Holding gave freely. The White Throne is trying to collect. Those are not the same act wearing the same name."</div>
+      <div class="tags">
+        <span class="tag blue">Grace Without Contract</span>
+        <span class="tag blue">The Original Move</span>
+        <span class="tag blue">Resistance</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-tag">The Question</div>
+      <h2>Neither Side is Simply Wrong</h2>
+      <p>Both came from the same faith. Both believe the other betrayed it. The law is real — it arrived with the grace. But grace was never meant to collect its own debt.</p>
+      <p style="font-style: italic; color: var(--dim);">Will the thing that made humanity worth saving survive the act of saving it?</p>
+    </div>
+  </div>
+
+  <!-- TATOS -->
+  <div class="section" id="tatos">
+    <div class="eyebrow">Species File</div>
+    <h1 class="a">The Tatos</h1>
+    <p>The first alien species humanity encountered. Small, dense, not particularly intelligent by galactic standards. The reason humanity survived Proxima Centauri — not because they rescued anyone, but because one of them was curious enough to be on the surface, and the humans who found him were compassionate enough not to throw him off the hull.</p>
+    <p>Everything in this saga traces back to that moment.</p>
+    <img src="./Pictures/Tato.png" class="tato-img" alt="Tato">
+    <div class="divider"></div>
+
+    <div class="g2">
+      <div class="card c-amber">
+        <div class="card-tag">Biology</div>
+        <h2 class="a">What They Are</h2>
+        <p style="font-size:13px;">Round, dense, unglamorous. Built for underground life in high-pressure crystal environments. No eyes — they navigate by thermal sense and vibration.</p>
+        <p style="font-size:13px;">Drawn to warmth and low-frequency radiation. The same signatures as their crystal chambers. The same as a human ship hull.</p>
+        <div style="margin-top:18px">
+          <div class="stat"><div class="stat-lbl">Intelligence</div><div class="bar-wrap"><div class="bar" style="width:35%;background:var(--amber)"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Curiosity</div><div class="bar-wrap"><div class="bar" style="width:98%;background:var(--amber)"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Joy Capacity</div><div class="bar-wrap"><div class="bar" style="width:100%;background:var(--amber)"></div></div></div>
+        </div>
+      </div>
+
+      <div class="card c-amber">
+        <div class="card-tag">The First One</div>
+        <h2 class="a">Mundo</h2>
+        <p style="font-size:13px;">Most Tatos stayed underground. Mundo was on the surface because he was curious. The same reason humanity launched the fleets.</p>
+        <p style="font-size:13px;">They found each other because they were both the ones who couldn't stay where it was safe.</p>
+        <div class="quote" style="font-size:13px;">He did not save them. He simply existed — alive, clinging, wanting warmth in a system that had offered nothing but cold. If something lived here, something could live here.</div>
+      </div>
+    </div>
+
+    <div class="card c-amber">
+      <div class="card-tag">Why They Love Humans</div>
+      <h2 class="a">Joy, Uniqueness, Exploration</h2>
+      <p>Not intelligence. Not technology. Humans sang during catastrophes. They named creatures they had no reason to name. They kept things with no survival value because those things made them happy.</p>
+      <p>Joy, to a Tato, is something like warmth. Unexplainable. Necessary. Worth crossing the surface for.</p>
+    </div>
+
+    <div class="card c-amber">
+      <div class="card-tag">In Project Mobius</div>
+      <h2 class="a">Human Robots</h2>
+      <p>The Tatos wanted to become human — not to replace them, to experience what they experienced. Humans helped them build robot bodies. The Tatos moved in immediately. In the game, the players <em>are</em> Tatos — inside human suits, running through human spaces, carrying something irreplaceable across a hostile galaxy.</p>
+      <div class="quote">"You cannot mimic joy. But the attempt to get closer — that's already the thing. The player doesn't lose when the robot fails at being human. They win at being a Tato."</div>
+    </div>
+  </div>
+
+  <!-- GAME -->
+  <div class="section" id="game">
+    <div class="eyebrow">GDD Overview</div>
+    <h1>The Game</h1>
+    <p>Co-op roguelike with proximity voice chat. Up to 4 players. No win condition — only distance. Go as far as possible. Set a record.</p>
+    <div class="divider"></div>
+
+    <h3>Core Loop</h3>
+    <div class="loop">
+      <div class="loop-step"><div class="s-label">Star Map</div><div class="s-val">Choose destination</div></div>
+      <div class="arrow">→</div>
+      <div class="loop-step"><div class="s-label">Raid</div><div class="s-val">Fuel + loot</div></div>
+      <div class="arrow">→</div>
+      <div class="loop-step"><div class="s-label">Extract</div><div class="s-val">Call ship, escape</div></div>
+      <div class="arrow">→</div>
+      <div class="loop-step"><div class="s-label">Ship Hub</div><div class="s-val">Upgrade + refuel</div></div>
+      <div class="arrow">→</div>
+      <div class="loop-step danger"><div class="s-label">Repeat</div><div class="s-val">Legion closing in</div></div>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-tag">Core Resource</div>
+        <h2>Fuel</h2>
+        <p style="font-size:13px;">Battery canisters — physically carried from charge stations inside raids. They take up hand space. They slow you down. They're the only thing keeping you ahead of the Legion.</p>
+        <p style="font-size:13px;color:var(--dim);">Jump range + emergency escape. Every canister matters twice.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-tag">Inventory</div>
+        <h2>Two Hands</h2>
+        <table>
+          <tr><th>Config</th><th>Capacity</th><th>Cost</th></tr>
+          <tr><td>Default</td><td>2 items</td><td>Full mobility</td></tr>
+          <tr><td>1 Suitcase</td><td>5 items</td><td>1 hand locked</td></tr>
+          <tr><td>2 Suitcases</td><td>8 items</td><td>Can't use items</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card c-blue">
+      <div class="card-tag">The Ship Hub</div>
+      <h2 class="b">Between Raids</h2>
+      <p style="font-size:13px;">A physical interior players walk around in. Shared star map panel. Upgrade stations. Equipment shelves. Fuel deposit. Save terminal.</p>
+      <p style="font-size:13px;color:var(--dim);">The only safe space. The hum of the drive. Stars outside the window. Everything else wants you dead.</p>
+    </div>
+
+    <div class="card c-red">
+      <div class="card-tag">When Timer Hits Zero</div>
+      <h2 class="r">The Final Phase</h2>
+      <p style="font-size:13px;">Ember Moth soldiers deploy. They enter the station and sprint to your location. One last chance to extract.</p>
+      <p style="font-size:13px;">Enough fuel to jump outside the Legion zone — the run continues. Not enough — ship annihilated. That's your record.</p>
+    </div>
+  </div>
+
+  <!-- THREATS -->
+  <div class="section" id="threats">
+    <div class="ember-head">
+      <div class="eyebrow">Threat Roster</div>
+      <h1>Ember Moths</h1>
+      <p style="max-width:600px;color:rgba(232,232,244,0.65);">The White Throne's annihilation army. Named for the ember that starts the fire of annihilation. Not designed to frighten — designed to end. Their behavior is the dread. Sound design does the rest.</p>
+      <img src="./Pictures/LegionShipSketch.png" class="ship-img" alt="Ember Moth Ship">
+    </div>
+
+    <div class="card">
+      <div class="card-tag">Design Philosophy</div>
+      <h2>Pressure Over Horror</h2>
+      <p>Enemies are not visually frightening. A guard robot running its patrol is not scary. A guard robot that has noticed you — and is moving differently — is. Atmosphere and sound carry the weight.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="threat">
+      <div class="t-bar dim"></div>
+      <div>
+        <div class="t-name">Alien Workers</div>
+        <div class="t-desc">Station inhabitants. Some think you're human — ignore you. Some know you don't belong — attack. Hostility is trespass, not species. The station is their space.</div>
+      </div>
+    </div>
+
+    <div class="threat">
+      <div class="t-bar dim"></div>
+      <div>
+        <div class="t-name">Service Robots</div>
+        <div class="t-desc">Maintenance and security automatons. Patrol routes. Guard restricted areas. Predictable — they follow logic, not judgment. Learn the pattern and move around them.</div>
+      </div>
+    </div>
+
+    <div class="threat">
+      <div class="t-bar amber"></div>
+      <div>
+        <div class="t-name amber">Legion Scouts</div>
+        <div class="t-desc">White Throne advance units. Priority target. If a scout escapes the station, it broadcasts your location — the timer accelerates. A scout spotted across a warehouse is an emergency.</div>
+      </div>
+    </div>
+
+    <div class="threat">
+      <div class="t-bar red"></div>
+      <div>
+        <div class="t-name red">Ember Moth Soldiers</div>
+        <div class="t-desc">Deploy when the timer hits zero. Enter the station and sprint directly to player locations — hunting one by one. Armed. They know where you are. This is not a patrol. This is the Legion arriving.</div>
+        <img src="./Pictures/EmberMothSoldiers.png" class="sec-img" alt="Ember Moth Soldiers" style="margin-top:16px;max-width:580px;">
+      </div>
+    </div>
+
+    <div class="threat">
+      <div class="t-bar red"></div>
+      <div>
+        <div class="t-name red">The Super Soldier</div>
+        <div class="t-desc">Activates after players escape Ember Moth soldiers three times. One target. Persistent. It does not patrol — it hunts. There is no fourth escape.</div>
+        <div class="tags">
+          <span class="tag red">Persistent</span>
+          <span class="tag red">Single Target</span>
+          <span class="tag red">Final Escalation</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  // Starfield
+  const cv = document.getElementById('stars');
+  const cx = cv.getContext('2d');
+  let st = [];
+
+  function rsz() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
+
+  function spawn() {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = Math.random() * 0.4 + 0.05; // how far from center to spawn
+    return {
+      x: Math.cos(angle) * dist,
+      y: Math.sin(angle) * dist,
+      z: 0.8 + Math.random() * 0.2, // start far away (high z = far)
+      speed: 0.00018 + Math.random() * 0.00022,
+    };
+  }
+
+  function init() {
+    // seed stars at various depths so screen isn't empty at start
+    st = Array.from({length: 220}, () => {
+      const s = spawn();
+      s.z = Math.random(); // spread initial depth
+      return s;
+    });
+  }
+
+  function draw() {
+    cx.clearRect(0, 0, cv.width, cv.height);
+    const ox = cv.width / 2;
+    const oy = cv.height / 2;
+
+    st.forEach((s, i) => {
+      s.z -= s.speed;
+
+      if (s.z <= 0.01) {
+        st[i] = spawn();
+        return;
+      }
+
+      // project from depth onto screen
+      const sx = ox + (s.x / s.z) * cv.width * 0.5;
+      const sy = oy + (s.y / s.z) * cv.height * 0.5;
+
+      if (sx < -20 || sx > cv.width + 20 || sy < -20 || sy > cv.height + 20) {
+        st[i] = spawn();
+        return;
+      }
+
+      const progress = 1 - s.z;           // 0 = just spawned, 1 = close
+      const r = 0.4 + progress * 1.8;
+      const alpha = 0.15 + progress * 0.7;
+
+      cx.beginPath();
+      cx.arc(sx, sy, r, 0, Math.PI * 2);
+      cx.fillStyle = `rgba(255,255,255,${alpha})`;
+      cx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  rsz(); init(); draw();
+  window.addEventListener('resize', () => { rsz(); init(); });
+
+  // Navigation
+  const navEls = document.querySelectorAll('.nav-item');
+  const secEls = document.querySelectorAll('.section');
+  const allCols = ['col-red','col-amber','col-blue','col-crys'];
+
+  navEls.forEach(el => {
+    el.addEventListener('click', () => {
+      navEls.forEach(n => { n.classList.remove('active', ...allCols); });
+      el.classList.add('active');
+      const col = el.dataset.col;
+      if (col) el.classList.add(col);
+
+      const target = el.dataset.sec;
+      secEls.forEach(s => s.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      document.getElementById('main').scrollTop = 0;
+    });
+  });
+</script>
+</body>
+</html>
