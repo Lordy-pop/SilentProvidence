@@ -3058,6 +3058,8 @@
     });
   }
 
+  const MAX_STREAK_PX = 60;
+
   function draw() {
     cx.clearRect(0, 0, cv.width, cv.height);
     const ox = cv.width / 2;
@@ -3093,8 +3095,20 @@
       // and brightness exactly with the streak drawn while warping, so there's
       // no visual "pop" when warp speed ramps up or down.
       const prev_z = s.z + s.speed * warpFactor;
-      const prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
-      const prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
+      let prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
+      let prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
+
+      // Clamp the visual streak length so high warp speeds don't cover the
+      // screen in long bright trails — this keeps overall brightness stable
+      // regardless of how fast warpFactor ramps up.
+      const dx = prev_sx - sx;
+      const dy = prev_sy - sy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > MAX_STREAK_PX) {
+        const scale = MAX_STREAK_PX / dist;
+        prev_sx = sx + dx * scale;
+        prev_sy = sy + dy * scale;
+      }
 
       cx.beginPath();
       cx.moveTo(prev_sx, prev_sy);
@@ -3156,10 +3170,29 @@
   const appContainer = document.getElementById('app-container');
   appContainer.addEventListener('pointerdown', (event) => {
     if (event.target.closest(WARP_HOLD_EXCLUDE_SELECTOR)) return;
+
+    // Touch screens fire `pointercancel` almost immediately once the browser
+    // detects finger movement (treating it as a scroll), which would kill the
+    // hold after a split second. So on touch, tap once to start accelerating
+    // and tap again to stop, instead of requiring a sustained press.
+    if (event.pointerType === 'touch') {
+      if (backgroundHeld) {
+        endBackgroundHold();
+      } else {
+        startBackgroundHold();
+      }
+      return;
+    }
+
     startBackgroundHold();
   });
-  window.addEventListener('pointerup', endBackgroundHold);
-  window.addEventListener('pointercancel', endBackgroundHold);
+
+  function endBackgroundHoldForPointer(event) {
+    if (event.pointerType === 'touch') return;
+    endBackgroundHold();
+  }
+  window.addEventListener('pointerup', endBackgroundHoldForPointer);
+  window.addEventListener('pointercancel', endBackgroundHoldForPointer);
 
   // ── Navigation ──
   const navEls = document.querySelectorAll('.nav-item');
