@@ -1625,7 +1625,8 @@
       background-attachment: fixed;
       display: flex;
       clip-path: url(#crt-curve);
-      filter: url(#chromatic-aberration) url(#crt-warp-filter);
+      /* Filter applied via JS one frame after load (see updateFilters) — applying it
+         synchronously at first paint can break touch hit-testing on iOS Safari. */
       z-index: 10;
       box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95);
     }
@@ -3633,16 +3634,23 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     function startBoot(event) {
       if (isBooting) return;
       isBooting = true;
-      
+
       // Clean up event listeners so they don't fire again
       window.removeEventListener('click', startBoot);
       window.removeEventListener('keydown', startBoot);
-      
+      window.removeEventListener('touchend', startBoot);
+      window.removeEventListener('pointerdown', startBoot);
+
       powerOnTerminal();
     }
-    
+
     window.addEventListener('click', startBoot);
     window.addEventListener('keydown', startBoot);
+    // touchend/pointerdown fallbacks: some iOS Safari versions don't reliably
+    // synthesize a 'click' from a tap on a plain <div>, leaving the boot
+    // screen stuck.
+    window.addEventListener('touchend', startBoot);
+    window.addEventListener('pointerdown', startBoot);
   }
 
   function powerOnTerminal() {
@@ -3811,7 +3819,12 @@ To continue collecting, the White Throne would have to condemn that innocence. T
 
   function updateFilters() {
     const app = document.getElementById('app-container');
-    if (app) {
+    if (!app) return;
+    // Defer to the next frame: applying/changing `filter` on this container in the
+    // same task as initial layout can break touch hit-testing for its descendants
+    // on iOS Safari (the boot screen becomes untappable). A frame's delay is
+    // visually imperceptible but lets layout/hit-testing settle first.
+    requestAnimationFrame(() => {
       app.style.filter = 'none';
       app.offsetHeight; // force reflow
       if (aberrationActive) {
@@ -3819,7 +3832,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
       } else {
         app.style.filter = 'url(#crt-warp-filter)';
       }
-    }
+    });
   }
 
   function updateAberrationButtonText() {
