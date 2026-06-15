@@ -1911,7 +1911,7 @@
 
       /* Main content layout adjustments */
       #main {
-        padding: 24px 16px calc(48px + env(safe-area-inset-bottom)) 16px !important;
+        padding: 24px 16px calc(96px + env(safe-area-inset-bottom)) 16px !important;
         margin-left: 2.5vw !important;
         margin-right: 2.5vw !important;
         margin-top: calc(3.8vh + 60px) !important;
@@ -3111,6 +3111,56 @@
 
   rsz(); init(); draw();
   window.addEventListener('resize', () => { rsz(); init(); });
+
+  // ── Press-and-Hold Background Warp Accelerator ──
+  // Holding down on empty background slowly spools the starfield up to warp
+  // speed for as long as the press is held, then spools back down on release.
+  let backgroundHeld = false;
+  let holdWarpRAF = null;
+
+  function holdWarpStep() {
+    if (backgroundHeld) {
+      warpFactor = Math.min(warpFactor + 0.035, 14);
+    } else {
+      warpFactor = Math.max(warpFactor - 0.06, 1);
+    }
+    if (backgroundHeld || warpFactor > 1) {
+      holdWarpRAF = requestAnimationFrame(holdWarpStep);
+    } else {
+      warpFactor = 1;
+      holdWarpRAF = null;
+    }
+  }
+
+  function startBackgroundHold() {
+    if (backgroundHeld) return;
+    backgroundHeld = true;
+    if (!holdWarpRAF) holdWarpRAF = requestAnimationFrame(holdWarpStep);
+  }
+
+  function endBackgroundHold() {
+    if (!backgroundHeld) return;
+    backgroundHeld = false;
+    if (!holdWarpRAF) holdWarpRAF = requestAnimationFrame(holdWarpStep);
+  }
+
+  // Elements that have their own press/click behavior — holding on these
+  // should not also trigger the background warp accelerator.
+  const WARP_HOLD_EXCLUDE_SELECTOR = [
+    'button', 'a', 'input', 'select', 'label',
+    '.nav-item', '.crew-row', '.sim-toggle', '.seg-btn', '.vol-bar',
+    '.filter-btn', '.log-item', '.dropdown-item', '.monitor-btn',
+    '#mobile-menu-trigger', '#zoom-display', '.houses-search-input',
+    '.sim-input', '#sim-dropdown-list', '.tag', '#boot-screen'
+  ].join(', ');
+
+  const appContainer = document.getElementById('app-container');
+  appContainer.addEventListener('pointerdown', (event) => {
+    if (event.target.closest(WARP_HOLD_EXCLUDE_SELECTOR)) return;
+    startBackgroundHold();
+  });
+  window.addEventListener('pointerup', endBackgroundHold);
+  window.addEventListener('pointercancel', endBackgroundHold);
 
   // ── Navigation ──
   const navEls = document.querySelectorAll('.nav-item');
