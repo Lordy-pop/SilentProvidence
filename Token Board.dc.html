@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0B0F16;}
+</style>
+</helmet>
+
+<div style="width:900px; background:radial-gradient(120% 70% at 50% -8%, #141A26 0%, #0B0F16 58%); color:#EEF3F8; font-family:'JetBrains Mono', monospace; padding:40px 40px 60px;">
+
+  <!-- ===== HEADER ===== -->
+  <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:24px;">
+    <div>
+      <div style="display:flex; align-items:center; gap:11px; margin-bottom:14px;">
+        <div style="width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:12px solid #ED1F3D;"></div>
+        <span style="font-family:'Orbitron'; font-size:11px; letter-spacing:.42em; color:#93A6BB;">PROJECT&nbsp;MOBIUS</span>
+        <span style="font-size:9.5px; letter-spacing:.24em; color:#5A6A7E;">// SILENT PROVIDENCE</span>
+      </div>
+      <div style="font-family:'Orbitron'; font-size:40px; font-weight:600; letter-spacing:.05em; line-height:1; color:#EEF3F8;">TOKEN BOARD &nbsp;<span style="color:#ED1F3D;">/</span>&nbsp; SESSION A</div>
+      <div style="display:flex; gap:16px; margin-top:16px; font-size:10px; letter-spacing:.2em; color:#738399; flex-wrap:wrap;">
+        <span style="color:#ED1F3D;">MOB&#8209;196</span><span>GAMEPLAY / DATA COLOURS</span>
+        <span style="color:#303C4C;">|</span>
+        <span style="color:#ED1F3D;">MOB&#8209;197</span><span>NON&#8209;COLOUR TOKEN SCALES</span>
+      </div>
+    </div>
+    <div style="flex:none; max-width:392px; border:1px solid #25303E; background:linear-gradient(160deg,#161D29,#0e131c); padding:16px 18px;">
+      <div style="font-size:9px; letter-spacing:.28em; color:#5A6A7E; margin-bottom:11px;">SCOPE — EXTENDS THE LOCKED KIT</div>
+      <div style="font-size:9.5px; line-height:1.65; color:#8595a8;">Token layer only. New tokens extend <span style="color:#C3CEDB;">.mobius-root</span> and reuse the existing grammar: <span style="color:#84BAD9;">cool = us / safe</span>, <span style="color:#FF6E6E;">red = danger + brand</span>. Every status hue carries a non&#8209;colour cue. No new components this session.</div>
+    </div>
+  </div>
+
+  <!-- ===== 01 GAMEPLAY / DATA ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">01</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">GAMEPLAY &amp; DATA COLOURS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;196 · player faction locked to steel blue · distinct cool data hues, one warm gold, one warm threat.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
+    <sc-for list="{{ dataColors }}" as="t" hint-placeholder-count="8">
+      <div style="border:1px solid #1f2733; background:#0a0e15; padding:13px;">
+        <div style="{{ t.sw }}"><span style="{{ t.badge }}">{{ t.glyph }}</span></div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:11px;">
+          <span style="font-size:10px; letter-spacing:.1em; color:#C3CEDB;">{{ t.name }}</span>
+          <span style="font-size:9px; letter-spacing:.06em; color:#5A6A7E;">{{ t.hex }}</span>
+        </div>
+        <div style="font-size:9px; letter-spacing:.04em; color:#828FA3; line-height:1.5; margin-top:7px;">{{ t.use }}</div>
+        <div style="font-size:8.5px; letter-spacing:.14em; color:#5A6A7E; margin-top:6px;">CUE · {{ t.cue }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- ===== 02 STATE + THREAT ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">02</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">STATE &amp; THREAT</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">Added warning / info / locked. One danger&#8209;red for threat &amp; critical. Colour is never the only signal.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
+    <sc-for list="{{ stateColors }}" as="s" hint-placeholder-count="6">
+      <div style="border:1px solid #1f2733; background:#0a0e15; padding:14px 16px; display:flex; align-items:center; gap:14px;">
+        <div style="{{ s.chip }}"><span style="{{ s.cueStyle }}">{{ s.glyph }}</span></div>
+        <div style="flex:1;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between;">
+            <span style="font-size:10.5px; letter-spacing:.12em; color:#EEF3F8;">{{ s.name }}</span>
+            <span style="font-size:9px; letter-spacing:.06em; color:#5A6A7E;">{{ s.hex }}</span>
+          </div>
+          <div style="font-size:9px; letter-spacing:.04em; color:#828FA3; line-height:1.5; margin-top:5px;">{{ s.use }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- ===== 03 SURFACES + ELEVATION ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">03</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">SURFACES &amp; ELEVATION</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">No real shadow in UI Toolkit — depth = surface tint + glow / scrim recipe.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1.15fr; gap:24px; align-items:start;">
+    <!-- surfaces -->
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;">
+      <sc-for list="{{ surfaces }}" as="f" hint-placeholder-count="6">
+        <div style="border:1px solid #1f2733; background:#0a0e15; padding:12px;">
+          <div style="{{ f.sw }}"></div>
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-top:10px;">
+            <span style="font-size:9.5px; letter-spacing:.08em; color:#C3CEDB;">{{ f.name }}</span>
+            <span style="font-size:8.5px; letter-spacing:.04em; color:#5A6A7E;">{{ f.val }}</span>
+          </div>
+          <div style="font-size:8.5px; letter-spacing:.04em; color:#828FA3; line-height:1.45; margin-top:5px;">{{ f.use }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <!-- elevation ladder -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px;">
+      <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">ELEVATION LADDER — 0 → 4</div>
+      <sc-for list="{{ elevation }}" as="e" hint-placeholder-count="5">
+        <div style="display:flex; align-items:center; gap:16px; padding:11px 0; border-bottom:1px solid rgba(27,35,48,.8);">
+          <div style="{{ e.chip }}">{{ e.level }}</div>
+          <div style="flex:1;">
+            <div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8;">{{ e.name }}</div>
+            <div style="font-size:8.5px; letter-spacing:.04em; color:#7e8b9e; line-height:1.45; margin-top:4px;">{{ e.recipe }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- ===== 04 TEMP DEV HEALTH BAR ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">04</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">TEMP DEV HEALTH BAR</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">Debug only — shipping HUD has NO health bar (damage is diegetic, session C). Curved · white fill · lingering red damage&#8209;delta.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:30px 40px 34px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:26px;">
+      <span style="font-size:9px; letter-spacing:.22em; color:#5A6A7E;">SITS ON THE VISOR — SLIGHT CURVE</span>
+      <span style="font-size:9px; letter-spacing:.22em; color:#FF6E6E;">⚠ DEBUG ONLY · REMOVE AT SHIP</span>
+    </div>
+    <!-- curved bar -->
+    <div style="perspective:680px; padding:0 4%;">
+      <div style="transform:rotateX(20deg); transform-origin:center bottom;">
+        <div style="position:relative; height:18px; background:#161D29; border:1px solid #28323f; border-radius:0 0 16px 16px / 0 0 26px 26px; overflow:hidden;">
+          <!-- white fill -->
+          <div style="position:absolute; top:0; bottom:0; left:0; width:64%; background:linear-gradient(180deg,#FFFFFF,#D7DEE6);"></div>
+          <!-- lingering red damage-delta -->
+          <div style="position:absolute; top:0; bottom:0; left:64%; width:9%; background:linear-gradient(90deg,#ED1F3D,#C50E28); opacity:.92;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex; gap:34px; margin-top:30px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:9px;"><span style="width:14px; height:10px; background:linear-gradient(180deg,#FFFFFF,#D7DEE6); flex:none;"></span><span style="font-size:9px; letter-spacing:.14em; color:#828FA3;">WHITE FILL — current health · <span style="color:#5A6A7E;">--mob-hp-fill</span></span></div>
+      <div style="display:flex; align-items:center; gap:9px;"><span style="width:14px; height:10px; background:#ED1F3D; flex:none;"></span><span style="font-size:9px; letter-spacing:.14em; color:#828FA3;">RED DELTA — chunk just lost, fades · <span style="color:#5A6A7E;">--mob-hp-loss</span></span></div>
+      <div style="display:flex; align-items:center; gap:9px;"><span style="width:14px; height:10px; background:#161D29; border:1px solid #28323f; flex:none;"></span><span style="font-size:9px; letter-spacing:.14em; color:#828FA3;">EMPTY TRACK · <span style="color:#5A6A7E;">--mob-hp-track</span></span></div>
+    </div>
+  </div>
+
+  <!-- ===== 05 NON-COLOUR SCALES ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">05</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">SPACING · RADIUS · STROKE · MOTION</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;197 · inline values promoted to named tokens on .mobius-root.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:24px; align-items:start;">
+    <!-- spacing -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px;">
+      <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">SPACING SCALE</div>
+      <sc-for list="{{ spacing }}" as="sp" hint-placeholder-count="7">
+        <div style="display:flex; align-items:center; gap:14px; padding:6px 0;">
+          <span style="width:118px; flex:none; font-size:9px; letter-spacing:.06em; color:#9aa7ba;">{{ sp.name }}</span>
+          <span style="width:40px; flex:none; font-size:9px; color:#5A6A7E;">{{ sp.px }}</span>
+          <div style="{{ sp.bar }}"></div>
+        </div>
+      </sc-for>
+    </div>
+    <!-- radius + stroke -->
+    <div style="display:flex; flex-direction:column; gap:24px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px;">
+        <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">RADIUS / SHAPE</div>
+        <div style="display:flex; gap:18px; flex-wrap:wrap;">
+          <sc-for list="{{ radii }}" as="r" hint-placeholder-count="6">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="{{ r.box }}"></div>
+              <span style="font-size:8px; letter-spacing:.1em; color:#9aa7ba;">{{ r.name }}</span>
+              <span style="font-size:8px; color:#5A6A7E;">{{ r.val }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px;">
+        <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">STROKE SCALE</div>
+        <sc-for list="{{ strokes }}" as="st" hint-placeholder-count="5">
+          <div style="display:flex; align-items:center; gap:14px; padding:5px 0;">
+            <span style="width:150px; flex:none; font-size:9px; letter-spacing:.04em; color:#9aa7ba;">{{ st.name }}</span>
+            <div style="{{ st.line }}"></div>
+            <span style="font-size:8.5px; color:#5A6A7E; margin-left:10px;">{{ st.val }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- motion -->
+  <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px; margin-top:24px;">
+    <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">MOTION SCALE — DURATION STEPS &amp; EASING</div>
+    <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:18px;">
+      <sc-for list="{{ durations }}" as="d" hint-placeholder-count="5">
+        <div style="border-left:2px solid #28323f; padding-left:12px;">
+          <div style="font-family:'Orbitron'; font-size:15px; letter-spacing:.04em; color:#EEF3F8;">{{ d.val }}</div>
+          <div style="font-size:9px; letter-spacing:.1em; color:#9aa7ba; margin-top:5px;">{{ d.name }}</div>
+          <div style="font-size:8.5px; letter-spacing:.04em; color:#7e8b9e; margin-top:4px; line-height:1.4;">{{ d.use }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex; gap:24px; margin-top:18px; padding-top:14px; border-top:1px solid #1B2330; flex-wrap:wrap;">
+      <sc-for list="{{ easings }}" as="ez" hint-placeholder-count="4">
+        <span style="font-size:8.5px; letter-spacing:.08em; color:#7e8b9e;"><span style="color:#84BAD9;">{{ ez.name }}</span> · {{ ez.val }}</span>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- ===== 06 TYPE SCALE ===== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:54px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">06</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">TYPE SCALE — COMPLETED</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">Orbitron for titles only · JetBrains Mono carries everything else. 10px readable floor.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:8px 24px 14px;">
+    <sc-for list="{{ typeRoles }}" as="ty" hint-placeholder-count="12">
+      <div style="display:flex; align-items:baseline; gap:24px; padding:14px 0; border-bottom:1px solid rgba(27,35,48,.8);">
+        <div style="width:122px; flex:none;">
+          <div style="font-size:10px; letter-spacing:.1em; color:#EEF3F8;">{{ ty.role }}</div>
+          <div style="font-size:8px; letter-spacing:.06em; color:#5A6A7E; margin-top:4px;">{{ ty.cls }}</div>
+        </div>
+        <div style="flex:1; min-width:0; overflow:hidden;"><span style="{{ ty.sample }}">{{ ty.text }}</span></div>
+        <div style="width:230px; flex:none; text-align:right;">
+          <div style="font-size:9px; letter-spacing:.06em; color:#9aa7ba;">{{ ty.spec }}</div>
+          <div style="font-size:8.5px; letter-spacing:.04em; color:#5A6A7E; margin-top:4px;">{{ ty.use }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="margin-top:30px; border:1px solid #303C4C; background:linear-gradient(90deg,rgba(237,31,61,.06),transparent); padding:13px 18px; font-size:9.5px; letter-spacing:.06em; line-height:1.6; color:#8595a8;">
+    <span style="color:#ED1F3D; letter-spacing:.18em;">HANDOFF NOTE</span> &nbsp; All tokens live on <span style="color:#C3CEDB;">.mobius-root</span> in <span style="color:#C3CEDB;">MobiusKit.uss</span> with matching tables in <span style="color:#C3CEDB;">README.md</span>. Ready to map to Unity (USS var + future ScriptableObject token). The finalized file feeds sessions B (Settings controls) and C (visor HUD + diegetic damage).
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1360}}">
+class Component extends DCLogic {
+  // notched swatch echoing the brand top-right cut
+  sw(hex, h){
+    return { position:'relative', height:(h||54)+'px', background:hex,
+      clipPath:'polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%)',
+      boxShadow:'inset 0 1px 0 rgba(255,255,255,.14)' };
+  }
+  badge(ink){
+    return { position:'absolute', top:'7px', right:'12px', fontSize:'12px', lineHeight:'1',
+      color:ink, opacity:.82 };
+  }
+
+  renderVals(){
+    const dataColors = [
+      { name:'ALLY / PLAYER', hex:'#84BAD9', glyph:'▲', ink:'#0B121A', use:'Friendly + local player. Locked steel blue — the "us / safe" hue.', cue:'UP-CHEVRON' },
+      { name:'SHIELD / ARMOUR', hex:'#74C8D6', glyph:'⬡', ink:'#06181C', use:'Defensive value over health.', cue:'HEX / SHIELD' },
+      { name:'STAMINA / ENERGY', hex:'#A9D86B', glyph:'◆', ink:'#16210A', use:'Sustain / exertion meter.', cue:'BOLT' },
+      { name:'XP / PROGRESSION', hex:'#B4A6E6', glyph:'◇', ink:'#150E2A', use:'Level / unlock progress.', cue:'DIAMOND PIP' },
+      { name:'RESOURCE / CURRENCY', hex:'#D9B45C', glyph:'●', ink:'#1C1404', use:'Salvage, credits, pickups.', cue:'COIN' },
+      { name:'DATA NEUTRAL', hex:'#8090A4', glyph:'—', ink:'#0c1118', use:'Inert / no-data / offline slot.', cue:'DASHED / EMPTY' },
+      { name:'THREAT / ENEMY', hex:'#ED1F3D', glyph:'▼', ink:'#190406', use:'Enemy + danger. Same red as critical-low — context disambiguates.', cue:'WARNING ▼' },
+      { name:'THREAT ESCALATE', hex:'#FF3A55', glyph:'▼', ink:'#190406', use:'Pulse peak as threat closes. Faster pulse = nearer.', cue:'FAST PULSE' },
+    ].map(d => ({ ...d, sw:this.sw(d.hex), badge:this.badge(d.ink) }));
+
+    const stateColors = [
+      { name:'SUCCESS', hex:'#84D6BE', glyph:'✓', use:'Ready / linked / confirmed.', ink:'#06201A' },
+      { name:'WARNING', hex:'#E7B23F', glyph:'!', use:'Caution. Yellower & calmer than brand orange.', ink:'#1A1303' },
+      { name:'DANGER / ERROR', hex:'#ED1F3D', glyph:'✕', use:'Failure / critical. The one danger-red.', ink:'#190406' },
+      { name:'INFO', hex:'#9FD0F2', glyph:'i', use:'Informational note (= active).', ink:'#06151F' },
+      { name:'LOCKED', hex:'#5A6A7E', glyph:'⊘', use:'Unavailable / disabled. Always back with lock cue.', ink:'#0c1118' },
+      { name:'ACTIVE', hex:'#9FD0F2', glyph:'●', use:'Live link / join code highlight.', ink:'#06151F' },
+    ].map(s => ({ ...s,
+      chip:{ position:'relative', width:'42px', height:'42px', flex:'none', background:s.hex,
+        clipPath:'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%)',
+        display:'flex', alignItems:'center', justifyContent:'center' },
+      cueStyle:{ fontSize:'16px', lineHeight:'1', fontWeight:700, color:s.ink } }));
+
+    const surfaces = [
+      { name:'BASE', val:'#0B0F16', use:'Screen background.', hex:'#0B0F16', bd:true },
+      { name:'PANEL', val:'#1E2735', use:'Standard panel tint.', hex:'#1E2735' },
+      { name:'PANEL-2', val:'#26303F', use:'Elevated panel / popover.', hex:'#26303F' },
+      { name:'CARD', val:'#121823', use:'Cards, sub-panels.', hex:'#121823' },
+      { name:'SCRIM', val:'rgba(6,9,14,.72)', use:'Modal overlay behind dialogs.', hex:'#06090E' },
+      { name:'SCREEN', val:'#0A1418', use:'Diegetic device / terminal surface.', hex:'#0A1418' },
+    ].map(f => ({ ...f, sw:{ height:'48px', background:f.hex,
+      border:'1px solid '+(f.bd?'rgba(130,150,175,.22)':'#1f2733'),
+      boxShadow: f.bd ? 'inset 0 0 0 1px rgba(130,150,175,.10)' : 'none' } }));
+
+    const elevation = [
+      { level:'0', name:'FLAT HUD', recipe:'No tint, no glow — diegetic, painted on the world.', tint:'#0B0F16' },
+      { level:'1', name:'CARD / PANEL', recipe:'Panel tint + hairline border + leading accent edge.', tint:'#1E2735' },
+      { level:'2', name:'FLOATING WINDOW', recipe:'Panel-2 + hairline + faint cool glow halo (--mob-glow-cool).', tint:'#26303F' },
+      { level:'3', name:'MODAL', recipe:'Scrim behind + panel-2 + accent glow (--mob-glow-accent).', tint:'#2c3span' },
+      { level:'4', name:'CRITICAL ALERT', recipe:'3px red edge + pulsing danger glow (--mob-glow-danger).', tint:'#3a1620' },
+    ].map(e => ({ ...e, chip:{ width:'34px', height:'34px', flex:'none',
+      background: e.level==='4' ? '#2a1118' : (e.level==='0' ? '#0B0F16' : e.tint),
+      border:'1px solid '+(e.level==='4' ? '#ED1F3D' : '#303C4C'),
+      borderLeft:(e.level==='4'?'3px':'2px')+' solid '+(e.level==='4'?'#ED1F3D':(e.level==='0'?'#1f2733':'#84BAD9')),
+      display:'flex', alignItems:'center', justifyContent:'center',
+      fontFamily:"'Orbitron'", fontSize:'13px', color:'#EEF3F8',
+      boxShadow: e.level==='2'?'0 0 16px rgba(159,208,242,.14)':(e.level==='4'?'0 0 18px rgba(237,31,61,.4)':(e.level==='3'?'0 0 16px rgba(237,31,61,.22)':'none')) } }));
+
+    const maxSp = 48;
+    const spacing = [
+      ['--mob-space-2xs',4],['--mob-space-xs',8],['--mob-space-sm',12],['--mob-space-md',16],
+      ['--mob-space-lg',24],['--mob-space-xl',32],['--mob-space-2xl',48],
+    ].map(([name,px]) => ({ name, px:px+'px',
+      bar:{ height:'12px', width:(8 + px/maxSp*72)+'%', background:'linear-gradient(90deg,#ED1F3D,#84BAD9)', opacity:.9 } }));
+
+    const radii = [
+      { name:'SHARP', val:'0', r:'0' },
+      { name:'SM', val:'2px', r:'2px' },
+      { name:'MD', val:'4px', r:'4px' },
+      { name:'PILL', val:'999', r:'999px' },
+      { name:'SCREEN', val:'10px', r:'10px' },
+    ].map(r => ({ ...r, box:{ width:'46px', height:'46px', background:'#1E2735',
+      border:'1px solid #3a4658', borderLeft:'2px solid #84BAD9', borderRadius:r.r } }));
+    radii.push({ name:'NOTCH', val:'16px',
+      box:{ width:'46px', height:'46px', background:'#1E2735', border:'1px solid #3a4658', borderLeft:'2px solid #ED1F3D',
+        clipPath:'polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%)' } });
+
+    const strokes = [
+      { name:'HAIR · 1px', val:'borders / dividers', w:1, c:'#46566A' },
+      { name:'EDGE · 2px', val:'leading accent edge', w:2, c:'#84BAD9' },
+      { name:'ACTIVE · 2px', val:'selected control', w:2, c:'#9FD0F2' },
+      { name:'FOCUS · 2px', val:'white focus ring', w:2, c:'#FFFFFF' },
+      { name:'DANGER · 3px', val:'critical / damage', w:3, c:'#ED1F3D' },
+    ].map(s => ({ ...s, line:{ flex:'1', height:s.w+'px', background:s.c } }));
+
+    const durations = [
+      { name:'INSTANT', val:'60ms', use:'press feedback' },
+      { name:'FAST', val:'120ms', use:'hover / press tint' },
+      { name:'BASE', val:'200ms', use:'toggles / selection' },
+      { name:'SLOW', val:'320ms', use:'panel open / close' },
+      { name:'CINE', val:'600ms', use:'visor / device transitions' },
+    ];
+    const easings = [
+      { name:'standard', val:'ease-out' },
+      { name:'enter', val:'cubic-bezier(.16,1,.30,1)' },
+      { name:'exit', val:'cubic-bezier(.40,0,1,1)' },
+      { name:'pulse', val:'ease-in-out' },
+    ];
+
+    const orb = "'Orbitron', sans-serif";
+    const jb = "'JetBrains Mono', monospace";
+    const base = { whiteSpace:'nowrap', color:'#EEF3F8', display:'inline-block' };
+    const typeRoles = [
+      { role:'TITLE 1', cls:'.mob-title-1', text:'RUNTIME LINK', spec:'Orbitron SemiBold · 29 / 1px', use:'Primary panel title', st:{ fontFamily:orb, fontWeight:600, fontSize:'29px', letterSpacing:'1px' } },
+      { role:'TITLE 2', cls:'.mob-title-2', text:'CREW LOBBY', spec:'Orbitron SemiBold · 22 / 1px', use:'Section header', st:{ fontFamily:orb, fontWeight:600, fontSize:'22px', letterSpacing:'1px' } },
+      { role:'TITLE 3', cls:'.mob-title-3', text:'RENDER QUALITY', spec:'Orbitron SemiBold · 17 / 1.4px', use:'Sub-section / card header', st:{ fontFamily:orb, fontWeight:600, fontSize:'17px', letterSpacing:'1.4px' } },
+      { role:'SUBTITLE', cls:'.mob-subtitle', text:'Private co-op session', spec:'JetBrains Mono · 11 / 0.5px', use:'Line under a title', st:{ fontFamily:jb, fontSize:'11px', letterSpacing:'.5px', color:'#AEBBCB' } },
+      { role:'BODY', cls:'.mob-body', text:'Damage is shown diegetically — the visor cracks.', spec:'JetBrains Mono · 13 / 0.5px', use:'Default reading text', st:{ fontFamily:jb, fontSize:'13px', letterSpacing:'.5px', color:'#AEBBCB' } },
+      { role:'BODY SMALL', cls:'.mob-body-sm', text:'Ambient drift & flicker', spec:'JetBrains Mono · 11 / 0.5px', use:'Dense / secondary copy', st:{ fontFamily:jb, fontSize:'11px', letterSpacing:'.5px', color:'#AEBBCB' } },
+      { role:'LABEL', cls:'.mob-label', text:'MASTER VOLUME', spec:'JetBrains Mono · 10 / 2px', use:'Field / row labels', st:{ fontFamily:jb, fontSize:'10px', letterSpacing:'2px', color:'#93A6BB' } },
+      { role:'EYEBROW', cls:'.mob-eyebrow', text:'PROJECT MOBIUS', spec:'JetBrains Mono · 10 / 3px', use:'Kicker above a title', st:{ fontFamily:jb, fontSize:'10px', letterSpacing:'3px', color:'#93A6BB' } },
+      { role:'CAPTION', cls:'.mob-caption', text:'9-slice content region', spec:'JetBrains Mono · 9 / 1px', use:'Meta / footnotes', st:{ fontFamily:jb, fontSize:'9px', letterSpacing:'1px', color:'#5A6A7E' } },
+      { role:'BUTTON', cls:'.mob-button', text:'HOST SESSION', spec:'JetBrains Mono Bold · 12 / 2px', use:'Button labels', st:{ fontFamily:jb, fontSize:'12px', fontWeight:700, letterSpacing:'2px' } },
+      { role:'STAT / NUMBER', cls:'.mob-stat', text:'2 / 3  ·  K7P2QR', spec:'JetBrains Mono Bold · 26 / 1px', use:'Readouts, counts, codes', st:{ fontFamily:jb, fontSize:'26px', fontWeight:700, letterSpacing:'1px', color:'#9FD0F2' } },
+      { role:'MONO / DEBUG', cls:'.mob-mono', text:'GATE / 192.160.80.90 — LINE 06', spec:'JetBrains Mono · 10 / 0.5px', use:'Debug overlays, coords', st:{ fontFamily:jb, fontSize:'10px', letterSpacing:'.5px', color:'#93A6BB' } },
+    ].map(t => ({ ...t, sample:{ ...base, ...t.st } }));
+
+    return { dataColors, stateColors, surfaces, elevation, spacing, radii, strokes, durations, easings, typeRoles };
+  }
+}
+</script>
+</body>
+</html>

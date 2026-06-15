@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0B0F16;}
+  input::placeholder,textarea::placeholder{color:#46566A;letter-spacing:.2em;}
+  ::selection{background:rgba(237,31,61,0.72);color:#fff;}
+  @keyframes mb-blink{0%,48%{opacity:1}49%,100%{opacity:0}}
+  @keyframes mb-pop{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+  @keyframes mb-toast{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+  @keyframes mb-scrim{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+
+<div style="position:relative; min-height:100vh; background:radial-gradient(120% 78% at 50% -8%, #141A26 0%, #0B0F16 58%); color:#EEF3F8; font-family:'JetBrains Mono', monospace; padding:46px 56px 110px;">
+
+  <!-- ===================== OVERLAY LAYER (modal / dialog / toast) ===================== -->
+  <sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:24px;">
+      <div onClick="{{ closeModal }}" style="position:absolute; inset:0; background:rgba(6,9,14,0.72); animation:mb-scrim .2s ease-out;"></div>
+      <div style="position:relative; width:440px; max-width:100%; background:linear-gradient(158deg,#26303F 0%,#10151f 100%); border:1px solid #3a4658; border-left:2px solid #ED1F3D; box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 46px rgba(237,31,61,.30); clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%); padding:26px 26px 24px; animation:mb-pop .32s cubic-bezier(0.16,1,0.30,1);">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; border-bottom:1px solid #2a3545; padding-bottom:15px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #ED1F3D;"></div>
+            <span style="font-family:'Orbitron'; font-size:9.5px; letter-spacing:.34em; color:#93A6BB;">MODAL · ELEVATION 3</span>
+          </div>
+          <button onClick="{{ closeModal }}" style="width:26px; height:26px; flex:none; display:flex; align-items:center; justify-content:center; border:0; cursor:pointer; background:#19212D; color:#93A6BB; font-size:13px; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%); transition:background .12s,color .12s;" style-hover="background:#232E3D; color:#EEF3F8;">&#10005;</button>
+        </div>
+        <div style="font-family:'Orbitron'; font-size:23px; font-weight:600; letter-spacing:.04em; color:#EEF3F8; margin-top:18px;">PURGE LOCAL CACHE</div>
+        <div style="font-size:11px; letter-spacing:.04em; line-height:1.7; color:#AEBBCB; margin-top:11px;">This clears all staged build data and cached telemetry for the current runtime. Active sessions are unaffected. This cannot be undone.</div>
+        <div style="display:flex; gap:10px; margin-top:24px;">
+          <button onClick="{{ confirmModal }}" style="flex:1; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:46px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#ED1F3D; color:#190406; font-size:12px; font-weight:700; letter-spacing:.22em; box-shadow:inset 0 1px 0 rgba(255,255,255,.22); transition:background .12s,transform .06s;" style-hover="background:#FF3A55;" style-active="background:#C50E28; transform:translateY(1px);">PURGE</div>
+          </button>
+          <button onClick="{{ closeModal }}" style="flex:none; width:130px; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:46px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#19212D; color:#93A6BB; font-size:11px; font-weight:600; letter-spacing:.22em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s,color .12s;" style-hover="background:#232E3D; color:#C3CEDB;">CANCEL</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ dialogOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:60; display:flex; align-items:center; justify-content:center; padding:24px;">
+      <div onClick="{{ closeDialog }}" style="position:absolute; inset:0; background:rgba(6,9,14,0.72); animation:mb-scrim .2s ease-out;"></div>
+      <div style="position:relative; width:360px; max-width:100%; background:linear-gradient(158deg,#26303F 0%,#10151f 100%); border:1px solid #3a4658; border-left:2px solid #8E2030; box-shadow:0 0 0 1px rgba(0,0,0,.4), 0 0 40px rgba(237,31,61,.26); clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%); padding:24px 24px 22px; text-align:center; animation:mb-pop .32s cubic-bezier(0.16,1,0.30,1);">
+        <div style="width:40px; height:36px; margin:2px auto 14px; position:relative;">
+          <div style="width:0; height:0; border-left:20px solid transparent; border-right:20px solid transparent; border-top:34px solid #8E2030;"></div>
+          <span style="position:absolute; top:2px; left:50%; transform:translateX(-50%); color:#F0C3C9; font-size:16px; font-weight:700;">!</span>
+        </div>
+        <div style="font-family:'Orbitron'; font-size:18px; font-weight:600; letter-spacing:.06em; color:#EEF3F8;">ABORT RUN?</div>
+        <div style="font-size:10.5px; letter-spacing:.04em; line-height:1.7; color:#AEBBCB; margin-top:10px;">All three operators will be returned to standby. Run progress is lost.</div>
+        <div style="display:flex; gap:10px; margin-top:22px;">
+          <button onClick="{{ closeDialog }}" style="flex:1; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:44px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#19212D; color:#C3CEDB; font-size:11px; font-weight:600; letter-spacing:.22em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s;" style-hover="background:#232E3D;">STAY</div>
+          </button>
+          <button onClick="{{ confirmDialog }}" style="flex:1; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:44px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#8E2030; color:#F0C3C9; font-size:11px; font-weight:600; letter-spacing:.22em; box-shadow:inset 0 1px 0 rgba(255,255,255,.09); transition:background .12s,transform .06s;" style-hover="background:#AB2A3D;" style-active="background:#66131F; transform:translateY(1px);">ABORT</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:fixed; right:26px; bottom:26px; z-index:70; display:flex; flex-direction:column; gap:10px; align-items:flex-end;">
+    <sc-for list="{{ toasts }}" as="t" hint-placeholder-count="0">
+      <div style="{{ t.wrap }}">
+        <div style="{{ t.bar }}"></div>
+        <div style="{{ t.iconWrap }}">{{ t.glyph }}</div>
+        <div style="flex:1; padding:11px 14px 12px 4px;">
+          <div style="{{ t.titleStyle }}">{{ t.title }}</div>
+          <div style="{{ t.msgStyle }}">{{ t.msg }}</div>
+        </div>
+        <button onClick="{{ t.onClose }}" style="width:30px; flex:none; border:0; background:transparent; color:#5A6A7E; font-size:12px; cursor:pointer;" style-hover="color:#EEF3F8;">&#10005;</button>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- ===================== HEADER ===================== -->
+  <div style="display:flex; gap:30px; align-items:stretch; flex-wrap:wrap; max-width:1180px; margin:0 auto;">
+    <div style="flex:1; min-width:340px;">
+      <div style="display:flex; align-items:center; gap:11px; margin-bottom:14px;">
+        <div style="width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:12px solid #ED1F3D;"></div>
+        <span style="font-family:'Orbitron'; font-size:11px; letter-spacing:.42em; color:#93A6BB;">PROJECT&nbsp;MOBIUS</span>
+        <span style="font-size:9.5px; letter-spacing:.24em; color:#5A6A7E;">// SILENT PROVIDENCE</span>
+      </div>
+      <div style="font-family:'Orbitron'; font-size:42px; font-weight:600; letter-spacing:.05em; line-height:1.0; color:#EEF3F8;">COMPONENT BOARD &nbsp;<span style="color:#ED1F3D;">/</span>&nbsp; SESSION B</div>
+      <div style="display:flex; gap:16px; margin-top:16px; font-size:10px; letter-spacing:.2em; color:#738399; flex-wrap:wrap;">
+        <span style="color:#ED1F3D;">MOB&#8209;198</span><span>WINDOWS · NAV · BUTTON GAPS</span>
+        <span style="color:#303C4C;">|</span>
+        <span style="color:#ED1F3D;">MOB&#8209;199</span><span>FORM CONTROLS</span>
+        <span style="color:#303C4C;">|</span>
+        <span>UNITY UI TOOLKIT &middot; UXML/USS</span>
+      </div>
+    </div>
+
+    <div style="flex:none; width:430px; border:1px solid #25303E; background:linear-gradient(160deg,#161D29,#0e131c); padding:18px 20px;">
+      <div style="font-size:9px; letter-spacing:.28em; color:#5A6A7E; margin-bottom:13px;">LOCKED ART DIRECTION — THIS SESSION</div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#9FD0F2;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">GLOW IS BACK</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Reintroduced as a feathered sprite / additive overlay behind the element — focus halo, floating-window cool halo, modal accent halo. Defeated by reduced-motion.</div></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#ED1F3D;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">CINEMATIC OPEN / CLOSE</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Windows, modals &amp; toasts animate on enter/exit using the session-A motion tokens (<span style="color:#C3CEDB;">--mob-dur-slow</span>, enter/exit easings).</div></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#FFFFFF;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">KBM-FIRST FOCUS MODEL</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">One shared focus order, white focus ring, wrap/clamp, and a confirm / cancel / back contract every component points to. Controller = forward note.</div></div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <div style="width:5px; flex:none; background:#84D6BE;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">COLOUR + CUE, NEVER COLOUR ALONE</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Every form/state signal carries an icon, shape or label as well as hue — valid/invalid, success/warning/error/info/locked.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:1180px; margin:0 auto;">
+
+  <!-- ===================== 01 WINDOWS & OVERLAYS ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:60px 0 24px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">01</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">WINDOWS &amp; OVERLAYS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;198 · floating window · modal · dialog · tooltip · toast — one shared anatomy, layered by elevation.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 360px; gap:24px; align-items:start;">
+
+    <!-- anatomy + floating window -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:22px 24px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:18px;">WINDOW ANATOMY — REUSABLE SLOTS</div>
+        <div style="display:flex; gap:26px; flex-wrap:wrap;">
+          <!-- the window -->
+          <div style="position:relative; width:330px; flex:none; background:linear-gradient(158deg,#26303F 0%,#11161f 100%); border:1px solid #3a4658; border-left:2px solid #ED1F3D; box-shadow:0 0 0 1px rgba(0,0,0,.3), 0 0 26px rgba(159,208,242,.14); clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #2a3545;">
+              <div style="display:flex; align-items:center; gap:9px;">
+                <div style="width:26px; height:26px; flex:none; display:flex; align-items:center; justify-content:center; background:#0E141D; border:1px solid #303C4C; clip-path:polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);"><div style="width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:9px solid #ED1F3D;"></div></div>
+                <div>
+                  <div style="font-size:10px; letter-spacing:.18em; color:#EEF3F8;">RUNTIME LINK</div>
+                  <div style="font-size:8px; letter-spacing:.16em; color:#5A6A7E; margin-top:2px;">GATE / 192.160.80.90</div>
+                </div>
+              </div>
+              <div style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; background:#19212D; color:#93A6BB; font-size:12px; clip-path:polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 0 100%);">&#10005;</div>
+            </div>
+            <div style="padding:16px 14px;">
+              <div style="height:60px; border:1px dashed #2e3a4a; background:repeating-linear-gradient(135deg, rgba(255,255,255,.014) 0 6px, transparent 6px 12px); display:flex; align-items:center; justify-content:center;"><span style="font-size:8.5px; letter-spacing:.2em; color:#566578;">BODY SLOT</span></div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:8px; padding:0 14px 14px;">
+              <div style="height:32px; display:flex; align-items:center; padding:0 14px; background:#19212D; color:#93A6BB; font-size:9px; letter-spacing:.18em; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">DISMISS</div>
+              <div style="height:32px; display:flex; align-items:center; padding:0 14px; background:#ED1F3D; color:#190406; font-size:9px; font-weight:700; letter-spacing:.18em; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">CONFIRM</div>
+            </div>
+          </div>
+          <!-- slot legend -->
+          <div style="flex:1; min-width:170px; display:flex; flex-direction:column; gap:9px; padding-top:4px;">
+            <sc-for list="{{ anatomy }}" as="a" hint-placeholder-count="8">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <div style="width:16px; height:2px; flex:none; background:{{ a.color }};"></div>
+                <span style="font-size:9px; letter-spacing:.14em; color:#C3CEDB; width:96px; flex:none;">{{ a.name }}</span>
+                <span style="font-size:8px; letter-spacing:.06em; color:#5A6A7E;">{{ a.note }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <!-- live triggers -->
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:22px 24px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">LIVE — OPEN / CLOSE &amp; TRANSITION MOTION</div>
+        <div style="font-size:9px; letter-spacing:.06em; color:#647488; line-height:1.6; margin-bottom:16px; max-width:520px;">Trigger each overlay. Modal scrims + glows on, dialog confirms a destructive intent, toasts auto&#8209;dismiss after 4.2s and stack bottom&#8209;right. All honour the motion tokens.</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button onClick="{{ openModal }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 18px; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#ED1F3D; color:#190406; font-size:10px; font-weight:700; letter-spacing:.2em; transition:background .12s,transform .06s;" style-hover="background:#FF3A55;" style-active="background:#C50E28; transform:translateY(1px);">OPEN MODAL</div>
+          </button>
+          <button onClick="{{ openDialog }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 18px; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#8E2030; color:#F0C3C9; font-size:10px; font-weight:600; letter-spacing:.2em; transition:background .12s,transform .06s;" style-hover="background:#AB2A3D;" style-active="background:#66131F; transform:translateY(1px);">OPEN DIALOG</div>
+          </button>
+          <button onClick="{{ tSuccess }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 16px; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); background:#19212D; color:#84D6BE; font-size:10px; font-weight:600; letter-spacing:.18em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s;" style-hover="background:#232E3D;">&#10003; TOAST</div>
+          </button>
+          <button onClick="{{ tWarn }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 16px; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); background:#19212D; color:#E7B23F; font-size:10px; font-weight:600; letter-spacing:.18em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s;" style-hover="background:#232E3D;">&#9650; TOAST</div>
+          </button>
+          <button onClick="{{ tErr }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 16px; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); background:#19212D; color:#FF6E6E; font-size:10px; font-weight:600; letter-spacing:.18em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s;" style-hover="background:#232E3D;">&#10005; TOAST</div>
+          </button>
+          <button onClick="{{ tInfo }}" style="border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+            <div style="height:42px; display:flex; align-items:center; justify-content:center; padding:0 16px; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); background:#19212D; color:#9FD0F2; font-size:10px; font-weight:600; letter-spacing:.18em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s;" style-hover="background:#232E3D;">&#9432; TOAST</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- tooltip + elevation ladder -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:22px 24px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:16px;">TOOLTIP — HOVER / FOCUS</div>
+        <div style="display:flex; justify-content:center; padding:26px 0 10px;">
+          <div style="position:relative;" onMouseEnter="{{ onTipEnter }}" onMouseLeave="{{ onTipLeave }}">
+            <sc-if value="{{ tip }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute; bottom:48px; left:50%; transform:translateX(-50%); width:194px; background:linear-gradient(158deg,#26303F,#161d29); border:1px solid #3a4658; box-shadow:0 0 22px rgba(159,208,242,.14); clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); padding:9px 11px; animation:mb-pop .16s ease-out;">
+                <div style="font-size:8.5px; letter-spacing:.16em; color:#9FD0F2; margin-bottom:4px;">UPLINK GATE</div>
+                <div style="font-size:8.5px; letter-spacing:.04em; line-height:1.5; color:#AEBBCB;">Routes the session through the regional relay. Adds ~8ms latency.</div>
+                <div style="position:absolute; bottom:-5px; left:50%; transform:translateX(-50%) rotate(45deg); width:9px; height:9px; background:#26303F; border-right:1px solid #3a4658; border-bottom:1px solid #3a4658;"></div>
+              </div>
+            </sc-if>
+            <div style="height:40px; display:flex; align-items:center; gap:8px; padding:0 16px; background:#19212D; color:#93A6BB; font-size:10px; letter-spacing:.16em; box-shadow:inset 0 0 0 1px #2a3545; cursor:help; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%);"><span style="width:13px; height:13px; border-radius:50%; border:1px solid #5A6A7E; display:flex; align-items:center; justify-content:center; font-size:8px; color:#9FD0F2;">i</span> HOVER ME</div>
+          </div>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; text-align:center; line-height:1.6;">Anchored, 8px arrow, ≤200px wide. Shows on hover AND keyboard focus.</div>
+      </div>
+
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:18px 20px;">
+        <div style="font-size:9px; letter-spacing:.24em; color:#88B4D6; margin-bottom:14px;">OVERLAY ELEVATION</div>
+        <sc-for list="{{ overlayElev }}" as="e" hint-placeholder-count="4">
+          <div style="display:flex; align-items:center; gap:14px; padding:9px 0; border-bottom:1px solid rgba(27,35,48,.8);">
+            <div style="{{ e.chip }}">{{ e.level }}</div>
+            <div style="flex:1;">
+              <div style="font-size:9.5px; letter-spacing:.1em; color:#EEF3F8;">{{ e.name }}</div>
+              <div style="font-size:8px; letter-spacing:.03em; color:#7e8b9e; line-height:1.45; margin-top:3px;">{{ e.recipe }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 02 NAVIGATION ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:60px 0 24px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">02</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">NAVIGATION SHELLS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;198 · tabs · back / breadcrumbs · pagination &amp; carousel — plus the shared focus / confirm / cancel / back model.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 380px; gap:24px; align-items:start;">
+
+    <!-- live tabs -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:0;">
+        <div style="padding:16px 22px 0;">
+          <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB;">TABS — LIVE · CLICK TO SWITCH</div>
+        </div>
+        <div style="display:flex; gap:2px; padding:14px 22px 0; border-bottom:1px solid #1B2330; margin-top:8px;">
+          <sc-for list="{{ tabsList }}" as="tb" hint-placeholder-count="5">
+            <button onClick="{{ tb.onClick }}" style="{{ tb.style }}">{{ tb.label }}</button>
+          </sc-for>
+        </div>
+        <div style="padding:22px;">
+          <div style="font-family:'Orbitron'; font-size:15px; letter-spacing:.08em; color:#EEF3F8;">{{ tabTitle }}</div>
+          <div style="font-size:10.5px; letter-spacing:.04em; line-height:1.7; color:#AEBBCB; margin-top:9px; max-width:560px;">{{ tabBody }}</div>
+        </div>
+      </div>
+
+      <!-- tab state matrix -->
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:18px;">TAB-BUTTON STATE MATRIX</div>
+        <div style="display:flex; gap:26px; flex-wrap:wrap; align-items:flex-end;">
+          <sc-for list="{{ tabMatrix }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+              <div style="{{ c.wrap }}"><div style="{{ c.ring }}"></div><div style="{{ c.tab }}">{{ c.label }}</div></div>
+              <div style="font-size:8px; letter-spacing:.18em; color:#5A6A7E;">{{ c.cap }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- back + breadcrumbs + pagination -->
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:16px;">BACK · BREADCRUMBS · PAGINATION</div>
+
+        <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:18px;">
+          <button style="height:36px; display:flex; align-items:center; gap:9px; padding:0 14px 0 11px; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%); background:#19212D; color:#93A6BB; font-size:10px; letter-spacing:.16em; box-shadow:inset 0 0 0 1px #2a3545; border:0; cursor:pointer; outline:none; font-family:inherit; transition:background .12s,color .12s;" style-hover="background:#232E3D; color:#EEF3F8;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;"><span style="font-size:13px; color:#ED1F3D;">&#8249;</span> BACK</button>
+
+          <div style="display:flex; align-items:center; gap:9px; font-size:9.5px; letter-spacing:.14em; flex-wrap:wrap;">
+            <span style="color:#738399; cursor:pointer;">SYSTEM</span>
+            <span style="color:#3a4658;">&#8250;</span>
+            <span style="color:#738399; cursor:pointer;">NETWORK</span>
+            <span style="color:#3a4658;">&#8250;</span>
+            <span style="color:#EEF3F8;">UPLINK GATE</span>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+          <sc-for list="{{ pageList }}" as="pg" hint-placeholder-count="10">
+            <button onClick="{{ pg.onClick }}" style="{{ pg.style }}">{{ pg.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- focus model + carousel -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#88B4D6; margin-bottom:16px;">FOCUS / CONFIRM / CANCEL / BACK</div>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:54px; flex:none; font-size:8px; letter-spacing:.14em; color:#9FD0F2; padding-top:2px;">TAB / &#8595;</span>
+            <span style="font-size:9px; letter-spacing:.04em; line-height:1.55; color:#AEBBCB;">Advance focus in DOM order; wraps at the end. White ring marks the focused control.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:54px; flex:none; font-size:8px; letter-spacing:.14em; color:#9FD0F2; padding-top:2px;">SHIFT+TAB</span>
+            <span style="font-size:9px; letter-spacing:.04em; line-height:1.55; color:#AEBBCB;">Reverse focus; clamps at the first control.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:54px; flex:none; font-size:8px; letter-spacing:.14em; color:#84D6BE; padding-top:2px;">ENTER</span>
+            <span style="font-size:9px; letter-spacing:.04em; line-height:1.55; color:#AEBBCB;">Confirm / activate the focused control = the primary action.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px;">
+            <span style="width:54px; flex:none; font-size:8px; letter-spacing:.14em; color:#FF6E6E; padding-top:2px;">ESC</span>
+            <span style="font-size:9px; letter-spacing:.04em; line-height:1.55; color:#AEBBCB;">Cancel / back — closes the overlay or steps up one shell. Default-focus lands on the safe (cancel) action.</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:12px; padding-top:9px; border-top:1px solid #1B2330;">
+            <span style="width:54px; flex:none; font-size:8px; letter-spacing:.14em; color:#5A6A7E; padding-top:2px;">PAD</span>
+            <span style="font-size:9px; letter-spacing:.04em; line-height:1.55; color:#647488;">Forward note: A = confirm, B = back, D-pad = focus, LB/RB = tab cycle. Not blocking v1.</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#88B4D6; margin-bottom:18px;">CAROUSEL — PAGE INDICATOR</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:9px; padding:6px 0 14px;">
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6">
+            <div onClick="{{ d.onClick }}" style="{{ d.style }}"></div>
+          </sc-for>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; text-align:center; line-height:1.6;">Active dot elongates to a bar. Synced to the pagination above.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 03 BUTTON GAPS ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:60px 0 24px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">03</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">BUTTON GAPS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;198 · the 5 variants × 5 states exist — adding icon, toggle &amp; tab buttons, and a size scale over the variants.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 380px; gap:24px; align-items:start;">
+    <!-- size scale -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:6px 22px 18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:14px 0 4px; border-bottom:1px solid #1B2330; margin-bottom:6px;">
+        <span style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB;">SIZE SCALE × VARIANT</span>
+        <span style="font-size:9px; letter-spacing:.18em; color:#5A6A7E;">NOTCH SCALES WITH HEIGHT</span>
+      </div>
+      <sc-for list="{{ sizeRows }}" as="r" hint-placeholder-count="3">
+        <div style="display:flex; align-items:center; gap:20px; padding:16px 0; border-bottom:1px solid rgba(27,35,48,.8);">
+          <div style="width:120px; flex:none;">
+            <div style="font-size:11px; letter-spacing:.14em; color:#EEF3F8; font-weight:700;">{{ r.name }}</div>
+            <div style="font-size:8px; letter-spacing:.06em; color:#738399; margin-top:4px;">{{ r.sub }}</div>
+          </div>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+            <div style="{{ r.primary.btn }}">{{ r.primary.label }}</div>
+            <div style="{{ r.secondary.btn }}">{{ r.secondary.label }}</div>
+            <div style="{{ r.quiet.btn }}">{{ r.quiet.label }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- icon button matrix + glyphs -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:18px;">ICON BUTTON — 5 STATES</div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start;">
+          <sc-for list="{{ iconStates }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:9px;">
+              <div style="{{ c.wrap }}"><div style="{{ c.ring }}"></div><div style="{{ c.btn }}">&#10005;</div></div>
+              <div style="font-size:8px; letter-spacing:.16em; color:#5A6A7E;">{{ c.cap }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin:18px 0 10px;">GLYPH SET — 42px square, ~44px target</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <sc-for list="{{ iconGlyphs }}" as="g" hint-placeholder-count="6">
+            <div style="width:38px; height:38px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%); background:#19212D; color:#9FD0F2; font-size:14px; box-shadow:inset 0 0 0 1px #2a3545;">{{ g }}</div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- toggle buttons (live) -->
+      <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">TOGGLE BUTTON — LIVE TOOLBAR</div>
+        <div style="font-size:8.5px; letter-spacing:.06em; color:#647488; line-height:1.55; margin-bottom:16px;">Sticky pressed state. Pip + fill + weight all carry on/off — not colour alone.</div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <sc-for list="{{ tbList }}" as="t" hint-placeholder-count="3">
+            <button onClick="{{ t.onClick }}" style="{{ t.style }}"><span style="{{ t.pip }}"></span>{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:16px; line-height:1.6;">TAB BUTTON variant &rarr; documented under §02 Navigation (the tab-button state matrix).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 04 FORM CONTROLS ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:60px 0 24px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">04</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">FORM CONTROLS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">MOB&#8209;199 · inputs · dropdown · checkbox / radio · real sliders — full anatomy, every state, colour + cue.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <!-- text inputs row -->
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:18px;">
+    <!-- multiline -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">MULTI-LINE</div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-bottom:8px;">SESSION BRIEF</div>
+      <textarea placeholder="Describe the run objective…" style="width:100%; height:84px; resize:none; background:#0E141D; border:1px solid #46566A; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); color:#9FD0F2; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.06em; line-height:1.6; padding:11px 13px; outline:none; caret-color:#ED1F3D;" style-focus="border-color:#ED1F3D; box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.22);"></textarea>
+      <div style="display:flex; justify-content:space-between; margin-top:7px;"><span style="font-size:8px; letter-spacing:.1em; color:#5A6A7E;">Helper · optional</span><span style="font-size:8px; letter-spacing:.1em; color:#5A6A7E;">0 / 240</span></div>
+    </div>
+
+    <!-- search -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">SEARCH</div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-bottom:8px;">FIND OPERATOR</div>
+      <div style="position:relative;">
+        <span style="position:absolute; left:13px; top:50%; transform:translateY(-50%); width:13px; height:13px; border-radius:50%; border:1.5px solid #5A6A7E; pointer-events:none;"></span>
+        <span style="position:absolute; left:23px; top:26px; width:6px; height:1.5px; background:#5A6A7E; transform:rotate(45deg); pointer-events:none;"></span>
+        <input type="text" placeholder="SEARCH…" style="width:100%; height:46px; background:#0E141D; border:1px solid #46566A; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); color:#9FD0F2; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.16em; padding:0 36px 0 34px; outline:none; caret-color:#ED1F3D;" style-focus="border-color:#ED1F3D; box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.22);">
+        <span style="position:absolute; right:13px; top:50%; transform:translateY(-50%); color:#5A6A7E; font-size:13px; cursor:pointer;">&#10005;</span>
+      </div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:7px;">Leading icon · trailing clear</div>
+    </div>
+
+    <!-- numeric stepper -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">NUMERIC · STEPPER</div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-bottom:8px;">CREW SLOTS</div>
+      <div style="display:flex; align-items:stretch; gap:0;">
+        <button onClick="{{ onStepDec }}" style="width:46px; height:46px; flex:none; display:flex; align-items:center; justify-content:center; background:#19212D; color:#93A6BB; font-size:18px; border:1px solid #46566A; border-right:0; cursor:pointer; outline:none;" style-hover="background:#232E3D; color:#EEF3F8;" style-focus="outline:2px solid #FFFFFF; outline-offset:2px;">&#8722;</button>
+        <div style="flex:1; height:46px; display:flex; align-items:center; justify-content:center; background:#0E141D; border-top:1px solid #46566A; border-bottom:1px solid #46566A; color:#9FD0F2; font-size:18px; font-weight:700; letter-spacing:.1em;">{{ stepVal }}</div>
+        <button onClick="{{ onStepInc }}" style="width:46px; height:46px; flex:none; display:flex; align-items:center; justify-content:center; background:#19212D; color:#93A6BB; font-size:18px; border:1px solid #46566A; border-left:0; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); cursor:pointer; outline:none;" style-hover="background:#232E3D; color:#EEF3F8;" style-focus="outline:2px solid #FFFFFF; outline-offset:2px;">&#43;</button>
+      </div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:7px;">Range 00–12 · clamps at bounds</div>
+    </div>
+
+    <!-- password -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">PASSWORD · HIDDEN</div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-bottom:8px;">RELAY KEY</div>
+      <div style="position:relative;">
+        <input type="{{ pwType }}" value="silentprovidence" readonly style="width:100%; height:46px; background:#0E141D; border:1px solid #46566A; clip-path:polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%); color:#9FD0F2; font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.24em; padding:0 64px 0 14px; outline:none;" style-focus="border-color:#ED1F3D; box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.22);">
+        <button onClick="{{ onTogglePw }}" style="position:absolute; right:11px; top:50%; transform:translateY(-50%); background:transparent; border:0; color:#9FD0F2; font-size:8px; letter-spacing:.16em; cursor:pointer; padding:5px;">{{ pwIcon }}</button>
+      </div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:7px;">Trailing toggle reveals the value</div>
+    </div>
+  </div>
+
+  <!-- dropdown + checkbox + radio -->
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px; margin-top:18px;">
+    <!-- dropdown -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px; position:relative; z-index:5;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">DROPDOWN / SELECT</div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-bottom:8px;">PERFORMANCE PROFILE</div>
+      <div style="position:relative;">
+        <div onClick="{{ onToggleDrop }}" style="{{ dropFieldStyle }}">
+          <span style="font-size:11px; letter-spacing:.14em; color:#EEF3F8;">{{ dropVal }}</span>
+          <span style="{{ chevStyle }}"></span>
+        </div>
+        <sc-if value="{{ dropOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:52px; left:0; right:0; background:linear-gradient(158deg,#26303F,#161d29); border:1px solid #3a4658; box-shadow:0 0 0 1px rgba(0,0,0,.35), 0 0 24px rgba(159,208,242,.12); clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); padding:5px 0; animation:mb-pop .16s ease-out; z-index:10;">
+            <sc-for list="{{ dropList }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.onClick }}" style="{{ o.style }}"><span>{{ o.label }}</span><span style="{{ o.tick }}">&#10003;</span></div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+      <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:9px;">Selected row = accent edge + check</div>
+    </div>
+
+    <!-- checkbox -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:14px;">CHECKBOX</div>
+      <div style="display:flex; flex-direction:column; gap:13px;">
+        <sc-for list="{{ cbList }}" as="cb" hint-placeholder-count="3">
+          <div onClick="{{ cb.onClick }}" style="display:flex; align-items:flex-start; gap:11px; cursor:pointer;">
+            <div style="{{ cb.box }}"><div style="{{ cb.check }}"></div></div>
+            <div><div style="font-size:10px; letter-spacing:.1em; color:#EEF3F8;">{{ cb.label }}</div><div style="font-size:8px; letter-spacing:.04em; color:#5A6A7E; margin-top:3px;">{{ cb.sub }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- radio -->
+    <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+      <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:14px;">RADIO — HUD DENSITY</div>
+      <div style="display:flex; flex-direction:column; gap:13px;">
+        <sc-for list="{{ rbList }}" as="rb" hint-placeholder-count="3">
+          <div onClick="{{ rb.onClick }}" style="display:flex; align-items:flex-start; gap:11px; cursor:pointer;">
+            <div style="{{ rb.ring }}"><div style="{{ rb.dot }}"></div></div>
+            <div><div style="{{ rb.labelStyle }}">{{ rb.label }}</div><div style="font-size:8px; letter-spacing:.04em; color:#5A6A7E; margin-top:3px;">{{ rb.sub }}</div></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- sliders -->
+  <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:22px 24px; margin-top:18px;">
+    <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:6px;">REAL SLIDER — DRAG OR CLICK THE TRACK</div>
+    <div style="font-size:8.5px; letter-spacing:.06em; color:#647488; line-height:1.55; margin-bottom:22px;">Track · fill · thumb · value readout. The segmented "meter" stays a display; this is the draggable control.</div>
+    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:30px 40px;">
+
+      <!-- continuous -->
+      <div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;"><span style="font-size:9.5px; letter-spacing:.16em; color:#EEF3F8;">CONTINUOUS</span><span style="font-size:11px; letter-spacing:.1em; color:#FF3A55;">{{ contRead }}</span></div>
+        <div onPointerDown="{{ contDown }}" style="position:relative; height:22px; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+          <div style="position:absolute; left:0; right:0; height:4px; background:#19212D; border-radius:2px; box-shadow:inset 0 0 0 1px #283242;"></div>
+          <div style="{{ contFill }}"></div>
+          <div style="{{ contThumb }}"></div>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:8px;">Value as percentage · 0–100</div>
+      </div>
+
+      <!-- stepped -->
+      <div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;"><span style="font-size:9.5px; letter-spacing:.16em; color:#EEF3F8;">STEPPED</span><span style="font-size:11px; letter-spacing:.14em; color:#FF3A55;">{{ stepRead }}</span></div>
+        <div onPointerDown="{{ stepDown }}" style="position:relative; height:22px; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+          <div style="position:absolute; left:0; right:0; height:4px; background:#19212D; border-radius:2px; box-shadow:inset 0 0 0 1px #283242;"></div>
+          <div style="{{ stepFill }}"></div>
+          <sc-for list="{{ stepTicks }}" as="tk" hint-placeholder-count="5"><div style="{{ tk.style }}"></div></sc-for>
+          <div style="{{ stepThumb }}"></div>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:8px;">Snaps to labelled notches · LOW…MAX</div>
+      </div>
+
+      <!-- range -->
+      <div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;"><span style="font-size:9.5px; letter-spacing:.16em; color:#EEF3F8;">RANGE</span><span style="font-size:11px; letter-spacing:.1em; color:#FF3A55;">{{ rangeRead }}</span></div>
+        <div onPointerDown="{{ rangeDown }}" style="position:relative; height:22px; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+          <div style="position:absolute; left:0; right:0; height:4px; background:#19212D; border-radius:2px; box-shadow:inset 0 0 0 1px #283242;"></div>
+          <div style="{{ rangeFill }}"></div>
+          <div style="{{ rangeLoThumb }}"></div>
+          <div style="{{ rangeHiThumb }}"></div>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:8px;">Two thumbs · grab the nearer one</div>
+      </div>
+
+      <!-- icon / volume -->
+      <div>
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px;"><span style="font-size:9.5px; letter-spacing:.16em; color:#EEF3F8;">ICON · VOLUME</span><span style="font-size:11px; letter-spacing:.1em; color:#FF3A55;">{{ volRead }}</span></div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="display:flex; align-items:flex-end; gap:2px; height:16px; width:18px; flex:none;">
+            <sc-for list="{{ volBars }}" as="vb" hint-placeholder-count="4"><div style="{{ vb.style }}"></div></sc-for>
+          </div>
+          <div onPointerDown="{{ volDown }}" style="position:relative; height:22px; flex:1; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+            <div style="position:absolute; left:0; right:0; height:4px; background:#19212D; border-radius:2px; box-shadow:inset 0 0 0 1px #283242;"></div>
+            <div style="{{ volFill }}"></div>
+            <div style="{{ volThumb }}"></div>
+          </div>
+        </div>
+        <div style="font-size:8px; letter-spacing:.1em; color:#5A6A7E; margin-top:8px;">Leading level icon tracks the value</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- form state matrix -->
+  <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:22px 24px; margin-top:18px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <span style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB;">FIELD STATE MATRIX — COLOUR + CUE</span>
+      <span style="font-size:9px; letter-spacing:.16em; color:#5A6A7E;">ERROR / VALID NEVER RELY ON HUE ALONE</span>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+      <sc-for list="{{ formStates }}" as="f" hint-placeholder-count="8">
+        <div>
+          <div style="font-size:8px; letter-spacing:.18em; color:#738399; margin-bottom:8px;">{{ f.cap }}</div>
+          <div style="{{ f.field }}">
+            <span style="flex:1; {{ f.textStyle }}">{{ f.text }}</span>
+            <span style="{{ f.cueStyle }}">{{ f.cue }}</span>
+            <span style="{{ f.tagStyle }}">{{ f.tag }}</span>
+          </div>
+          <div style="font-size:8px; letter-spacing:.06em; margin-top:7px; color:{{ f.helpColor }};">{{ f.help }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN · SETTINGS (ORANGE) ===================== -->
+  <div style="margin-top:64px; border-top:1px solid #F0820F; padding-top:8px;">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px; flex-wrap:wrap;">
+      <span style="font-family:'Orbitron'; font-size:22px; letter-spacing:.12em; color:#EEF3F8;">SCREEN · SETTINGS</span>
+      <span style="font-size:11px; letter-spacing:.3em; color:#F0820F;">NEW CONTROLS IN CONTEXT</span>
+      <span style="font-size:9px; letter-spacing:.2em; color:#5A6A7E;">ORANGE ACCENT · PLAYER UI OPTIONS</span>
+    </div>
+    <div style="font-size:10px; letter-spacing:.1em; color:#738399; max-width:820px; line-height:1.6;">The four player-accommodation settings this session must support — <span style="color:#FF9A2B;">HUD density</span>, <span style="color:#FF9A2B;">visor effects</span>, <span style="color:#FF9A2B;">reduced-motion</span> and <span style="color:#FF9A2B;">UI scale</span> \u2014 built from the new dropdown, segmented, toggle and slider controls. Same kit, calmer signal; red is never used here.</div>
+
+    <div style="display:flex; justify-content:center; margin-top:30px;">
+      <div style="position:relative; border:1px solid #25303E; background:#080b11; overflow:hidden; width:100%; max-width:560px; padding:34px;">
+        <div style="position:absolute; inset:0; background:radial-gradient(90% 70% at 50% 40%, transparent 30%, rgba(7,10,16,.7)); pointer-events:none;"></div>
+        <div style="position:absolute; top:16px; right:16px; width:13px; height:13px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#F0820F; opacity:.6; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#F0820F; opacity:.6; transform:translateX(-50%);"></div></div>
+
+        <div style="position:relative; background:linear-gradient(158deg,#1E2735 0%,#0f141e 100%); border:1px solid #303C4C; border-left:2px solid #F0820F; clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%); padding:28px 28px 26px;">
+          <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0,0,0,.38)); pointer-events:none;"></div>
+          <div style="position:relative;">
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:16px;">
+              <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #F0820F;"></div>
+              <span style="font-family:'Orbitron'; font-size:9.5px; letter-spacing:.34em; color:#93A6BB;">SETTINGS</span>
+            </div>
+            <div style="font-family:'Orbitron'; font-size:26px; font-weight:600; letter-spacing:.04em; color:#EEF3F8; line-height:1;">PLAYER &amp; DISPLAY</div>
+
+            <div style="display:flex; align-items:center; margin:20px 0 6px;">
+              <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #F0820F; flex:none;"></div>
+              <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin-left:6px;"></div>
+            </div>
+
+            <!-- HUD density (segmented) -->
+            <div style="padding:15px 0; border-bottom:1px solid #1B2330;">
+              <div style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8; margin-bottom:11px;">HUD DENSITY</div>
+              <div style="display:flex; gap:8px;">
+                <sc-for list="{{ hudSeg }}" as="h" hint-placeholder-count="3"><button onClick="{{ h.onClick }}" style="{{ h.style }}">{{ h.label }}</button></sc-for>
+              </div>
+            </div>
+
+            <!-- visor toggle -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid #1B2330;">
+              <div><div style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8;">VISOR EFFECTS</div><div style="font-size:8.5px; letter-spacing:.06em; color:#5A6A7E; margin-top:3px;">Warp · aberration · crack overlay</div></div>
+              <div onClick="{{ onVisor }}" style="{{ visorTrack }}"><div style="{{ visorKnob }}"></div></div>
+            </div>
+
+            <!-- reduced motion toggle -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid #1B2330;">
+              <div><div style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8;">REDUCED MOTION</div><div style="font-size:8.5px; letter-spacing:.06em; color:#5A6A7E; margin-top:3px;">Tones down glow, pulse &amp; drift</div></div>
+              <div onClick="{{ onReduce }}" style="{{ reduceTrack }}"><div style="{{ reduceKnob }}"></div></div>
+            </div>
+
+            <!-- UI scale slider -->
+            <div style="padding:15px 0;">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:13px;">
+                <span style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8;">UI SCALE</span>
+                <span style="font-size:11px; letter-spacing:.1em; color:#FF9A2B;">{{ uiRead }}</span>
+              </div>
+              <div onPointerDown="{{ uiDown }}" style="position:relative; height:22px; display:flex; align-items:center; cursor:pointer; touch-action:none;">
+                <div style="position:absolute; left:0; right:0; height:4px; background:#19212D; border-radius:2px; box-shadow:inset 0 0 0 1px #283242;"></div>
+                <div style="{{ uiFill }}"></div>
+                <div style="{{ uiThumb }}"></div>
+              </div>
+              <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:8px; letter-spacing:.1em; color:#5A6A7E;"><span>80%</span><span>105%</span><span>130%</span></div>
+            </div>
+
+            <div style="display:flex; gap:10px; margin-top:18px;">
+              <button style="flex:1; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+                <div style="height:46px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#F0820F; color:#190E02; font-size:12px; font-weight:700; letter-spacing:.22em; box-shadow:inset 0 1px 0 rgba(255,255,255,.28); transition:background .12s,transform .06s;" style-hover="background:#FF9A2B;" style-active="background:#C7610A; transform:translateY(1px);">APPLY</div>
+              </button>
+              <button style="flex:none; width:130px; border:0; padding:0; cursor:pointer; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px;">
+                <div style="height:46px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#19212D; color:#93A6BB; font-size:11px; font-weight:600; letter-spacing:.22em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s,color .12s;" style-hover="background:#232E3D; color:#C3CEDB;">CANCEL</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- footer -->
+  <div style="margin-top:54px; border:1px solid #303C4C; background:linear-gradient(90deg,rgba(237,31,61,.06),transparent); padding:16px 20px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #ED1F3D;"></div>
+    <span style="font-size:9px; letter-spacing:.24em; color:#ED1F3D;">SESSION B</span>
+    <span style="font-size:9.5px; letter-spacing:.06em; color:#8595a8; line-height:1.6;">All new components map to <span style="color:#C3CEDB;">.mob-*</span> classes in MobiusKit.uss with state matrices &amp; 9-slice rows in README.md. Reuses session-A tokens; PC / KBM-first, controller as a forward note.</span>
+  </div>
+
+  <!-- SECTIONS-END --></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    activeTab: 'NETWORK', page: 3,
+    tip: false, modalOpen: false, dialogOpen: false, toasts: [],
+    dropOpen: false, dropVal: 'BALANCED',
+    checks: { telemetry: true, crash: false, beta: true },
+    radio: 'MINIMAL',
+    cont: 64, step: 3, rangeLo: 28, rangeHi: 74, volume: 45, stepVal: 4, uiScale: 100,
+    pwShow: false,
+    toggleBtns: { grid: true, snap: false, mag: false },
+    hud: 'MINIMAL', visor: true, reduce: false,
+  };
+  _tid = 0;
+
+  notch(p) { return `clip-path:polygon(0 0, calc(100% - ${p}px) 0, 100% ${p}px, 100% 100%, 0 100%);`; }
+
+  /* ---- overlays ---- */
+  pushToast(kind) {
+    const map = {
+      success: { ac: '#84D6BE', glow: 'rgba(132,214,190,.20)', g: '\u2713', t: 'LINK ESTABLISHED', m: 'Session synced \u00b7 3 operators ready' },
+      warning: { ac: '#E7B23F', glow: 'rgba(231,178,63,.20)', g: '\u25B2', t: 'SIGNAL DEGRADED', m: 'Packet loss 12% \u00b7 check uplink' },
+      error:   { ac: '#FF6E6E', glow: 'rgba(237,31,61,.30)', g: '\u2715', t: 'LINK DROPPED', m: 'Host unreachable \u00b7 retrying in 5s' },
+      info:    { ac: '#9FD0F2', glow: 'rgba(159,208,242,.20)', g: 'i', t: 'NEW BUILD STAGED', m: 'v0.4.1 applies on next launch' },
+    };
+    const d = map[kind]; const id = ++this._tid;
+    this.setState(s => ({ toasts: [...s.toasts, { id, ...d }] }));
+    setTimeout(() => this.dismissToast(id), 4200);
+  }
+  dismissToast(id) { this.setState(s => ({ toasts: s.toasts.filter(t => t.id !== id) })); }
+
+  /* ---- sliders ---- */
+  slide(key, min, max, step, e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const calc = cx => { let t = (cx - rect.left) / rect.width; t = Math.max(0, Math.min(1, t)); let v = min + t * (max - min); if (step) v = Math.round(v / step) * step; else v = Math.round(v); return v; };
+    const set = cx => this.setState({ [key]: calc(cx) });
+    set(e.clientX);
+    const mm = ev => set(ev.clientX);
+    const up = () => { window.removeEventListener('pointermove', mm); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', mm); window.addEventListener('pointerup', up);
+  }
+  rangeSlide(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const calc = cx => Math.max(0, Math.min(100, Math.round(((cx - rect.left) / rect.width) * 100)));
+    const v = calc(e.clientX);
+    const pickHi = Math.abs(v - this.state.rangeHi) <= Math.abs(v - this.state.rangeLo);
+    const move = cx => { const nv = calc(cx); this.setState(s => pickHi ? { rangeHi: Math.max(s.rangeLo + 4, nv) } : { rangeLo: Math.min(s.rangeHi - 4, nv) }); };
+    move(e.clientX);
+    const mm = ev => move(ev.clientX);
+    const up = () => { window.removeEventListener('pointermove', mm); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', mm); window.addEventListener('pointerup', up);
+  }
+
+  /* ---- builders ---- */
+  thumb(pct, color) {
+    return `position:absolute; top:50%; left:${pct}%; transform:translate(-50%,-50%); width:12px; height:20px; ${this.notch(4)} background:${color || '#ED1F3D'}; box-shadow:inset 0 1px 0 rgba(255,255,255,.32), 0 0 10px rgba(237,31,61,.4); cursor:grab; touch-action:none;`;
+  }
+  btnCell(fill, ink, label, o) {
+    o = o || {};
+    const h = o.h || 44, n = o.n || 9, fs = o.fs || 12;
+    const dis = o.disabled;
+    return {
+      label,
+      wrap: `position:relative; display:inline-flex;`,
+      ring: o.focus ? `position:absolute; inset:-4px; border:2px solid #FFFFFF; box-shadow:0 0 12px rgba(255,255,255,.32); pointer-events:none;` : `display:none;`,
+      btn: `height:${h}px; min-width:96px; display:flex; align-items:center; justify-content:center; padding:0 18px; ${this.notch(n)} background:${dis ? '#222C3A' : fill}; color:${dis ? 'rgba(185,200,215,0.30)' : ink}; font-size:${fs}px; font-weight:700; letter-spacing:.2em; box-shadow:${dis ? 'none' : 'inset 0 1px 0 rgba(255,255,255,.18)'}; ${o.pressed ? 'transform:translateY(1px);' : ''}`,
+    };
+  }
+
+  renderVals() {
+    const S = this.state;
+    const C = { red: '#ED1F3D', redHi: '#FF3A55', redLo: '#C50E28', redInk: '#190406', blue: '#84BAD9', blueHi: '#9ECCE7', blueInk: '#0B121A', orange: '#F0820F', orangeHi: '#FF9A2B', orangeInk: '#190E02', quiet: '#19212D', text3: '#93A6BB', muted: '#5A6A7E' };
+
+    /* ----- overlays ----- */
+    const toasts = S.toasts.map(t => ({
+      id: t.id,
+      wrap: `display:flex; width:336px; background:linear-gradient(158deg,#26303F,#141b26); border:1px solid #3a4658; ${this.notch(10)} box-shadow:0 0 0 1px rgba(0,0,0,.35), 0 0 26px ${t.glow}; overflow:hidden; animation:mb-toast .32s cubic-bezier(0.16,1,0.30,1);`,
+      bar: `width:4px; flex:none; background:${t.ac};`,
+      iconWrap: `width:34px; flex:none; display:flex; align-items:center; justify-content:center; color:${t.ac}; font-size:12px; font-weight:700;`,
+      glyph: t.g, title: t.t, msg: t.m,
+      titleStyle: `font-size:10px; letter-spacing:.14em; color:#EEF3F8;`,
+      msgStyle: `font-size:9px; letter-spacing:.03em; color:#8595a8; margin-top:4px; line-height:1.5;`,
+      onClose: () => this.dismissToast(t.id),
+    }));
+
+    /* ----- anatomy legend ----- */
+    const anatomy = [
+      { name: 'BACKDROP', color: 'rgba(6,9,14,.72)', note: 'scrim — modal only' },
+      { name: 'FRAME', color: '#3a4658', note: '1px border + accent edge' },
+      { name: 'HEADER', color: '#ED1F3D', note: 'icon · title · close' },
+      { name: 'TITLE', color: '#EEF3F8', note: 'Orbitron + JBM subtitle' },
+      { name: 'CLOSE', color: '#93A6BB', note: 'icon button, top-right' },
+      { name: 'BODY', color: '#566578', note: '9-slice content region' },
+      { name: 'ACTIONS', color: '#84BAD9', note: 'footer · confirm / cancel' },
+      { name: 'ICON SLOT', color: '#9FD0F2', note: 'optional art / glyph' },
+    ];
+
+    const elevChip = (n, col) => `width:30px; height:30px; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Orbitron'; font-size:13px; color:${col}; border:1px solid ${col}; ${this.notch(5)}`;
+    const overlayElev = [
+      { level: '1', name: 'CARD / PANEL', recipe: 'panel tint + hairline + leading accent edge', chip: elevChip('1', '#5A6A7E') },
+      { level: '2', name: 'FLOATING WINDOW', recipe: 'panel-2 + hairline + faint cool glow halo', chip: elevChip('2', '#84BAD9') },
+      { level: '3', name: 'MODAL', recipe: 'scrim behind + panel-2 + accent glow halo', chip: elevChip('3', '#9FD0F2') },
+      { level: '4', name: 'CRITICAL ALERT', recipe: '3px red edge + pulsing danger glow (motion)', chip: elevChip('4', '#ED1F3D') },
+    ];
+
+    /* ----- navigation ----- */
+    const tabNames = ['OVERVIEW', 'NETWORK', 'CREW', 'TELEMETRY', 'LOGS'];
+    const tabsList = tabNames.map(name => {
+      const selected = name === S.activeTab, disabled = name === 'LOGS';
+      return {
+        label: disabled ? name + ' \u00b7 LOCKED' : name,
+        style: `position:relative; padding:11px 16px; font-size:10px; letter-spacing:.16em; font-weight:${selected ? '700' : '400'}; color:${disabled ? '#3f4a5a' : selected ? '#EEF3F8' : '#93A6BB'}; background:${selected ? 'linear-gradient(180deg, rgba(237,31,61,0.12), transparent)' : 'transparent'}; border:0; border-bottom:2px solid ${selected ? '#ED1F3D' : 'transparent'}; cursor:${disabled ? 'not-allowed' : 'pointer'}; outline:none; font-family:inherit; white-space:nowrap; transition:color .12s, background .12s;`,
+        onClick: disabled ? () => {} : () => this.setState({ activeTab: name }),
+      };
+    });
+    const tabContent = {
+      OVERVIEW: { t: 'RUNTIME OVERVIEW', b: 'Aggregate session health, build channel and the active crew at a glance. Default landing tab on first link.' },
+      NETWORK: { t: 'NETWORK / UPLINK', b: 'Relay region, measured latency, packet loss and the join code. The uplink gate tooltip lives here.' },
+      CREW: { t: 'CREW ROSTER', b: 'Per-operator readiness, host badge and slot assignment — reuses the .mob-crew-row component from MOB-109.' },
+      TELEMETRY: { t: 'LIVE TELEMETRY', b: 'Streamed counters and graphs. Numbers lock to the JetBrains Mono grid so columns align.' },
+    };
+    const tc = tabContent[S.activeTab] || tabContent.OVERVIEW;
+
+    const tabMatrix = [
+      { cap: 'IDLE', ...this.tabStateCell('IDLE') },
+      { cap: 'HOVER', ...this.tabStateCell('HOVER') },
+      { cap: 'SELECTED', ...this.tabStateCell('SELECTED') },
+      { cap: 'FOCUS', ...this.tabStateCell('FOCUS') },
+      { cap: 'DISABLED', ...this.tabStateCell('DISABLED') },
+    ];
+
+    const totalPages = 8;
+    const pageList = [];
+    pageList.push({ label: '\u2039', key: 'prev', style: this.pageStyle(false, S.page === 1), onClick: () => this.setState(s => ({ page: Math.max(1, s.page - 1) })) });
+    for (let i = 1; i <= totalPages; i++) {
+      pageList.push({ label: String(i).padStart(2, '0'), key: 'p' + i, style: this.pageStyle(i === S.page, false), onClick: () => this.setState({ page: i }) });
+    }
+    pageList.push({ label: '\u203A', key: 'next', style: this.pageStyle(false, S.page === totalPages), onClick: () => this.setState(s => ({ page: Math.min(totalPages, s.page + 1) })) });
+    const dots = [];
+    for (let i = 0; i < 6; i++) {
+      const on = i === (S.page - 1) % 6;
+      dots.push({ key: 'd' + i, style: `width:${on ? '20px' : '7px'}; height:7px; border-radius:4px; background:${on ? '#ED1F3D' : '#33414f'}; transition:all .2s;`, onClick: () => this.setState({ page: i + 1 }) });
+    }
+
+    /* ----- button gaps ----- */
+    const iconGlyphs = ['\u002B', '\u2715', '\u2039', '\u203A', '\u2261', '\u21BB'];
+    const iconStates = [
+      { cap: 'IDLE', ...this.iconCell('#19212D', '#93A6BB', false, false, false) },
+      { cap: 'HOVER', ...this.iconCell('#232E3D', '#EEF3F8', false, false, false) },
+      { cap: 'SELECTED', ...this.iconCell('#ED1F3D', '#190406', false, false, false) },
+      { cap: 'FOCUS', ...this.iconCell('#19212D', '#93A6BB', true, false, false) },
+      { cap: 'DISABLED', ...this.iconCell('#222C3A', 'rgba(185,200,215,0.3)', false, false, true) },
+    ];
+    const tbDefs = [{ key: 'grid', label: 'GRID' }, { key: 'snap', label: 'SNAP' }, { key: 'mag', label: 'MAGNET' }];
+    const tbList = tbDefs.map(d => {
+      const on = S.toggleBtns[d.key];
+      return {
+        label: d.label,
+        style: `height:40px; display:flex; align-items:center; gap:8px; padding:0 16px; ${this.notch(7)} background:${on ? '#ED1F3D' : '#19212D'}; color:${on ? '#190406' : '#93A6BB'}; font-size:10px; font-weight:${on ? '700' : '500'}; letter-spacing:.16em; box-shadow:${on ? 'inset 0 1px 0 rgba(255,255,255,.2)' : 'inset 0 0 0 1px #2a3545'}; border:0; cursor:pointer; outline:none; font-family:inherit; transition:all .12s;`,
+        pip: `width:7px; height:7px; ${this.notch(2)} background:${on ? '#190406' : '#3a4658'};`,
+        onClick: () => this.setState(s => ({ toggleBtns: { ...s.toggleBtns, [d.key]: !s.toggleBtns[d.key] } })),
+      };
+    });
+    const sizeRows = [
+      { name: 'SMALL', sub: 'h36 \u00b7 fs10 \u00b7 notch7', h: 36, n: 7, fs: 10 },
+      { name: 'DEFAULT', sub: 'h48 \u00b7 fs12 \u00b7 notch9', h: 48, n: 9, fs: 12 },
+      { name: 'LARGE', sub: 'h56 \u00b7 fs13 \u00b7 notch11', h: 56, n: 11, fs: 13 },
+    ].map(r => ({
+      name: r.name, sub: r.sub,
+      primary: this.btnCell(C.red, C.redInk, 'HOST', { h: r.h, n: r.n, fs: r.fs }),
+      secondary: this.btnCell(C.blue, C.blueInk, 'JOIN', { h: r.h, n: r.n, fs: r.fs }),
+      quiet: this.btnCell(C.quiet, C.text3, 'QUIT', { h: r.h, n: r.n, fs: r.fs }),
+    }));
+
+    /* ----- forms: dropdown ----- */
+    const dropOptions = ['PERFORMANCE', 'BALANCED', 'QUALITY', 'CUSTOM'];
+    const dropList = dropOptions.map(o => {
+      const sel = o === S.dropVal;
+      return {
+        label: o,
+        style: `display:flex; align-items:center; justify-content:space-between; padding:11px 14px; font-size:10px; letter-spacing:.14em; color:${sel ? '#EEF3F8' : '#AEBBCB'}; background:${sel ? 'rgba(237,31,61,0.12)' : 'transparent'}; border-left:2px solid ${sel ? '#ED1F3D' : 'transparent'}; cursor:pointer; transition:background .12s;`,
+        tick: sel ? `color:#ED1F3D; font-size:10px;` : `display:none;`,
+        onClick: () => this.setState({ dropVal: o, dropOpen: false }),
+      };
+    });
+    const dropFieldStyle = `display:flex; align-items:center; justify-content:space-between; height:46px; padding:0 14px; background:#0E141D; border:1px solid ${S.dropOpen ? '#ED1F3D' : '#46566A'}; ${this.notch(6)} cursor:pointer; ${S.dropOpen ? 'box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.22);' : ''} transition:border-color .12s;`;
+    const chevStyle = `width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:6px solid ${S.dropOpen ? '#ED1F3D' : '#5A6A7E'}; transform:rotate(${S.dropOpen ? '180deg' : '0deg'}); transition:transform .2s;`;
+
+    /* ----- checkbox ----- */
+    const cbDefs = [
+      { key: 'telemetry', label: 'SHARE TELEMETRY', sub: 'Anonymous session metrics' },
+      { key: 'crash', label: 'AUTO-SEND CRASH LOGS', sub: 'Upload on unexpected exit' },
+      { key: 'beta', label: 'BETA CHANNEL', sub: 'Receive pre-release builds' },
+    ];
+    const cbList = cbDefs.map(d => {
+      const on = S.checks[d.key];
+      return {
+        label: d.label, sub: d.sub,
+        box: `width:18px; height:18px; flex:none; display:flex; align-items:center; justify-content:center; ${this.notch(4)} background:${on ? '#ED1F3D' : '#0E141D'}; border:1px solid ${on ? '#ED1F3D' : '#46566A'}; transition:all .12s;`,
+        check: `width:4px; height:8px; border:solid #190406; border-width:0 2px 2px 0; transform:rotate(45deg) translateY(-1px); opacity:${on ? 1 : 0}; transition:opacity .12s;`,
+        onClick: () => this.setState(s => ({ checks: { ...s.checks, [d.key]: !s.checks[d.key] } })),
+      };
+    });
+
+    /* ----- radio ----- */
+    const rbDefs = [
+      { key: 'NEAR-EMPTY', label: 'NEAR-EMPTY', sub: 'Crosshair + criticals only' },
+      { key: 'MINIMAL', label: 'MINIMAL-PERSISTENT', sub: 'Default \u00b7 core readouts kept' },
+      { key: 'FULL', label: 'FULL', sub: 'All panels and counters' },
+    ];
+    const rbList = rbDefs.map(d => {
+      const sel = d.key === S.radio;
+      return {
+        label: d.label, sub: d.sub,
+        ring: `width:18px; height:18px; flex:none; border-radius:50%; border:1px solid ${sel ? '#ED1F3D' : '#46566A'}; display:flex; align-items:center; justify-content:center; transition:all .12s;`,
+        dot: `width:8px; height:8px; border-radius:50%; background:#ED1F3D; opacity:${sel ? 1 : 0}; transform:scale(${sel ? 1 : 0.4}); transition:all .12s;`,
+        labelStyle: `font-size:10.5px; letter-spacing:.1em; color:${sel ? '#EEF3F8' : '#AEBBCB'};`,
+        onClick: () => this.setState({ radio: d.key }),
+      };
+    });
+
+    /* ----- sliders ----- */
+    const contFill = `position:absolute; top:50%; left:0; transform:translateY(-50%); height:4px; width:${S.cont}%; background:#ED1F3D; border-radius:2px;`;
+    const contThumb = this.thumb(S.cont);
+    const contDown = e => this.slide('cont', 0, 100, 0, e);
+
+    const stepLabels = ['LOW', 'FAIR', 'MED', 'HIGH', 'MAX'];
+    const stepPct = (S.step - 1) / 4 * 100;
+    const stepFill = `position:absolute; top:50%; left:0; transform:translateY(-50%); height:4px; width:${stepPct}%; background:#ED1F3D; border-radius:2px;`;
+    const stepThumb = this.thumb(stepPct);
+    const stepDown = e => this.slide('step', 1, 5, 1, e);
+    const stepTicks = [0, 25, 50, 75, 100].map((p, i) => ({ key: 't' + i, style: `position:absolute; top:50%; left:${p}%; transform:translate(-50%,-50%); width:2px; height:10px; background:${(S.step - 1) * 25 >= p ? '#ED1F3D' : '#3a4658'};` }));
+
+    const rangeFill = `position:absolute; top:50%; left:${S.rangeLo}%; transform:translateY(-50%); height:4px; width:${S.rangeHi - S.rangeLo}%; background:#ED1F3D; border-radius:2px;`;
+    const rangeLoThumb = this.thumb(S.rangeLo);
+    const rangeHiThumb = this.thumb(S.rangeHi);
+    const rangeDown = e => this.rangeSlide(e);
+
+    const volFill = `position:absolute; top:50%; left:0; transform:translateY(-50%); height:4px; width:${S.volume}%; background:#ED1F3D; border-radius:2px;`;
+    const volThumb = this.thumb(S.volume);
+    const volDown = e => this.slide('volume', 0, 100, 0, e);
+    const volBars = [0, 1, 2, 3].map(i => ({ key: 'b' + i, style: `width:3px; height:${5 + i * 3}px; background:${S.volume > i * 25 ? '#ED1F3D' : '#3a4658'}; align-self:flex-end;` }));
+
+    /* ----- form state matrix ----- */
+    const fField = (border, bg, extra) => `height:42px; display:flex; align-items:center; padding:0 12px; background:${bg || '#0E141D'}; border:1px solid ${border}; ${this.notch(4)} ${extra || ''}`;
+    const cueS = c => c ? `font-size:11px; font-weight:700; color:${c}; margin-left:6px; flex:none;` : `display:none;`;
+    const tagS = c => c ? `font-size:7px; letter-spacing:.14em; color:${c}; border:1px solid #2a3545; padding:2px 4px; margin-left:6px; flex:none;` : `display:none;`;
+    const fs = (o) => ({ cap: o.cap, field: o.field, text: o.text, textStyle: o.textStyle, cue: o.cue || '', cueStyle: cueS(o.cueColor), tag: o.tag || '', tagStyle: tagS(o.tag ? '#9FD0F2' : ''), help: o.help, helpColor: o.helpColor });
+    const formStates = [
+      { cap: 'EMPTY', field: fField('#46566A'), text: 'LINK CODE', textStyle: 'font-size:11px; letter-spacing:.2em; color:#46566A;', help: 'Awaiting input', helpColor: '#5A6A7E' },
+      { cap: 'FILLED', field: fField('#46566A'), text: '7K9Q2M', textStyle: 'font-size:11px; letter-spacing:.24em; color:#9FD0F2;', help: '6 / 6 chars', helpColor: '#5A6A7E' },
+      { cap: 'HOVER', field: fField('#5d6e84'), text: '7K9Q2M', textStyle: 'font-size:11px; letter-spacing:.24em; color:#9FD0F2;', help: 'Border lightens', helpColor: '#5A6A7E' },
+      { cap: 'FOCUSED', field: fField('#ED1F3D', '#0E141D', 'box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 14px rgba(237,31,61,.24);'), text: '7K9Q2M\u2502', textStyle: 'font-size:11px; letter-spacing:.24em; color:#9FD0F2;', help: 'Red edge + glow', helpColor: '#9FD0F2' },
+      { cap: 'DISABLED', field: fField('#2a3545', '#11161a'), text: 'LINK CODE', textStyle: 'font-size:11px; letter-spacing:.2em; color:#3a4658;', cueColor: '#5A6A7E', cue: '\u29B8', help: 'Unavailable', helpColor: '#5A6A7E' },
+      { cap: 'READ-ONLY', field: fField('#46566A', '#0c1119', 'border-style:dashed;'), text: '7K9Q2M', textStyle: 'font-size:11px; letter-spacing:.24em; color:#AEBBCB;', tag: 'RO', help: 'Not editable', helpColor: '#5A6A7E' },
+      { cap: 'ERROR', field: fField('#FF6E6E'), text: '7K9', textStyle: 'font-size:11px; letter-spacing:.24em; color:#FF8E8E;', cueColor: '#FF6E6E', cue: '\u2715', help: 'INVALID \u2014 NEEDS 6 CHARS', helpColor: '#FF6E6E' },
+      { cap: 'VALID', field: fField('#84D6BE'), text: '7K9Q2M', textStyle: 'font-size:11px; letter-spacing:.24em; color:#9FD0F2;', cueColor: '#84D6BE', cue: '\u2713', help: 'LINK VERIFIED', helpColor: '#84D6BE' },
+    ].map(fs);
+
+    /* ----- demo settings (orange) ----- */
+    const hudSeg = ['NEAR-EMPTY', 'MINIMAL', 'FULL'].map(o => {
+      const sel = o === S.hud;
+      return {
+        label: o,
+        style: `flex:1; height:34px; display:flex; align-items:center; justify-content:center; ${this.notch(6)} background:${sel ? '#F0820F' : '#19212D'}; color:${sel ? '#190E02' : '#93A6BB'}; font-size:9px; font-weight:${sel ? '700' : '400'}; letter-spacing:.12em; border:0; cursor:pointer; outline:none; font-family:inherit; box-shadow:${sel ? 'inset 0 1px 0 rgba(255,255,255,.2)' : 'inset 0 0 0 1px #2a3545'}; transition:all .12s;`,
+        onClick: () => this.setState({ hud: o }),
+      };
+    });
+    const mkToggle = (on, accent) => ({
+      track: `width:50px; height:24px; flex:none; ${this.notch(4)} background:${on ? accent : '#19212D'}; box-shadow:inset 0 0 0 1px ${on ? accent : '#2a3545'}; position:relative; cursor:pointer; transition:background .15s;`,
+      knob: `position:absolute; top:3px; left:3px; width:18px; height:18px; ${this.notch(3)} background:${on ? '#190E02' : '#46566A'}; transform:translateX(${on ? '26px' : '0'}); transition:transform .15s, background .15s;`,
+    });
+    const visorT = mkToggle(S.visor, '#F0820F');
+    const reduceT = mkToggle(S.reduce, '#F0820F');
+    const uiPct = (S.uiScale - 80) / 50 * 100;
+    const uiFill = `position:absolute; top:50%; left:0; transform:translateY(-50%); height:4px; width:${uiPct}%; background:#F0820F; border-radius:2px;`;
+    const uiThumb = `position:absolute; top:50%; left:${uiPct}%; transform:translate(-50%,-50%); width:12px; height:20px; ${this.notch(4)} background:#F0820F; box-shadow:inset 0 1px 0 rgba(255,255,255,.32), 0 0 10px rgba(240,130,15,.4); cursor:grab; touch-action:none;`;
+    const uiDown = e => this.slide('uiScale', 80, 130, 5, e);
+
+    return {
+      /* overlays */
+      modalOpen: S.modalOpen, dialogOpen: S.dialogOpen, toasts,
+      openModal: () => this.setState({ modalOpen: true }),
+      closeModal: () => this.setState({ modalOpen: false }),
+      confirmModal: () => { this.setState({ modalOpen: false }); this.pushToast('success'); },
+      openDialog: () => this.setState({ dialogOpen: true }),
+      closeDialog: () => this.setState({ dialogOpen: false }),
+      confirmDialog: () => { this.setState({ dialogOpen: false }); this.pushToast('error'); },
+      tSuccess: () => this.pushToast('success'), tWarn: () => this.pushToast('warning'), tErr: () => this.pushToast('error'), tInfo: () => this.pushToast('info'),
+      tip: S.tip, onTipEnter: () => this.setState({ tip: true }), onTipLeave: () => this.setState({ tip: false }),
+      anatomy, overlayElev,
+      /* nav */
+      tabsList, tabTitle: tc.t, tabBody: tc.b, tabMatrix, pageList, dots,
+      /* buttons */
+      iconGlyphs, iconStates, tbList, sizeRows,
+      /* forms */
+      dropOpen: S.dropOpen, dropVal: S.dropVal, dropList, dropFieldStyle, chevStyle,
+      onToggleDrop: () => this.setState(s => ({ dropOpen: !s.dropOpen })),
+      cbList, rbList,
+      contFill, contThumb, contDown, contRead: S.cont + '%',
+      stepFill, stepThumb, stepDown, stepTicks, stepRead: stepLabels[S.step - 1],
+      rangeFill, rangeLoThumb, rangeHiThumb, rangeDown, rangeRead: S.rangeLo + ' \u2013 ' + S.rangeHi,
+      volFill, volThumb, volDown, volBars, volRead: S.volume + '%',
+      stepVal: String(S.stepVal).padStart(2, '0'),
+      onStepDec: () => this.setState(s => ({ stepVal: Math.max(0, s.stepVal - 1) })),
+      onStepInc: () => this.setState(s => ({ stepVal: Math.min(12, s.stepVal + 1) })),
+      pwType: S.pwShow ? 'text' : 'password', pwIcon: S.pwShow ? 'HIDE' : 'SHOW',
+      onTogglePw: () => this.setState(s => ({ pwShow: !s.pwShow })),
+      formStates,
+      /* demo */
+      hudSeg, visorTrack: visorT.track, visorKnob: visorT.knob, onVisor: () => this.setState(s => ({ visor: !s.visor })),
+      reduceTrack: reduceT.track, reduceKnob: reduceT.knob, onReduce: () => this.setState(s => ({ reduce: !s.reduce })),
+      uiFill, uiThumb, uiDown, uiRead: S.uiScale + '%',
+    };
+  }
+
+  tabStateCell(state) {
+    const sel = state === 'SELECTED', hov = state === 'HOVER', foc = state === 'FOCUS', dis = state === 'DISABLED';
+    return {
+      wrap: `position:relative; display:inline-flex;`,
+      ring: foc ? `position:absolute; inset:-3px; border:2px solid #FFFFFF; box-shadow:0 0 10px rgba(255,255,255,.3); pointer-events:none;` : `display:none;`,
+      tab: `padding:10px 16px; font-size:10px; letter-spacing:.16em; font-weight:${sel ? '700' : '400'}; color:${dis ? '#3f4a5a' : sel ? '#EEF3F8' : hov ? '#C3CEDB' : '#93A6BB'}; background:${sel ? 'linear-gradient(180deg, rgba(237,31,61,0.12), transparent)' : hov ? 'rgba(255,255,255,0.03)' : 'transparent'}; border-bottom:2px solid ${sel ? '#ED1F3D' : 'transparent'};`,
+      label: 'NETWORK',
+    };
+  }
+  iconCell(bg, color, focus, sel, dis) {
+    return {
+      wrap: `position:relative; display:inline-flex;`,
+      ring: focus ? `position:absolute; inset:-4px; border:2px solid #FFFFFF; box-shadow:0 0 12px rgba(255,255,255,.32); pointer-events:none;` : `display:none;`,
+      btn: `width:42px; height:42px; display:flex; align-items:center; justify-content:center; ${this.notch(7)} background:${bg}; color:${color}; font-size:14px; box-shadow:${dis ? 'none' : 'inset 0 1px 0 rgba(255,255,255,.12)'};`,
+    };
+  }
+  pageStyle(active, disabled) {
+    return `min-width:34px; height:34px; display:flex; align-items:center; justify-content:center; padding:0 8px; ${this.notch(5)} background:${active ? '#ED1F3D' : '#19212D'}; color:${active ? '#190406' : disabled ? '#3a4658' : '#93A6BB'}; font-size:10px; font-weight:${active ? '700' : '500'}; letter-spacing:.1em; border:0; cursor:${disabled ? 'not-allowed' : 'pointer'}; outline:none; font-family:inherit; box-shadow:${active ? 'inset 0 1px 0 rgba(255,255,255,.2)' : 'inset 0 0 0 1px #2a3545'}; transition:all .12s;`;
+  }
+}
+</script>
+</body>
+</html>

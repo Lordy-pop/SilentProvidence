@@ -14,8 +14,10 @@
 
 | File | Contents | Status |
 |------|----------|--------|
+| [premise.md](premise.md) | **Start here** — the saga in full, the central question, the door into everything else | Active |
 | [silent-providence.md](silent-providence.md) | World bible — full history, factions, the Mobius Drive | Active |
 | [theology.md](theology.md) | The questions underneath — theological positions, the closing of the ledger | Active |
+| [houses.md](houses.md) | The Houses — Earth's surviving civilizations, their philosophies, their vocations | Active |
 | [aliens/tatos.md](aliens/tatos.md) | Tatos species — Mundo, human robots, the sacred text, the ending | Active |
 | [stories/mundo.md](stories/mundo.md) | Mundo — the first Tato, from his perspective. Funny. The beginning of everything. | First draft |
 

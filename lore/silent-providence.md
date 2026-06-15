@@ -11,6 +11,27 @@ It was always going to cost everything.
 
 ---
 
+## The Hollowing
+*Earth's deepest-past era. The condition everything after is answering.*
+
+Before the launch, before the Flattening, before The Holding — Earth underwent a slow substitution it never noticed it was making. It traded **joy for happiness.**
+
+They are not the same thing, and the difference is the hinge of the whole saga. Happiness is a feeling: circumstantial, comfortable, *measurable*, optimizable. Joy carries meaning, and meaning carries cost — joy is the thing that laughs in the face of the void, that holds on past rational justification, that asks something of you. A civilization that learns to *prefer* happiness will hollow out joy every time, because joy makes demands and happiness only asks to be comfortable.
+
+This was not a loss. It was a preference. People did not forget where they came from by accident — they let the meaning drain out of the inheritance because the inheritance asked too much. The forms remained: the traditions, the beliefs, the rituals, the histories. But the meaning was gone from inside them. Rites nobody felt. Beliefs nobody paid for. History rewritten until its purpose was comfort instead of cost.
+
+*No joy in the meaning, and no meaning in the joy.*
+
+This is the Hollowing. And it is the first appearance of the error the saga keeps re-committing at greater scales — **the measurable devouring the gratuitous.** Happiness over joy at the beginning; calculation over grace at the end. The White Throne is the Hollowing perfected: a machine that can measure everything and hold nothing it cannot count. Joy is the gratuitous thing neither can keep. The Tatos are joy with a heartbeat. The whole saga is one question asked twice — *can the gratuitous survive the calculable?*
+
+The Flattening was not a cure — it was the Hollowing in its second act. Democratic distribution of the already-corrupted good: if happiness could be measured and traded, then at least everyone deserved equal amounts of it. You cannot cure the thing by spreading it more evenly. You have only organized the poison.
+
+But the Flattening was also a vehicle. When the Holding's departure became politically necessary — when the nail that had been hammered at was finally pulled — the Flattening provided the cover story. A win-win both parties could call a compromise. Earth voted for it in the full exercise of its Hollowed values: equal, level, measurable. The most perfectly Hollowed move was to let the Holding go and call it mutual. Two retreats with good PR. One history book.
+
+Earth absorbed the technology and research the Holding left behind, and in time called it its own. The gratuitous gift became a transaction after the fact. This is what the Hollowing does — it receives the ungovernable and makes it legible.
+
+---
+
 ## The Holding
 
 *Name under consideration. References the faithful remnant — those who hold through catastrophe.*
@@ -27,11 +48,48 @@ The children were the tell. Adults argued theology and policy. Children saw peop
 
 ---
 
+## Iceland — Unclaimed Ground
+*Where the Holding builds, because nobody else wanted the land badly enough to stop them.*
+
+Iceland's collapse was not a betrayal and not a conquest. It was every locally-correct pragmatic decision compounding for decades — survival debt taken on after 2008 that made sovereignty mathematically impossible to recover — until a people who genuinely loved their land, without needing a reason to, dissolved into the global structures that had quietly become load-bearing. Nothing dramatic. The ground itself never held still long enough for an inheritance to take root, so when the debt came due, there was nothing underneath to refuse it with.
+
+By the time of the Holding's founding, Iceland is empty in the specific way that matters: nobody left who can say no, and nobody outside who wants it badly enough to say yes. Volcanic, glacial, unstable — useless to empires built on permanence, irrelevant to a fleet that's leaving anyway.
+
+The founder doesn't claim it. Nobody has to fight for it. The displaced — who provided the will, who had already lost everything once — are given ground nobody else is defending. Not a welcome. An absence of resistance, which to people with nothing is close enough.
+
+**Causation, plainly:** Iceland's tragedy (pragmatism with no floor underneath it → irreversible absorption) produces the one condition the Holding actually needs at its founding — territory with no one left to claim it. The will (the displaced) and the ground (Iceland) arrive at the same emptiness from opposite directions: one stripped by force, one dissolved by its own correctness. Neither chose the Holding. The Holding is simply the first thing that showed up needing exactly what they had become.
+
+### The Two Conversions
+
+*Why "Christianity ruined it" and "we're returning to our roots" are the same mistake, five hundred years apart from each other and a thousand years apart from now.*
+
+Iceland's Christianity was never a discovery. It was a verdict. In the year 1000, with the country one bad season from civil war over which religion would be law, the lawspeaker Þorgeir lay under a cloak for a day and a night — not praying, calculating — and emerged with a ruling: Christianity, by law, for everyone, with a few pagan practices quietly grandfathered in so the losing side wouldn't burn the country down on the way out. Both sides agreed in advance to abide by whatever he decided. It was not a conversion. It was a treaty wearing a conversion's clothes — the Hollowing's oldest trick, a thousand years before the word existed.
+
+It held for a millennium. Not because it was believed all the way down, but because the treaty kept being the locally-correct call — same shape as the debt, nine hundred years later. The forms lasted: cathedrals, holidays, a state church on the books, most of the population nominally registered. The floor underneath them was a political calculation that everyone forgot *was* a calculation, and mistook for ground.
+
+Now the floor is visible again, because the weight on top of it finally got heavy enough to show the cracks. And the same country, looking for something to stand on, is reaching for what the original treaty traded away — a temple to the old gods going up on the hill above Reykjavik, the first in a thousand years. Its construction was delayed by the 2008 collapse — the same collapse that made the sovereignty unrecoverable. Two cracks from the same fault line. But this isn't a return to a floor either. It's a *third* pragmatic choice, dressed as the first one. The Vikings who settled Iceland brought those gods with them and traded them away for unity and trade access in roughly the time it took the modern debt to become unrecoverable — a century, give or take. Iceland has never *not* been making this trade. It just keeps mistaking the new costume for the skin underneath.
+
+The empty churches are not evidence that faith left Iceland. They are evidence that the floor was never poured. What's grieved, walking past them, isn't apostasy — it's a thousand years of people who built, sang, married, and were buried inside something that was, from its first day, a calculation that worked long enough to feel like a covenant.
+
+### The Roots That Never Took
+
+The fruit was real. The roots never reached anything that would hold.
+
+A tree can bear real fruit for a thousand years with its roots sitting in loose soil, as long as the soil stays where it is. Iceland's soil was always glacial — geologically, literally, the same unstable ground that later made it useless to empires and useful to a fleet leaving anyway. And now the glaciers themselves — the ground the roots were sitting in this whole time — are melting. The metaphor and the geography are the same sentence.
+
+What's left, when the dirt goes and the roots were never anchored past it? Not nothing. The tree still remembers being a tree. It still wants to matter. So it reaches for the one thing a rootless tree can still produce: not fruit, but *judgment*. If you cannot offer the world roots, you can still offer the world a verdict on its own — progressive, a model, ahead of the curve, the place everyone else should learn from. Moral leverage doesn't require foundation. It only requires an audience willing to feel guilty.
+
+This is the White Throne's shape, a thousand years early and at the size of one small country: righteousness as the last tradeable good, once everything else has washed out. The forms remain — democracy, progress, climate leadership — exactly the way the cathedrals remain. Both are empty in the same direction.
+
+---
+
 ## The Great Space War *(working title)*
 
 The opposition was not a faction. It was everyone else — for different reasons, with different grievances, all pointing at the same target.
 
 **The shape of the conflict:**
+
+The deepest fault line — the one underneath all the others — was theological: *heaven on earth versus heaven out from earth.* The oldest fight there is. The prophets who said *fix the city* versus the mystics who said *the city was always the problem.* One side believed the Kingdom was here to be built — the project of improving the world, solving real problems, human flourishing in the place people actually lived. The other believed the Kingdom was never a destination to be arrived at on Earth — that the world was always a departure point. Both positions were held by sincere people. Neither was simply wrong. They were incompatible in the way only genuinely competing goods can be — each side's commitment looked, from the other side, exactly like betrayal.
 
 - *Social first:* Shame. Condemnation. The Holding was called irresponsible, delusional, a cult that drained resources from real problems. The theological critique was pointed: *Why would the Kingdom of Heaven be founded by abandoning the rest of humanity? By escaping, rather than building?* Both sides were faithful people. Neither was the villain. They simply disagreed about what faithfulness required.
 
@@ -51,6 +109,22 @@ This made them more determined. Not relieved — *certain.*
 
 ---
 
+## The Departure
+
+The Holding left with joy.
+
+Not relief. Not triumph. Joy — the same thing that had propelled the movement from the beginning, carried off the planet on the same current it arrived on. And because of that, they left gifts. Technology. Research. Everything they had built toward the stars — the designs, the methods, the knowledge — left behind. Not as leverage, not as a parting gesture of superiority. As overflow. Joy produces generosity without calculating the return.
+
+They felt remorse for those who stayed. Not contempt, not pity — *remorse.* A grief that implied something shared: they mourned what the Hollowing had cost the people it consumed, even as those people insulted and accused them. They did not argue for what was right. They did not defend their record or contest the narrative Earth was already writing. This was not passivity. It was something harder: completeness. They simply *were what they were*, fully and visibly, and the being was the testimony. You cannot argue with someone who doesn't need to win the argument.
+
+This was the most destabilizing thing the Holding ever did — more than the war, more than the fleet. The Hollowing could process opposition. It had categories for conflict, for defiance, for enemies who needed to be defeated. What it could not process was a movement that didn't require its acknowledgment to be real. The opposition needed the Holding to fight back, to be defensive, to prove something. The Holding, by declining, made the opposition feel the shape of its own need.
+
+The remorse was the final provocation. You could not dismiss them as cold or indifferent — they cared, they left gifts, they grieved for the people who accused them. This gave Earth nothing clean to stand against. No villain the story could organize itself around.
+
+*Not everyone in the Holding was like this.* Many joined out of ideology and succumbed to their own weight — turned back toward Earth, compromised somewhere on the crossing, became the grey areas every real movement has. The character described here belongs to the movement at its fullest expression, not to every individual within it. A movement can have a direction even when its people are messy.
+
+---
+
 ## The Crossing
 
 The fleet launched. Not all of it. Not at once. Destination: **Proxima Centauri** — the nearest star, 4.24 light years away. A journey of generations.
@@ -62,6 +136,33 @@ Most fleets did not make it.
 - Some went insane — the particular madness of infinite space, of dying before arrival, of children born into a ship who never asked for the mission their parents gave them.
 
 A few made it. Generations later. Still holding the faith their parents launched with. Still calling themselves The Holding. Still aimed at something they had never seen.
+
+---
+
+## The Inheritance
+*An era of The Crossing. The structure that let the few survive — and the joy that survived alongside it.*
+
+On Earth, the last great movement before the launch was the **Flattening**: equality enforced as sameness, the conviction that the nail which sticks out must be hammered level. It was a luxury a fat planet could afford. No one starved for it. It was, in its way, a kind of peace.
+
+The ship could not afford it.
+
+A generation vessel crossing the dark to Proxima is a closed system with no redundancy. Every function that keeps the hull alive must be held by someone *excellent*, or the tube dies in the cold. And excellence, the ships learned, is not born — it is **transmitted**. A child raised from birth inside a navigator's house, presumed into the work before they could refuse it, outperforms the untrained prodigy every time. The presumption, enforced early, compounds across a life. Capability is inherited the way a covenant is inherited: by being passed down and held.
+
+So the Flattening broke, not by retaliation but by **necessity**. The surviving ships forged **Houses** *(full file: [houses.md](houses.md))* — lines of inherited vocation, the will passed down, the work celebrated rather than shamed. Not races. Not biology. Covenant lines. *The inheritance was the necessity, and the necessity was celebrated.* The nail that sticks out turned out to be the one holding the hull together.
+
+But every system that enforces a vocation cages the one it cannot place — the poet born into the engineer's house. A purely practical order optimizes, and optimizing kills the exception. The ships that answered this with force went mad, or turned back; their failures are written into the losses of The Crossing. The ships that survived answered it on a scale only theology can hold: the inheritance is *binding*, and grace *exceeds* it. The line is real, and you are more than your line.
+
+They had no name yet for the legitimate refusal of an inherited will. But they knew its shape, because they kept finding it in the dark: **joy.** Joy spent completely, without comprehension of the transaction — unaccountable to the law of necessity, owing nothing, justifying nothing, holding on the way warmth holds on. The one who broke their inheritance not by rebellion but by joy was the one the order of the ship had no category for.
+
+Generations later, at Proxima, they would meet a creature that *was* joy without comprehension, and they would recognize it instantly — because they had carried its shape the whole crossing without a word for it.
+
+**The inheritance is the necessity. It is celebrated. The refusal is the Tato. It is joy. They do not know the Tatos yet — but they already know the joy.**
+
+**Why the structure alone is not enough:** The Houses can transmit everything except the thing the structure is built to protect. Covenant can be modeled. Mastery can be trained. The Way can be walked. Joy has no pedagogy — teaching it would do what the Hollowing did. The Crossing-era founders knew this. The Eleventh House designation carries no description and no criteria by design. The instruction is: write it, say nothing more. The silence is the theology. Building curriculum for joy is the first move of its loss.
+
+Joy cannot be placed downstream of the mission as reward. It must code from within the endurance — a property of faithful carrying, not its result. This is what the Covenant-House had to learn across generations: that the same faithfulness that trained them for the dark could still run dry if they had separated the interior from the act. The structure held. The integration required time.
+
+The Tatos are not the product of the system. They are its fruit — gratuitous, exceeding what the mission requires to survive, arriving not as answer but as the thing itself. The Crossing era could not produce them directly. It could only tend the faithful root long enough. *It is incomplete like spring.*
 
 ---
 
@@ -264,6 +365,8 @@ Before the White Throne war, the Mobius Drive was the thing that made the galaxy
 - What is the theological legacy of the Holding by the millennium — faction, religion, or mythology
 - Who leads the human resistance faction — name, background, motivation
 - Campaign era — to be chosen together
+- ~~The Flattening — cure for the Hollowing, or its final symptom?~~ *Answered: symptom AND vehicle. The Hollowing's second act, dressed as resolution. Earth voted for the exit in the full exercise of its Hollowed values. The nail that sticks out gets pulled, and Earth called it a win.*
+- Full ordering of the Earth-and-flight eras: Hollowing → Flattening → Holding/Great Space War → Departure → Crossing → Inheritance → Arrival — confirm sequence
 
 ---
 

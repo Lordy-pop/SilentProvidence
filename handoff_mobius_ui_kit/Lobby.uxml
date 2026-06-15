@@ -1,0 +1,95 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <!-- Lobby.uxml — built entirely from the existing kit (MOB-108/109). No new
+         styles except .mob-crew-row, which now lives in MobiusKit.uss for reuse.
+         Wire in C#: populate crew rows from the session roster, toggle .is-ready /
+         .is-standby per player, drive the readiness meter, and enable START RUN
+         (swap .mob-btn--disabled-look → .mob-btn--primary) only when all online
+         crew are ready. -->
+    <Style src="MobiusKit.uss" />
+
+    <ui:VisualElement class="mobius-root" style="align-items: center; justify-content: center;">
+
+        <ui:VisualElement class="mob-cross"                  style="position:absolute; top:18px; left:18px;" />
+        <ui:VisualElement class="mob-cross mob-cross--accent" style="position:absolute; top:18px; right:18px; width:13px; height:13px;" />
+
+        <!-- Lobby panel — same .mob-panel, wider (520) -->
+        <ui:VisualElement name="panel" class="mob-panel" style="width: 520px;">
+
+            <!-- header: wordmark + join code -->
+            <ui:VisualElement style="flex-direction: row; align-items: flex-start; justify-content: space-between;">
+                <ui:VisualElement>
+                    <ui:VisualElement style="flex-direction: row; align-items: center; margin-bottom: 16px;">
+                        <ui:VisualElement class="mob-mark" style="margin-right: 9px;" />
+                        <ui:Label text="CREW LOBBY" class="mob-display mob-eyebrow" />
+                    </ui:VisualElement>
+                    <ui:Label text="STANDBY MUSTER" class="mob-title" style="font-size: 27px;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="align-items: flex-end;">
+                    <ui:Label text="LINK CODE" style="font-size: 8px; letter-spacing: 2px; color: var(--mob-muted); margin-bottom: 5px;" />
+                    <ui:Label name="lobby-code" text="K7P2QR" style="font-size: 15px; letter-spacing: 3px; color: var(--mob-active);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- node rule + count -->
+            <ui:VisualElement class="mob-noderule" style="margin: 20px 0 6px 0;">
+                <ui:VisualElement class="mob-mark mob-mark--sm" />
+                <ui:VisualElement class="mob-rule" />
+                <ui:Label name="crew-count" text="3 / 4 LINKED" style="font-size: 9px; letter-spacing: 2px; color: var(--mob-text-3);" />
+            </ui:VisualElement>
+
+            <!-- crew roster — populate rows in C#; classes shown for the 4 example states -->
+            <ui:VisualElement name="crew-list" style="border-width: 1px; border-bottom-width: 0; border-color: var(--mob-line-dim); margin-top: 10px;">
+
+                <ui:VisualElement class="mob-crew-row is-you is-ready" focusable="true">
+                    <ui:Label text="01" class="mob-crew-row__slot" />
+                    <ui:VisualElement class="mob-crew-row__dot" />
+                    <ui:Label text="OPERATOR-01" class="mob-crew-row__name" />
+                    <ui:Label text="HOST" class="mob-crew-row__tag mob-crew-row__tag--host" />
+                    <ui:Label text="READY" class="mob-crew-row__ready" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="mob-crew-row is-ready" focusable="true">
+                    <ui:Label text="02" class="mob-crew-row__slot" />
+                    <ui:VisualElement class="mob-crew-row__dot" />
+                    <ui:Label text="VESPER" class="mob-crew-row__name" />
+                    <ui:Label text="READY" class="mob-crew-row__ready" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="mob-crew-row is-standby" focusable="true">
+                    <ui:Label text="03" class="mob-crew-row__slot" />
+                    <ui:VisualElement class="mob-crew-row__dot" />
+                    <ui:Label text="HALON" class="mob-crew-row__name" />
+                    <ui:Label text="STANDBY" class="mob-crew-row__ready" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="mob-crew-row is-open">
+                    <ui:Label text="04" class="mob-crew-row__slot" />
+                    <ui:VisualElement class="mob-crew-row__dot" />
+                    <ui:Label text="——————" class="mob-crew-row__name" />
+                    <ui:Label text="OPEN" class="mob-crew-row__tag" />
+                    <ui:Label text="OPEN" class="mob-crew-row__ready" />
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <!-- readiness meter (reuses .mob-meter; tint success-green in C# or via a modifier) -->
+            <ui:VisualElement style="margin-top: 18px;">
+                <ui:VisualElement style="flex-direction: row; justify-content: space-between; margin-bottom: 9px;">
+                    <ui:Label text="CREW READINESS" style="font-size: 9px; letter-spacing: 1.8px; color: var(--mob-text-3);" />
+                    <ui:Label name="ready-label" text="2 / 3 READY" style="font-size: 10px; letter-spacing: 1.4px; color: var(--mob-success);" />
+                </ui:VisualElement>
+                <ui:VisualElement name="ready-meter" class="mob-meter" />
+            </ui:VisualElement>
+
+            <!-- actions -->
+            <ui:VisualElement style="flex-direction: row; margin-top: 22px;">
+                <ui:Button text="TOGGLE READY" name="ready-btn" class="mob-btn mob-btn--secondary" style="min-width: 0; width: 178px; margin-right: 10px;" />
+                <!-- START RUN: disabled until all ready. C# swaps to .mob-btn--primary + text START RUN -->
+                <ui:Button text="AWAITING CREW" name="start-btn" class="mob-btn mob-btn--primary" enabled="false" style="flex-grow: 1;" />
+            </ui:VisualElement>
+
+            <ui:Button text="LEAVE RUN" name="leave-btn" class="mob-btn mob-btn--destructive" style="height: 44px; margin-top: 12px;" />
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

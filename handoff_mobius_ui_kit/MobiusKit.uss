@@ -1,0 +1,880 @@
+/* ============================================================================
+   PROJECT MOBIUS — UI KIT  ·  MobiusKit.uss
+   Unity UI Toolkit stylesheet. Target: Unity 2022 LTS+ (UI Toolkit runtime).
+   Setting: "Silent Providence" — cold sci-fi co-op runtime.
+
+   HOW THE NOTCH WORKS
+   UI Toolkit has no clip-path. The signature top-right corner notch lives in a
+   9-sliced sprite (Sprites/btn-frame.svg). Each control draws that white sprite
+   as a background-image and recolours it with -unity-background-image-tint-color.
+   One sprite, ~24 tinted states. Slice borders are set per control below.
+
+   CAVEATS (read before implementing)
+   - No text-transform. Author all labels UPPERCASE in the UXML text itself.
+   - letter-spacing is in px here (the HTML used em).
+   - Glows/box-shadow do not exist in USS. Focus uses a crisp border ring; the
+     soft glow from the mockup is optional and omitted (see FOCUS section).
+   - Custom properties (--var) cascade and may be overridden in pseudo/state
+     selectors. If your Unity version does not re-evaluate var() inside
+     -unity-background-image-tint-color on :hover, set the literal colour in the
+     state rule instead (both forms are shown for the button).
+   ========================================================================== */
+
+/* ------------------------------------------------------------------ TOKENS */
+.mobius-root {
+    /* neutrals — cool, desaturated blue-grey */
+    --mob-base:        #0B0F16;
+    --mob-base-deep:   #080B11;
+    --mob-panel:       #1E2735;   /* panel tint (top of baked gradient)        */
+    --mob-panel-deep:  #161D29;
+    --mob-card:        #121823;
+    --mob-line:        #303C4C;
+    --mob-line-dim:    #1B2330;
+    --mob-disabled:    #222C3A;
+
+    /* text */
+    --mob-text:        #EEF3F8;
+    --mob-text-2:      #AEBBCB;
+    --mob-text-3:      #93A6BB;
+    --mob-muted:       #5A6A7E;
+
+    /* PRIMARY — hot red (go / active / error family) */
+    --mob-red:         #ED1F3D;
+    --mob-red-hi:      #FF3A55;
+    --mob-red-lo:      #C50E28;
+    --mob-red-ink:     #190406;
+
+    /* DESTRUCTIVE — deep blood red */
+    --mob-destruct:    #8E2030;
+    --mob-destruct-hi: #AB2A3D;
+    --mob-destruct-lo: #66131F;
+    --mob-destruct-ink:#F0C3C9;
+
+    /* SECONDARY — light steel blue */
+    --mob-blue:        #84BAD9;
+    --mob-blue-hi:     #9ECCE7;
+    --mob-blue-lo:     #6699BB;
+    --mob-blue-ink:    #0B121A;
+
+    /* QUIET — dark neutral */
+    --mob-quiet:       #19212D;
+    --mob-quiet-hi:    #232E3D;
+    --mob-quiet-lo:    #11161F;
+
+    /* ORANGE — sparing flavour / Settings accent */
+    --mob-orange:      #F0820F;
+    --mob-orange-hi:   #FF9A2B;
+    --mob-orange-lo:   #C7610A;
+    --mob-orange-ink:  #190E02;
+
+    /* signals */
+    --mob-focus:       #FFFFFF;   /* keyboard focus ring                       */
+    --mob-active:      #9FD0F2;   /* active info / join code                    */
+    --mob-success:     #84D6BE;
+    --mob-error:       #FF6E6E;
+
+    /* input */
+    --mob-input:       #0E141D;
+    --mob-input-line:  #46566A;
+
+    /* THEME ACCENT — defaults to red. Overridden by .theme-orange below.
+       Drives the panel edge and the signature mark. */
+    --mob-accent:      #ED1F3D;
+
+    /* ====================================================================
+       GAMEPLAY / DATA COLOURS  (MOB-196)
+       Rule of the world: COOL = us / safe, RED = danger. Cool data hues sit
+       at a common lightness so no single bar shouts over another; warmth is
+       reserved for caution (warning) and threat (red). Every status hue below
+       also carries a NON-COLOUR cue (icon/shape) — see README.
+       ==================================================================== */
+
+    /* Player / ally / friendly — the "us / safe" identity hue. LOCKED to the
+       steel-blue family; the ally/player layer NEVER uses decorative red. */
+    --mob-ally:        var(--mob-blue);      /* = #84BAD9 */
+    --mob-ally-hi:     var(--mob-blue-hi);   /* = #9ECCE7 */
+    --mob-ally-lo:     var(--mob-blue-lo);   /* = #6699BB */
+    --mob-ally-ink:    var(--mob-blue-ink);  /* dark label on ally fill */
+
+    /* Defensive / sustain data — cool, distinct hues at a shared lightness. */
+    --mob-shield:      #74C8D6;   /* shield / armour            — icy cyan     */
+    --mob-energy:      #A9D86B;   /* stamina / energy           — cool lime    */
+    --mob-xp:          #B4A6E6;   /* XP / progression / level   — violet       */
+    --mob-resource:    #D9B45C;   /* resource / currency        — muted gold   */
+    --mob-data-neutral:#8090A4;   /* inert / no-data / offline  — grey         */
+
+    /* HEALTH — there is NO health-bar hue in the shipping design. Damage is
+       diegetic (visor crack + critical-red edges, built in session C). These
+       tokens exist ONLY for the TEMP DEV health bar (curved, white fill, with
+       a short-lingering red damage-delta). The delta red is the one danger-red. */
+    --mob-hp-fill:     #EEF3F8;   /* dev bar fill — plain white                */
+    --mob-hp-loss:     #ED1F3D;   /* dev bar damage-delta — = the danger red   */
+    --mob-hp-track:    #161D29;   /* dev bar empty track                       */
+
+    /* THREAT / ENEMY — the red family doing double duty. ONE danger-red:
+       "enemy near" and "you're dying" are the SAME red, disambiguated by
+       context + non-colour cue (icon / placement / animation), not by hue. */
+    --mob-threat:      var(--mob-red);     /* = #ED1F3D */
+    --mob-threat-hi:   var(--mob-red-hi);  /* = #FF3A55 — escalation / pulse   */
+    --mob-danger:      var(--mob-red);     /* critical-low / destructive (alias)*/
+
+    /* ====================================================================
+       STATE COLOURS  (MOB-196)
+       success / error / active already exist above; add warning / info /
+       locked. Each pairs with a non-colour cue (see README state table).
+       ==================================================================== */
+    --mob-warning:     #E7B23F;   /* caution — amber. Distinct from brand orange
+                                     (#F0820F): warning is yellower & calmer.   */
+    --mob-warning-ink: #1A1303;   /* dark label on warning fill                */
+    --mob-info:        var(--mob-active);    /* = #9FD0F2 informational note    */
+    --mob-locked:      var(--mob-muted);     /* = #5A6A7E unavailable / disabled*/
+
+    /* ====================================================================
+       SURFACES  (MOB-196) — the kit had base/panel/card; add the layers it
+       lacked: an elevated panel, a modal scrim, and the diegetic device screen.
+       ==================================================================== */
+    --mob-panel-2:     #26303F;   /* elevated panel / popover (above --mob-panel)*/
+    --mob-scrim:       rgba(6,9,14,0.72);   /* modal overlay behind dialogs     */
+    --mob-screen:      #0A1418;   /* in-world device / terminal screen surface  */
+    --mob-screen-line: rgba(159,208,242,0.07); /* faint phosphor scanline tint  */
+
+    /* ====================================================================
+       GLOW RECIPE  (MOB-197 elevation) — UI Toolkit has no box-shadow/blur,
+       so "glow" is faked with a blurred/feathered sprite layer or an additive
+       overlay VisualElement behind the element, tinted with these colours.
+       ==================================================================== */
+    --mob-glow-focus:  rgba(255,255,255,0.32);  /* white focus halo            */
+    --mob-glow-accent: rgba(237,31,61,0.30);    /* brand/CTA glow              */
+    --mob-glow-cool:   rgba(159,208,242,0.14);  /* ally / floating-window glow */
+    --mob-glow-danger: rgba(237,31,61,0.45);    /* critical-alert pulse        */
+
+    /* ====================================================================
+       SPACING SCALE  (MOB-197) — promoted from inline values.
+       ==================================================================== */
+    --mob-space-2xs:   4px;
+    --mob-space-xs:    8px;
+    --mob-space-sm:    12px;
+    --mob-space-md:    16px;
+    --mob-space-lg:    24px;
+    --mob-space-xl:    32px;
+    --mob-space-2xl:   48px;
+    --mob-screen-margin: 48px;   /* outer screen padding (menu stage)          */
+    --mob-panel-pad:   28px;     /* default panel inner padding                */
+    --mob-list-gap:    2px;      /* meter / segmented / list-row tight gap      */
+    --mob-grid-gap:    16px;     /* card / grid gap                            */
+    --mob-safe-margin: 18px;     /* safe-area / corner-mark inset              */
+
+    /* ====================================================================
+       RADIUS / SHAPE SCALE  (MOB-197) — kit is mostly sharp; name the steps.
+       The signature CUT is a sprite notch, not a radius (see --mob-notch).
+       ==================================================================== */
+    --mob-radius-sharp:  0;      /* default — panels, buttons (notch is sprite)*/
+    --mob-radius-sm:     2px;    /* inputs                                     */
+    --mob-radius-md:     4px;    /* dev chips / small controls                 */
+    --mob-radius-pill:   999px;  /* dots, pills, knobs                         */
+    --mob-radius-screen: 10px;   /* diegetic device/terminal screen corners    */
+    --mob-notch:         16px;   /* signature top-right cut (sprite slice size)*/
+
+    /* ====================================================================
+       STROKE SCALE  (MOB-197) — border widths by role.
+       ==================================================================== */
+    --mob-stroke-hair:     1px;  /* structural borders, dividers (subtle)      */
+    --mob-stroke-edge:     2px;  /* leading accent edge / default emphasis     */
+    --mob-stroke-active:   2px;  /* selected / active control border           */
+    --mob-stroke-focus:    2px;  /* white keyboard-focus ring                  */
+    --mob-stroke-danger:   3px;  /* critical-alert / damage edge               */
+
+    /* ====================================================================
+       MOTION SCALE  (MOB-197) — duration steps + easing curves.
+       UI Toolkit supports transition-duration / -property / -timing-function;
+       glow & pulse are faked (see GLOW). Reduced-motion (.reduce-motion) and
+       the visor-off toggle tone these down — see README + sessions B/C.
+       ==================================================================== */
+    --mob-dur-instant: 60ms;     /* press feedback                            */
+    --mob-dur-fast:    120ms;    /* hover / press tint (matches existing kit)  */
+    --mob-dur-base:    200ms;    /* toggles, selection                        */
+    --mob-dur-slow:    320ms;    /* panel / dialog open-close                  */
+    --mob-dur-cine:    600ms;    /* theatrical visor / device-screen transitions*/
+    --mob-ease-standard: ease-out;                      /* hover / press       */
+    --mob-ease-enter:    cubic-bezier(0.16, 1, 0.30, 1);/* open / reveal       */
+    --mob-ease-exit:     cubic-bezier(0.40, 0, 1, 1);   /* close / dismiss     */
+    --mob-ease-pulse:    ease-in-out;                   /* error / threat pulse*/
+
+    background-color: var(--mob-base);
+    color: var(--mob-text);
+    -unity-font-definition: url("Fonts/JetBrainsMono-Regular.ttf");
+    flex-grow: 1;
+}
+
+/* Settings / non-destructive screens swap the accent to orange. Put this class
+   on the panel (or any ancestor). */
+.theme-orange {
+    --mob-accent: #F0820F;
+}
+
+/* --------------------------------------------------------------- TYPOGRAPHY */
+.mob-display {                       /* Orbitron — titles & wordmark only      */
+    -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+    letter-spacing: 1px;
+}
+.mob-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--mob-text-3);
+}
+.mob-title {
+    -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+    font-size: 29px;
+    letter-spacing: 1px;
+    color: var(--mob-text);
+}
+.mob-subtitle {
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--mob-text-2);
+}
+
+/* TYPE ROLES (MOB-197) — completes the scale. Orbitron for titles only;
+   JetBrains Mono carries everything else (true monospace → columns lock).
+   Author UPPERCASE labels in the UXML (no text-transform in USS). */
+.mob-title-1 {                       /* primary panel title (= .mob-title)     */
+    -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+    font-size: 29px; letter-spacing: 1px; color: var(--mob-text);
+}
+.mob-title-2 {                       /* section header                         */
+    -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+    font-size: 22px; letter-spacing: 1px; color: var(--mob-text);
+}
+.mob-title-3 {                       /* sub-section / card header               */
+    -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+    font-size: 17px; letter-spacing: 1.4px; color: var(--mob-text);
+}
+.mob-body      { font-size: 13px; letter-spacing: 0.5px; color: var(--mob-text-2); }
+.mob-body-sm   { font-size: 11px; letter-spacing: 0.5px; color: var(--mob-text-2); }
+.mob-label     { font-size: 10px; letter-spacing: 2px;   color: var(--mob-text-3); }
+.mob-caption   { font-size: 9px;  letter-spacing: 1px;   color: var(--mob-muted); }
+.mob-button    { font-size: 12px; letter-spacing: 2px;   -unity-font-style: bold; }
+.mob-stat {                          /* numbers / readouts — JBM aligns digits */
+    font-size: 26px; letter-spacing: 1px; -unity-font-style: bold; color: var(--mob-text);
+}
+.mob-mono      { font-size: 10px; letter-spacing: 0.5px; color: var(--mob-text-3); } /* debug / code */
+
+/* REDUCED MOTION (MOB-197) — player a11y toggle. Add .reduce-motion to the
+   root to cut transition durations toward 0 and disable looping pulses/drift.
+   The visor warp + chromatic aberration + crack toggle is a separate HUD
+   control (session C): atmospheric by default, fully defeatable for readability. */
+.reduce-motion * { transition-duration: 0.001s; }
+
+/* ------------------------------------------------------------------ BUTTON */
+/* Base. Apply to <ui:Button> together with a variant class.                  */
+.mob-btn {
+    height: 48px;
+    min-width: 120px;
+    padding-left: 16px;
+    padding-right: 16px;
+    margin: 0;
+    -unity-text-align: middle-center;
+    -unity-font-style: bold;
+    font-size: 12px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/btn-frame.svg");
+    -unity-slice-left: 8;
+    -unity-slice-top: 16;
+    -unity-slice-right: 16;
+    -unity-slice-bottom: 8;
+    -unity-slice-scale: 1px;
+
+    border-radius: 0;
+    border-width: 2px;                 /* the focus ring lives here (transparent until :focus) */
+    border-color: rgba(0,0,0,0);
+
+    transition-property: -unity-background-image-tint-color, border-color, translate;
+    transition-duration: 0.12s;
+}
+
+/* FOCUS — keyboard nav. A crisp WHITE rectangular ring around the notched fill.
+   Distinct from :hover (fill brightens) and :active (fill darkens + nudges).
+   This was the a11y gap in the original menu. */
+.mob-btn:focus { border-color: var(--mob-focus); }
+
+/* DISABLED */
+.mob-btn:disabled {
+    opacity: 1;
+    -unity-background-image-tint-color: var(--mob-disabled);
+    color: rgba(185,200,215,0.30);
+}
+
+/* PRIMARY */
+.mob-btn--primary          { -unity-background-image-tint-color: var(--mob-red);    color: var(--mob-red-ink); }
+.mob-btn--primary:hover    { -unity-background-image-tint-color: var(--mob-red-hi); }
+.mob-btn--primary:active   { -unity-background-image-tint-color: var(--mob-red-lo); translate: 0 1px; }
+
+/* SECONDARY */
+.mob-btn--secondary        { -unity-background-image-tint-color: var(--mob-blue);    color: var(--mob-blue-ink); }
+.mob-btn--secondary:hover  { -unity-background-image-tint-color: var(--mob-blue-hi); }
+.mob-btn--secondary:active { -unity-background-image-tint-color: var(--mob-blue-lo); translate: 0 1px; }
+
+/* QUIET */
+.mob-btn--quiet            { -unity-background-image-tint-color: var(--mob-quiet);    color: var(--mob-text-3); -unity-font-style: normal; }
+.mob-btn--quiet:hover      { -unity-background-image-tint-color: var(--mob-quiet-hi); color: #C3CEDB; }
+.mob-btn--quiet:active     { -unity-background-image-tint-color: var(--mob-quiet-lo); translate: 0 1px; }
+
+/* DESTRUCTIVE */
+.mob-btn--destructive          { -unity-background-image-tint-color: var(--mob-destruct);    color: var(--mob-destruct-ink); -unity-font-style: normal; }
+.mob-btn--destructive:hover    { -unity-background-image-tint-color: var(--mob-destruct-hi); }
+.mob-btn--destructive:active   { -unity-background-image-tint-color: var(--mob-destruct-lo); translate: 0 1px; }
+
+/* ORANGE — Settings primary ("APPLY"). Related to PRIMARY, calmer signal. */
+.mob-btn--orange           { -unity-background-image-tint-color: var(--mob-orange);    color: var(--mob-orange-ink); }
+.mob-btn--orange:hover     { -unity-background-image-tint-color: var(--mob-orange-hi); }
+.mob-btn--orange:active    { -unity-background-image-tint-color: var(--mob-orange-lo); translate: 0 1px; }
+
+/* ------------------------------------------------------------------- INPUT */
+/* Apply to <ui:TextField>. Rectangular (no notch) — focus is a red edge. */
+.mob-input {
+    height: 48px;
+    margin: 0;
+}
+.mob-input > .unity-text-field__input {
+    background-color: var(--mob-input);
+    border-width: 1px;
+    border-color: var(--mob-input-line);
+    border-radius: 2px;
+    padding-left: 14px;
+    padding-right: 14px;
+    color: var(--mob-active);
+    font-size: 13px;
+    letter-spacing: 3px;
+    --unity-cursor-color: var(--mob-red);
+    --unity-selection-color: rgba(237,31,61,0.72);
+    transition-property: border-color;
+    transition-duration: 0.12s;
+}
+.mob-input:focus > .unity-text-field__input { border-color: var(--mob-red); }
+
+/* ------------------------------------------------------------------- PANEL */
+.mob-panel {
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/panel-frame.svg");
+    -unity-background-image-tint-color: var(--mob-panel);
+    -unity-slice-left: 10;
+    -unity-slice-top: 20;
+    -unity-slice-right: 20;
+    -unity-slice-bottom: 10;
+    border-left-width: 2px;            /* leading accent edge */
+    border-left-color: var(--mob-accent);
+    padding: 30px 28px 28px 28px;
+}
+
+/* ------------------------------------------------------------- SIGNATURE MARK */
+.mob-mark {                            /* inverted triangle */
+    width: 13px;
+    height: 12px;
+    background-image: url("Sprites/mark-triangle.svg");
+    -unity-background-image-tint-color: var(--mob-accent);
+    flex-shrink: 0;
+}
+.mob-mark--lg { width: 16px; height: 15px; }
+.mob-mark--sm { width: 8px;  height: 8px; }
+
+/* ------------------------------------------------------------------ STATUS */
+.mob-status { flex-direction: row; align-items: center; }
+.mob-status__dot {
+    width: 7px; height: 7px; border-radius: 4px; margin-right: 9px;
+    background-color: var(--mob-text-3);
+    flex-shrink: 0;
+}
+.mob-status__text { font-size: 10px; letter-spacing: 2px; color: var(--mob-text-3); }
+.mob-status.is-active  .mob-status__dot,
+.mob-status.is-active  .mob-status__text  { background-color: var(--mob-active);  color: var(--mob-active); }
+.mob-status.is-success .mob-status__dot,
+.mob-status.is-success .mob-status__text  { background-color: var(--mob-success); color: var(--mob-success); }
+.mob-status.is-error   .mob-status__dot,
+.mob-status.is-error   .mob-status__text  { background-color: var(--mob-error);   color: var(--mob-error); }
+
+/* ------------------------------------------------------- SETTINGS CONTROLS */
+/* Toggle — custom. VisualElement.mob-toggle (focusable) > VisualElement.mob-toggle__knob.
+   Add/remove the .is-on class in C#. Tinted with the theme accent (orange in Settings). */
+.mob-toggle {
+    width: 50px; height: 24px; flex-shrink: 0;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    border-width: 2px; border-color: rgba(0,0,0,0);
+    transition-property: -unity-background-image-tint-color; transition-duration: 0.15s;
+}
+.mob-toggle:focus { border-color: var(--mob-focus); }
+.mob-toggle.is-on { -unity-background-image-tint-color: var(--mob-accent); }
+.mob-toggle__knob {
+    position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-input-line);
+    transition-property: translate, -unity-background-image-tint-color; transition-duration: 0.15s;
+}
+.mob-toggle.is-on .mob-toggle__knob {
+    translate: 26px 0;
+    -unity-background-image-tint-color: var(--mob-orange-ink);
+}
+
+/* Segmented picker (Render Quality). Three .mob-seg buttons; selected = .is-selected. */
+.mob-seg {
+    flex-grow: 1; height: 36px; margin: 0;
+    -unity-text-align: middle-center; font-size: 10px; letter-spacing: 1.8px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    color: var(--mob-text-3);
+    border-width: 2px; border-color: rgba(0,0,0,0);
+}
+.mob-seg:focus { border-color: var(--mob-focus); }
+.mob-seg.is-selected {
+    -unity-background-image-tint-color: var(--mob-accent);
+    color: var(--mob-orange-ink);
+    -unity-font-style: bold;
+}
+
+/* Meter / volume — row of segments. Build N .mob-meter__seg in C#; add .is-filled
+   to the first k. (For a draggable control, use <ui:Slider> and tint the dragger
+   with --mob-accent instead.) */
+.mob-meter { flex-direction: row; }
+.mob-meter__seg {
+    flex-grow: 1; height: 12px; margin-right: 2px;
+    background-color: var(--mob-disabled);
+}
+.mob-meter__seg.is-filled { background-color: var(--mob-accent); }
+
+/* ------------------------------------------------------------- CREW ROW */
+/* Roster list item (Lobby, and any future crew/party/friends screen). One row
+   per player. Add a state class to colour the dot + readiness text:
+     .is-ready (success green) · .is-standby (orange) · .is-open (muted).
+   Add .is-you to highlight the local player (steel-blue tint + left edge).
+   Wrap N rows in a container with border (border-bottom:0) — each row draws its
+   own bottom rule. Rows are focusable/clickable to toggle ready in C#. */
+.mob-crew-row {
+    flex-direction: row;
+    align-items: center;
+    padding: 13px 14px;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--mob-line-dim);
+    border-left-width: 2px;
+    border-left-color: rgba(0,0,0,0);
+}
+.mob-crew-row.is-you {
+    background-color: rgba(132,186,217,0.06);
+    border-left-color: var(--mob-blue);
+}
+.mob-crew-row__slot  { width: 18px; font-size: 9px;  letter-spacing: 1.4px; color: var(--mob-muted); }
+.mob-crew-row__dot   { width: 7px; height: 7px; border-radius: 4px; margin: 0 12px; flex-shrink: 0;
+                       background-color: var(--mob-muted); }
+.mob-crew-row__name  { flex-grow: 1; font-size: 12px; letter-spacing: 0.8px; color: var(--mob-text-2); }
+.mob-crew-row.is-you .mob-crew-row__name { color: var(--mob-text); }
+.mob-crew-row__tag   { font-size: 8px; letter-spacing: 2px; padding: 3px 6px; margin-right: 12px;
+                       border-width: 1px; border-color: #2a3545; color: var(--mob-muted); }
+.mob-crew-row__tag--host { color: var(--mob-active); border-color: #2f4a5c; }
+.mob-crew-row__ready { width: 74px; font-size: 9px; letter-spacing: 1.8px; -unity-text-align: middle-right; color: var(--mob-muted); }
+
+.mob-crew-row.is-ready   .mob-crew-row__dot,
+.mob-crew-row.is-ready   .mob-crew-row__ready   { background-color: var(--mob-success); color: var(--mob-success); }
+.mob-crew-row.is-standby .mob-crew-row__dot,
+.mob-crew-row.is-standby .mob-crew-row__ready   { background-color: var(--mob-orange);  color: var(--mob-orange); }
+.mob-crew-row.is-open    .mob-crew-row__name    { color: var(--mob-input-line); }
+
+/* ---------------------------------------------------------------- ORNAMENTS */
+/* Node rule — divider. UXML: row > .mob-mark--sm + .mob-rule + 3x .mob-dot */
+.mob-noderule { flex-direction: row; align-items: center; }
+.mob-rule { height: 1px; flex-grow: 1; background-color: var(--mob-line); margin: 0 7px; }
+.mob-dot  { width: 3px; height: 3px; border-radius: 2px; background-color: #3a4658; margin-left: 4px; }
+
+/* Tick scale — row of .mob-tick (minor) / .mob-tick--major; one .mob-tick--accent */
+.mob-tick        { width: 2px; height: 7px;  background-color: #3a4658; margin-right: 4px; align-self: flex-end; }
+.mob-tick--major { height: 15px; }
+.mob-tick--accent{ background-color: var(--mob-red); }
+
+/* Frame corner brackets — four absolutely-positioned 11px L-shapes on a panel.
+   .mob-bracket--tl / --tr / --bl / --br */
+.mob-bracket { position: absolute; width: 11px; height: 11px; }
+.mob-bracket--tl { top: 4px;    left: 4px;  border-top-width: 1px;    border-left-width: 1px;  border-color: #6f8294; }
+.mob-bracket--tr { top: 4px;    right: 4px; border-top-width: 1px;    border-right-width: 1px; border-color: #6f8294; }
+.mob-bracket--bl { bottom: 4px; left: 4px;  border-bottom-width: 1px; border-left-width: 1px;  border-color: #6f8294; }
+.mob-bracket--br { bottom: 4px; right: 4px; border-bottom-width: 1px; border-right-width: 1px; border-color: #6f8294; }
+
+/* Registration cross — corner of a screen. One per screen may be orange. */
+.mob-cross  { width: 12px; height: 12px; background-image: url("Sprites/mark-cross.svg");
+              -unity-background-image-tint-color: #2f3a49; }
+.mob-cross--accent { -unity-background-image-tint-color: var(--mob-orange); opacity: 0.65; }
+
+/* ============================================================================
+   SESSION B — WINDOWS · NAVIGATION · BUTTON GAPS · FORM CONTROLS
+   (MOB-198 + MOB-199). New components only; everything reuses the session-A
+   tokens, the notch grammar (9-slice white sprites + tint), Orbitron/JBM type,
+   and the focus-ring a11y model. PC / KBM-first; controller = forward note.
+
+   GLOW is back: faked behind an element with .mob-glow (a feathered/blurred
+   white sprite or additive overlay VisualElement) tinted by a --mob-glow-* token.
+   MOTION uses the session-A scale (--mob-dur-slow open/close, enter/exit easings).
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- GLOW LAYER */
+/* Optional halo behind any element. Author a sibling VisualElement BEHIND the
+   target (lower in z / earlier sibling with negative margins), give it .mob-glow
+   + a modifier, and back it with the feather sprite. No box-shadow in UI Toolkit,
+   so this is how floating windows, focus and critical alerts read as "lit". */
+.mob-glow            { position: absolute; /* stretch to target + a few px */
+                       -unity-background-image-tint-color: var(--mob-glow-cool); }
+.mob-glow--focus     { -unity-background-image-tint-color: var(--mob-glow-focus); }
+.mob-glow--accent    { -unity-background-image-tint-color: var(--mob-glow-accent); }
+.mob-glow--danger    { -unity-background-image-tint-color: var(--mob-glow-danger); }
+.reduce-motion .mob-glow--danger { /* pulse handled in C#; reduce-motion holds it steady */ }
+
+/* ====================================================================== B1
+   WINDOWS / OVERLAYS
+   Shared anatomy slots: scrim · frame · header · title/subtitle · close ·
+   body · footer/actions · icon-slot. Layered by the session-A elevation scale.
+   ====================================================================== */
+
+/* Backdrop / scrim — behind a modal or dialog. Cover the whole UIDocument. */
+.mob-scrim {
+    position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    background-color: var(--mob-scrim);
+    align-items: center; justify-content: center;
+    transition-property: opacity; transition-duration: var(--mob-dur-slow);
+    transition-timing-function: var(--mob-ease-enter);
+}
+
+/* Window frame — base for floating window / modal / dialog. Reuses panel-frame.
+   Modifiers raise the surface tint + accent edge per elevation. */
+.mob-window {
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/panel-frame.svg");
+    -unity-background-image-tint-color: var(--mob-panel-2);
+    -unity-slice-left: 10; -unity-slice-top: 20; -unity-slice-right: 20; -unity-slice-bottom: 10;
+    border-left-width: 2px; border-left-color: var(--mob-accent);   /* leading accent edge */
+    /* cinematic open: animate opacity + translate/scale from C# or USS transition */
+    transition-property: opacity, translate, scale;
+    transition-duration: var(--mob-dur-slow);
+    transition-timing-function: var(--mob-ease-enter);
+}
+.mob-window--floating { -unity-background-image-tint-color: var(--mob-panel-2); }   /* elevation 2 */
+.mob-window--modal    { -unity-background-image-tint-color: var(--mob-panel-2); border-left-color: var(--mob-accent); } /* elevation 3 */
+.mob-window--dialog   { -unity-background-image-tint-color: var(--mob-panel-2); border-left-color: var(--mob-destruct); } /* destructive confirm */
+.mob-window--alert    { border-left-color: var(--mob-red); border-left-width: 3px; }  /* elevation 4 critical */
+
+/* Header — icon slot + title/subtitle on the left, close on the right. */
+.mob-window__header {
+    flex-direction: row; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    border-bottom-width: 1px; border-bottom-color: var(--mob-line);
+}
+.mob-window__title    { -unity-font-definition: url("Fonts/Orbitron-SemiBold.ttf");
+                        font-size: 17px; letter-spacing: 1.4px; color: var(--mob-text); }
+.mob-window__subtitle { font-size: 9px; letter-spacing: 1.6px; color: var(--mob-muted); margin-top: 2px; }
+.mob-window__body     { padding: 16px 16px; }
+.mob-window__footer   { flex-direction: row; justify-content: flex-end; padding: 0 16px 16px; }
+/* Icon/art slot in the header — small notched tile. */
+.mob-window__icon {
+    width: 26px; height: 26px; flex-shrink: 0; margin-right: 9px;
+    align-items: center; justify-content: center;
+    background-color: var(--mob-input);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-input);
+}
+
+/* Tooltip — small anchored popover. Hover OR keyboard-focus shows it (in C#). */
+.mob-tooltip {
+    position: absolute;
+    max-width: 200px;
+    padding: 9px 11px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-panel-2);
+    border-width: 1px; border-color: var(--mob-line);
+}
+.mob-tooltip__label { font-size: 8.5px; letter-spacing: 1.6px; color: var(--mob-info); margin-bottom: 4px; }
+.mob-tooltip__text  { font-size: 8.5px; letter-spacing: 0.4px; color: var(--mob-text-2); white-space: normal; }
+
+/* Toast — transient notice. Stack bottom-right; auto-dismiss in C# (~4.2s).
+   Add a kind class to colour the leading bar + icon; non-colour cue = the icon. */
+.mob-toast {
+    flex-direction: row; width: 336px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/btn-frame.svg");
+    -unity-slice-left: 8; -unity-slice-top: 16; -unity-slice-right: 16; -unity-slice-bottom: 8;
+    -unity-background-image-tint-color: var(--mob-panel-2);
+    border-width: 1px; border-color: var(--mob-line);
+    transition-property: opacity, translate; transition-duration: var(--mob-dur-slow);
+    transition-timing-function: var(--mob-ease-enter);
+}
+.mob-toast__bar    { width: 4px; flex-shrink: 0; background-color: var(--mob-muted); }
+.mob-toast__icon   { width: 34px; flex-shrink: 0; align-items: center; justify-content: center;
+                     font-size: 12px; -unity-font-style: bold; color: var(--mob-muted); }
+.mob-toast__title  { font-size: 10px; letter-spacing: 1.4px; color: var(--mob-text); }
+.mob-toast__msg    { font-size: 9px; letter-spacing: 0.3px; color: var(--mob-text-2); margin-top: 4px; white-space: normal; }
+.mob-toast.is-success .mob-toast__bar, .mob-toast.is-success .mob-toast__icon { background-color: var(--mob-success); color: var(--mob-success); }
+.mob-toast.is-warning .mob-toast__bar, .mob-toast.is-warning .mob-toast__icon { background-color: var(--mob-warning); color: var(--mob-warning); }
+.mob-toast.is-error   .mob-toast__bar, .mob-toast.is-error   .mob-toast__icon { background-color: var(--mob-error);   color: var(--mob-error); }
+.mob-toast.is-info    .mob-toast__bar, .mob-toast.is-info    .mob-toast__icon { background-color: var(--mob-info);    color: var(--mob-info); }
+
+/* ====================================================================== B2
+   NAVIGATION SHELLS — tabs · back / breadcrumbs · pagination / carousel.
+   Focus order + confirm/cancel/back model: see README "Focus & navigation".
+   ====================================================================== */
+
+/* Tabs — row of .mob-tab buttons; selected = .is-selected. State matrix below. */
+.mob-tabs { flex-direction: row; border-bottom-width: 1px; border-bottom-color: var(--mob-line-dim); }
+.mob-tab {
+    padding: 11px 16px; margin: 0;
+    font-size: 10px; letter-spacing: 1.6px; color: var(--mob-text-3);
+    background-color: rgba(0,0,0,0);
+    border-width: 0; border-bottom-width: 2px; border-bottom-color: rgba(0,0,0,0);
+    transition-property: color, border-bottom-color, background-color; transition-duration: var(--mob-dur-fast);
+}
+.mob-tab:hover      { color: #C3CEDB; background-color: rgba(255,255,255,0.03); }
+.mob-tab:focus      { color: var(--mob-text); border-color: var(--mob-focus); border-bottom-color: var(--mob-focus); } /* white ring */
+.mob-tab.is-selected{ color: var(--mob-text); -unity-font-style: bold; border-bottom-color: var(--mob-accent); }
+.mob-tab:disabled   { color: #3f4a5a; opacity: 1; }
+
+/* Back button — quiet button with a leading chevron (chevron.svg rotated 90°). */
+.mob-backbtn {
+    height: 36px; flex-direction: row; align-items: center; padding: 0 14px 0 11px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    color: var(--mob-text-3); font-size: 10px; letter-spacing: 1.6px;
+    border-width: 2px; border-color: rgba(0,0,0,0);
+}
+.mob-backbtn:hover { -unity-background-image-tint-color: var(--mob-quiet-hi); color: var(--mob-text); }
+.mob-backbtn:focus { border-color: var(--mob-focus); }
+.mob-backbtn__chevron { width: 7px; height: 12px; margin-right: 9px; flex-shrink: 0;
+                        background-image: url("Sprites/chevron.svg"); rotate: 90deg;
+                        -unity-background-image-tint-color: var(--mob-accent); }
+
+/* Breadcrumbs — row of labels separated by a dim chevron; last = current. */
+.mob-crumbs { flex-direction: row; align-items: center; }
+.mob-crumb        { font-size: 9.5px; letter-spacing: 1.4px; color: var(--mob-text-3); }
+.mob-crumb.is-current { color: var(--mob-text); }
+.mob-crumb__sep   { width: 6px; height: 9px; margin: 0 9px; rotate: -90deg;
+                    background-image: url("Sprites/chevron.svg");
+                    -unity-background-image-tint-color: #3a4658; }
+
+/* Pagination — row of .mob-page tiles; current = .is-current. Prev/Next reuse
+   the same tile with a .mob-page__chevron child. Disabled at the bounds. */
+.mob-page {
+    min-width: 34px; height: 34px; margin-right: 6px;
+    -unity-text-align: middle-center; font-size: 10px; letter-spacing: 1px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    color: var(--mob-text-3);
+    border-width: 2px; border-color: rgba(0,0,0,0);
+}
+.mob-page:hover      { -unity-background-image-tint-color: var(--mob-quiet-hi); }
+.mob-page:focus      { border-color: var(--mob-focus); }
+.mob-page.is-current { -unity-background-image-tint-color: var(--mob-accent); color: var(--mob-red-ink); -unity-font-style: bold; }
+.mob-page:disabled   { color: #3a4658; }
+
+/* Carousel page indicator — row of dots; active dot elongates to a bar. */
+.mob-carousel { flex-direction: row; align-items: center; justify-content: center; }
+.mob-carousel__dot { width: 7px; height: 7px; border-radius: 4px; margin: 0 4px;
+                     background-color: #33414f; transition-property: width, background-color; transition-duration: var(--mob-dur-base); }
+.mob-carousel__dot.is-active { width: 20px; background-color: var(--mob-accent); }
+
+/* ====================================================================== B3
+   BUTTON GAPS — icon button · toggle button · tab button (above) · size scale.
+   Layer a SIZE modifier on any existing .mob-btn variant.
+   ====================================================================== */
+
+/* Size scale — modifies height / font / notch slice on top of a variant. */
+.mob-btn--sm { height: 36px; min-width: 96px; font-size: 10px;
+               -unity-slice-left: 6; -unity-slice-top: 12; -unity-slice-right: 12; -unity-slice-bottom: 6; }
+.mob-btn--lg { height: 56px; min-width: 140px; font-size: 13px;
+               -unity-slice-left: 10; -unity-slice-top: 22; -unity-slice-right: 22; -unity-slice-bottom: 10; }
+
+/* Icon button — square, single glyph child. Inherits .mob-btn states; size variant
+   keeps it square (width = height). ~44px min target on touch; 42px default. */
+.mob-iconbtn {
+    width: 42px; height: 42px; min-width: 0; padding: 0;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    color: var(--mob-text-3);
+}
+.mob-iconbtn:hover    { -unity-background-image-tint-color: var(--mob-quiet-hi); color: var(--mob-text); }
+.mob-iconbtn:focus    { border-color: var(--mob-focus); }
+.mob-iconbtn.is-selected { -unity-background-image-tint-color: var(--mob-accent); color: var(--mob-red-ink); }
+.mob-iconbtn--sm { width: 36px; height: 36px; }
+.mob-iconbtn--lg { width: 52px; height: 52px; }
+
+/* Toggle button — sticky pressed state for a toolbar. .is-on = accent fill.
+   Non-colour cue: the .mob-togglebtn__pip + bold weight, not hue alone. */
+.mob-togglebtn {
+    height: 40px; flex-direction: row; align-items: center; padding: 0 16px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/btn-frame.svg");
+    -unity-slice-left: 8; -unity-slice-top: 16; -unity-slice-right: 16; -unity-slice-bottom: 8;
+    -unity-background-image-tint-color: var(--mob-quiet);
+    color: var(--mob-text-3); font-size: 10px; letter-spacing: 1.6px;
+    border-width: 2px; border-color: rgba(0,0,0,0);
+    transition-property: -unity-background-image-tint-color, color; transition-duration: var(--mob-dur-fast);
+}
+.mob-togglebtn:hover { -unity-background-image-tint-color: var(--mob-quiet-hi); }
+.mob-togglebtn:focus { border-color: var(--mob-focus); }
+.mob-togglebtn.is-on { -unity-background-image-tint-color: var(--mob-accent); color: var(--mob-red-ink); -unity-font-style: bold; }
+.mob-togglebtn__pip  { width: 7px; height: 7px; margin-right: 8px; flex-shrink: 0; background-color: #3a4658; }
+.mob-togglebtn.is-on .mob-togglebtn__pip { background-color: var(--mob-red-ink); }
+
+/* ====================================================================== B4
+   FORM CONTROLS — text inputs (multi-line / search / numeric / password),
+   dropdown · checkbox · radio · real sliders. Anatomy: label · field · value
+   · helper/error · leading/trailing icon. Error/Valid carry an ICON, not hue.
+   ====================================================================== */
+
+/* Field scaffold — a label + control + helper/error stacked. */
+.mob-field { /* container */ }
+.mob-field__label { font-size: 10px; letter-spacing: 2px; color: var(--mob-text-3); margin-bottom: 8px; }   /* UPPERCASE in UXML */
+.mob-field__help  { font-size: 8px; letter-spacing: 0.6px; color: var(--mob-muted); margin-top: 7px; }
+.mob-field.is-error .mob-field__help { color: var(--mob-error); }   /* pairs with the ✕ cue below */
+.mob-field.is-valid .mob-field__help { color: var(--mob-success); } /* pairs with the ✓ cue below */
+
+/* Multi-line — extends .mob-input. Taller, top-aligned, wraps. */
+.mob-input--multiline { height: 84px; }
+.mob-input--multiline > .unity-text-field__input { -unity-text-align: upper-left; white-space: normal; padding: 11px 13px; }
+
+/* Search — leading magnifier + trailing clear. Icons are sibling VisualElements
+   over the field (UXML), the input itself just gets extra horizontal padding. */
+.mob-input--search > .unity-text-field__input { padding-left: 34px; padding-right: 34px; letter-spacing: 2px; }
+
+/* Numeric stepper — [-] value [+]. A row: two .mob-stepper__btn around a readout. */
+.mob-stepper { flex-direction: row; align-items: stretch; height: 46px; }
+.mob-stepper__btn {
+    width: 46px; flex-shrink: 0; -unity-text-align: middle-center; font-size: 18px;
+    background-color: var(--mob-quiet); color: var(--mob-text-3);
+    border-width: 1px; border-color: var(--mob-input-line);
+}
+.mob-stepper__btn:hover { background-color: var(--mob-quiet-hi); color: var(--mob-text); }
+.mob-stepper__btn:focus { border-color: var(--mob-focus); }
+.mob-stepper__btn--dec  { border-right-width: 0; }
+.mob-stepper__btn--inc  { border-left-width: 0; }
+.mob-stepper__value {
+    flex-grow: 1; -unity-text-align: middle-center; font-size: 18px; -unity-font-style: bold;
+    letter-spacing: 1px; color: var(--mob-active);
+    background-color: var(--mob-input);
+    border-top-width: 1px; border-bottom-width: 1px; border-color: var(--mob-input-line);
+}
+
+/* Password — extends .mob-input; trailing SHOW/HIDE toggle is a sibling button. */
+.mob-input--password > .unity-text-field__input { padding-right: 60px; }
+.mob-input__reveal { position: absolute; right: 11px; top: 0; bottom: 0; justify-content: center;
+                     background-color: rgba(0,0,0,0); border-width: 0;
+                     font-size: 8px; letter-spacing: 1.6px; color: var(--mob-active); }
+
+/* Dropdown / select — closed field shows value + chevron; .is-open flips the
+   chevron and the border goes accent. Options live in a .mob-dropdown__panel
+   (elevation-2). Selected option = accent edge + check (mark-check.svg). */
+.mob-dropdown { /* anchor */ }
+.mob-dropdown__field {
+    height: 46px; flex-direction: row; align-items: center; justify-content: space-between;
+    padding: 0 14px;
+    background-color: var(--mob-input);
+    border-width: 1px; border-color: var(--mob-input-line); border-radius: 2px;
+    transition-property: border-color; transition-duration: var(--mob-dur-fast);
+}
+.mob-dropdown.is-open .mob-dropdown__field,
+.mob-dropdown__field:focus { border-color: var(--mob-red); }
+.mob-dropdown__value   { font-size: 11px; letter-spacing: 1.4px; color: var(--mob-text); }
+.mob-dropdown__chevron { width: 11px; height: 7px; flex-shrink: 0;
+                         background-image: url("Sprites/chevron.svg");
+                         -unity-background-image-tint-color: var(--mob-muted);
+                         transition-property: rotate, -unity-background-image-tint-color; transition-duration: var(--mob-dur-base); }
+.mob-dropdown.is-open .mob-dropdown__chevron { rotate: 180deg; -unity-background-image-tint-color: var(--mob-red); }
+.mob-dropdown__panel {
+    position: absolute; left: 0; right: 0; top: 52px;
+    background-color: var(--mob-panel-2);
+    border-width: 1px; border-color: var(--mob-line);
+    padding-top: 5px; padding-bottom: 5px;
+}
+.mob-dropdown__option { flex-direction: row; align-items: center; justify-content: space-between;
+                        padding: 11px 14px; font-size: 10px; letter-spacing: 1.4px; color: var(--mob-text-2);
+                        border-left-width: 2px; border-left-color: rgba(0,0,0,0); }
+.mob-dropdown__option:hover { background-color: rgba(255,255,255,0.03); color: var(--mob-text); }
+.mob-dropdown__option.is-selected { color: var(--mob-text); border-left-color: var(--mob-accent);
+                                    background-color: rgba(237,31,61,0.12); }
+.mob-dropdown__check { width: 12px; height: 12px; background-image: url("Sprites/mark-check.svg");
+                       -unity-background-image-tint-color: var(--mob-accent); display: none; }
+.mob-dropdown__option.is-selected .mob-dropdown__check { display: flex; }
+
+/* Checkbox — 18px notched box; .is-checked = accent fill + check sprite.
+   Non-colour cue: the check glyph itself. */
+.mob-check { flex-direction: row; align-items: flex-start; }
+.mob-check__box {
+    width: 18px; height: 18px; flex-shrink: 0; margin-right: 11px;
+    align-items: center; justify-content: center;
+    background-color: var(--mob-input);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-input);
+    border-width: 1px; border-color: var(--mob-input-line);
+    transition-property: -unity-background-image-tint-color, border-color; transition-duration: var(--mob-dur-fast);
+}
+.mob-check__box:focus { border-color: var(--mob-focus); }
+.mob-check.is-checked .mob-check__box { -unity-background-image-tint-color: var(--mob-accent); border-color: var(--mob-accent); }
+.mob-check__tick { width: 11px; height: 11px; background-image: url("Sprites/mark-check.svg");
+                   -unity-background-image-tint-color: var(--mob-red-ink); display: none; }
+.mob-check.is-checked .mob-check__tick { display: flex; }
+.mob-check__label { font-size: 10px; letter-spacing: 1px; color: var(--mob-text); }
+.mob-check__sub   { font-size: 8px; letter-spacing: 0.4px; color: var(--mob-muted); margin-top: 3px; }
+
+/* Radio — 18px ring; .is-selected = accent ring + inner dot. */
+.mob-radio { flex-direction: row; align-items: flex-start; }
+.mob-radio__ring {
+    width: 18px; height: 18px; flex-shrink: 0; margin-right: 11px; border-radius: 999px;
+    align-items: center; justify-content: center;
+    background-color: var(--mob-input);
+    border-width: 1px; border-color: var(--mob-input-line);
+    transition-property: border-color; transition-duration: var(--mob-dur-fast);
+}
+.mob-radio__ring:focus { border-color: var(--mob-focus); }
+.mob-radio.is-selected .mob-radio__ring { border-color: var(--mob-accent); }
+.mob-radio__dot { width: 8px; height: 8px; border-radius: 999px; background-color: var(--mob-accent);
+                  scale: 0.4 0.4; display: none; }
+.mob-radio.is-selected .mob-radio__dot { display: flex; scale: 1 1; }
+.mob-radio__label { font-size: 10.5px; letter-spacing: 1px; color: var(--mob-text-2); }
+.mob-radio.is-selected .mob-radio__label { color: var(--mob-text); }
+
+/* Real slider — a true draggable control (distinct from the display-only
+   .mob-meter). Style a <ui:Slider>/<ui:SliderInt>: tint the track, fill and
+   the notched dragger. Variants: continuous (default), stepped (set page-size
+   + show ticks), range (MinMaxSlider — two draggers), icon/volume (leading icon).
+   Reduced-motion has no effect here (no looping animation). */
+.mob-slider .unity-base-slider__tracker {
+    height: 4px; background-color: var(--mob-quiet); border-radius: 2px;
+    border-width: 1px; border-color: #283242;
+}
+.mob-slider .unity-base-slider__dragger {
+    width: 12px; height: 20px; border-radius: 0; margin-top: -10px;
+    background-color: rgba(0,0,0,0);
+    background-image: url("Sprites/ctrl-frame.svg");
+    -unity-slice-left: 6; -unity-slice-top: 8; -unity-slice-right: 8; -unity-slice-bottom: 6;
+    -unity-background-image-tint-color: var(--mob-accent);
+    border-width: 0;
+}
+.mob-slider .unity-base-slider__dragger:focus { /* pair with a .mob-glow--focus behind, or: */
+    -unity-background-image-tint-color: var(--mob-accent); }
+/* Fill: UI Toolkit's slider has no built-in fill element — add a .mob-slider__fill
+   VisualElement over the track and size its width from C# (value → %). */
+.mob-slider__fill { position: absolute; left: 0; height: 4px; background-color: var(--mob-accent); border-radius: 2px; }
+/* Tick marks for the stepped variant — a row of .mob-slider__tick over the track. */
+.mob-slider__tick { position: absolute; width: 2px; height: 10px; background-color: #3a4658; }
+.mob-slider__tick.is-filled { background-color: var(--mob-accent); }
+/* Value readout — right-aligned. Format: exact value / percentage / label (see README). */
+.mob-slider__value { font-size: 11px; letter-spacing: 1px; color: var(--mob-red-hi); -unity-text-align: middle-right; }
+/* Volume / icon slider — leading level icon (4 ascending bars) that fills with value. */
+.mob-slider__iconbar { width: 3px; background-color: #3a4658; align-self: flex-end; }
+.mob-slider__iconbar.is-lit { background-color: var(--mob-accent); }

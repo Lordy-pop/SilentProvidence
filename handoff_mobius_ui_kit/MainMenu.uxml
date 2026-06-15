@@ -1,0 +1,61 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <!-- MainMenu.uxml — MOB-109. Functional layout (Host / Join / Quit) unchanged.
+         Wire this up in C#: the StatusController drives .mob-status kind classes,
+         Host generates a join code (shown amber/active), Join validates 6 chars. -->
+    <Style src="MobiusKit.uss" />
+
+    <ui:VisualElement class="mobius-root" style="align-items: center; justify-content: center;">
+
+        <!-- sparse corner registration marks; one orange as flavour -->
+        <ui:VisualElement class="mob-cross"          style="position:absolute; top:18px; left:18px;" />
+        <ui:VisualElement class="mob-cross mob-cross--accent" style="position:absolute; top:18px; right:18px; width:13px; height:13px;" />
+        <ui:VisualElement class="mob-cross"          style="position:absolute; bottom:18px; left:18px;" />
+        <ui:VisualElement class="mob-cross"          style="position:absolute; bottom:18px; right:18px;" />
+
+        <ui:VisualElement name="panel" class="mob-panel" style="width: 392px;">
+
+            <!-- wordmark lockup: signature triangle + PROJECT MOBIUS -->
+            <ui:VisualElement style="flex-direction: row; align-items: center; margin-bottom: 20px;">
+                <ui:VisualElement class="mob-mark" style="margin-right: 9px;" />
+                <ui:Label text="PROJECT MOBIUS" class="mob-display mob-eyebrow" />
+            </ui:VisualElement>
+
+            <ui:Label text="RUNTIME LINK" class="mob-title" />
+            <ui:Label text="Private co-op session" class="mob-subtitle" style="margin-top: 9px;" />
+
+            <!-- node-rule divider -->
+            <ui:VisualElement class="mob-noderule" style="margin: 20px 0;">
+                <ui:VisualElement class="mob-mark mob-mark--sm" />
+                <ui:VisualElement class="mob-rule" />
+                <ui:VisualElement class="mob-dot" />
+                <ui:VisualElement class="mob-dot" />
+                <ui:VisualElement class="mob-dot" />
+            </ui:VisualElement>
+
+            <ui:Button text="HOST SESSION" name="host-btn" class="mob-btn mob-btn--primary" style="margin-bottom: 12px;" />
+
+            <ui:VisualElement style="flex-direction: row; margin-bottom: 12px;">
+                <ui:TextField name="join-code" class="mob-input" style="flex-grow: 1; margin-right: 10px;" />
+                <ui:Button text="JOIN" name="join-btn" class="mob-btn mob-btn--secondary" style="min-width: 0; width: 92px;" />
+            </ui:VisualElement>
+
+            <ui:Button text="QUIT" name="quit-btn" class="mob-btn mob-btn--quiet" style="height: 44px;" />
+
+            <!-- status: toggle is-active / is-success / is-error in C# -->
+            <ui:VisualElement style="margin-top: 20px; padding-top: 16px; border-top-width: 1px; border-top-color: var(--mob-line-dim);">
+                <ui:VisualElement name="status" class="mob-status">
+                    <ui:VisualElement class="mob-status__dot" />
+                    <ui:Label name="status-text" text="STANDBY · LINK IDLE" class="mob-status__text" />
+                </ui:VisualElement>
+                <ui:Label name="join-code-display" text="LINK CODE · ——————" style="display:none; font-size:10px; letter-spacing:4px; color: var(--mob-active); margin-top: 9px;" />
+                <ui:Label name="error-label" text="" style="display:none; font-size:10px; color: var(--mob-error); margin-top: 9px;" />
+            </ui:VisualElement>
+
+            <!-- destructive, shown in-run -->
+            <ui:VisualElement style="margin-top: 18px; padding-top: 14px; border-top-width: 1px; border-top-color: var(--mob-line-dim);">
+                <ui:Button text="LEAVE RUN" name="leave-btn" class="mob-btn mob-btn--destructive" style="height: 44px;" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -4,36 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Mobius | Silent Providence</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <!-- Fonts: Orbitron for headers, JetBrains Mono for body/labels, Space Mono for terminals -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --red: #ff1a2e;
-      --red-glow: rgba(255, 26, 46, 0.25);
-      --amber: #f5a623;
-      --amber-glow: rgba(245, 166, 35, 0.2);
-      --murmur: #5bc8f5;
-      --crystal: #a8d4ff;
-      --bg: #07070f;
-      --surface: #0d0d1a;
-      --surface2: #111120;
-      --text: #e8e8f4;
-      --dim: #6b6b8a;
-      --border: rgba(255,255,255,0.07);
+      /* Palette Tokens from Token Board */
+      --bg: #0B0F16;
+      --bg-gradient: radial-gradient(120% 78% at 50% -8%, #141A26 0%, #0B0F16 58%);
+      --panel: #1E2735;
+      --panel-2: #26303F;
+      --card: #121823;
+      --text: #EEF3F8;
+      --dim: #738399;
+      --dim-dark: #5A6A7E;
+      --border: #25303E;
+      --border-focus: #FFFFFF;
+      --primary-red: #ED1F3D;
+      --primary-red-hover: #FF3A55;
+      --secondary-blue: #84BAD9;
+      --secondary-blue-hover: #9ECCE7;
+      --destructive: #8E2030;
+      --destructive-hover: #AB2A3D;
+      --success: #84D6BE;
+      --warning: #E7B23F;
+      --orange: #F0820F;
+      --orange-hover: #FF9A2B;
+      --active-blue: #9FD0F2;
+      --input-bg: #0E141D;
+
+      /* Glows */
+      --glow-cool: rgba(159, 208, 242, 0.14);
+      --glow-accent: rgba(237, 31, 61, 0.22);
+      --glow-danger: rgba(237, 31, 61, 0.4);
+      --glow-orange: rgba(240, 130, 15, 0.35);
+
+      /* Motion */
+      --mob-dur-instant: 60ms;
+      --mob-dur-fast: 120ms;
+      --mob-dur-base: 200ms;
+      --mob-dur-slow: 320ms;
+      --mob-dur-cine: 600ms;
+      --mob-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --mob-ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+      --mob-ease-exit: cubic-bezier(0.4, 0, 1, 1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
+      background: #000000; /* Dark space around TV bezel */
       height: 100vh;
       overflow: hidden;
-      display: flex;
     }
 
     canvas#stars {
-      position: fixed;
+      position: absolute;
       inset: 0;
       z-index: 0;
       pointer-events: none;
@@ -43,9 +72,9 @@
     #sidebar {
       position: relative;
       z-index: 10;
-      width: 210px;
-      min-width: 210px;
-      background: rgba(10, 10, 20, 0.92);
+      width: 240px;
+      min-width: 240px;
+      background: linear-gradient(180deg, #121823 0%, #0c1119 100%);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
@@ -53,52 +82,140 @@
       backdrop-filter: blur(12px);
     }
 
+    /* Crosshair registration mark from mark-cross.svg */
+    .reg-mark {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      color: var(--border);
+      pointer-events: none;
+    }
+    .reg-tl { top: 18px; left: 18px; }
+    .reg-tr { top: 18px; right: 18px; }
+    .reg-bl { bottom: 18px; left: 18px; }
+    .reg-br { bottom: 18px; right: 18px; }
+
     .logo {
-      padding: 0 24px 40px;
+      padding: 0 24px 30px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .logo-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .logo-header .dot {
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 9px solid var(--primary-red);
+    }
+    .logo-header .eyebrow {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: .3em;
+      color: var(--dim);
     }
     .logo .title {
       font-family: 'Orbitron', sans-serif;
-      font-size: 12px;
+      font-size: 18px;
       font-weight: 700;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
       text-transform: uppercase;
+      color: var(--text);
     }
     .logo .sub {
-      font-size: 10px;
-      color: var(--dim);
+      font-size: 9px;
+      color: var(--dim-dark);
       letter-spacing: 1.5px;
-      margin-top: 5px;
+      margin-top: 4px;
+    }
+
+    .nav-group-title {
+      font-size: 9px;
+      letter-spacing: .2em;
+      color: var(--dim-dark);
+      padding: 0 24px 8px;
+      text-transform: uppercase;
     }
 
     .nav-item {
-      padding: 13px 24px;
+      position: relative; /* Context for absolute hitbox */
+      padding: 13px 24px;  /* Restore symmetric vertical padding */
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 12px;
       font-size: 11px;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--dim);
       border-left: 2px solid transparent;
-      transition: all 0.2s;
+      transition: all var(--mob-dur-fast) var(--mob-ease-standard);
       user-select: none;
     }
-    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-    .nav-item.active { color: var(--text); border-left-color: var(--text); background: rgba(255,255,255,0.05); }
-    .nav-item.active.col-red   { border-left-color: var(--red);    color: var(--red); }
-    .nav-item.active.col-amber { border-left-color: var(--amber);  color: var(--amber); }
-    .nav-item.active.col-blue  { border-left-color: var(--murmur); color: var(--murmur); }
-    .nav-item.active.col-crys  { border-left-color: var(--crystal);color: var(--crystal); }
-
-    .nav-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
+    /* Shift interactive click hitbox 14px downwards to match visual CRT warp */
+    .nav-item::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      bottom: -14px;
+      z-index: 10;
+    }
+    .nav-item:hover {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .nav-item.active {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border-left-color: var(--secondary-blue);
+    }
+    .nav-item.active.col-red {
+      border-left-color: var(--primary-red);
+      color: var(--primary-red);
+    }
+    .nav-item.active.col-amber {
+      border-left-color: var(--orange);
+      color: var(--orange);
+    }
+    .nav-item.active.col-blue {
+      border-left-color: var(--secondary-blue);
+      color: var(--secondary-blue);
+    }
+    .nav-item.active.col-crys {
+      border-left-color: var(--active-blue);
+      color: var(--active-blue);
     }
 
-    /* ── Main ── */
+    /* Active Indicator: signature triangle rotated to point right */
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      flex-shrink: 0;
+      color: currentColor;
+      transition: transform var(--mob-dur-base) var(--mob-ease-standard);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-dot svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+      transition: transform var(--mob-dur-base) var(--mob-ease-standard);
+    }
+    .nav-item.active .nav-dot svg {
+      transform: rotate(-90deg) scale(1.15);
+      filter: drop-shadow(0 0 4px currentColor);
+    }
+
+    /* ── Main Content Area ── */
     #main {
       flex: 1;
       position: relative;
@@ -111,141 +228,227 @@
     #main::-webkit-scrollbar-thumb { background: var(--border); }
 
     .section { display: none; }
-    .section.active { display: block; animation: fadeUp 0.35s ease; }
+    .section.active { display: block; animation: fadeUp var(--mob-dur-slow) var(--mob-ease-enter); }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Type ── */
+    /* ── Typography ── */
     .eyebrow {
-      font-family: 'Orbitron', sans-serif;
       font-size: 10px;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--dim);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::before {
+      content: '//';
+      color: var(--primary-red);
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 44px;
-      font-weight: 900;
+      font-size: 40px;
+      font-weight: 600;
       line-height: 1.1;
+      letter-spacing: 1px;
       margin-bottom: 24px;
+      color: var(--text);
     }
 
     h2 {
       font-family: 'Orbitron', sans-serif;
       font-size: 17px;
-      font-weight: 700;
+      font-weight: 600;
       margin-bottom: 12px;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
+      color: var(--text);
     }
 
     h3 {
       font-family: 'Orbitron', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 3px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--dim);
       margin-bottom: 14px;
     }
 
     p {
-      font-size: 14px;
-      line-height: 1.85;
-      color: rgba(232,232,244,0.75);
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--text);
+      opacity: 0.85;
       margin-bottom: 14px;
-      max-width: 640px;
+      max-width: 680px;
+    }
+    p em {
+      color: var(--active-blue);
+      font-style: normal;
+    }
+    p strong {
+      color: var(--primary-red);
+      font-weight: 600;
     }
 
     .tagline {
-      font-size: 18px;
-      line-height: 1.6;
+      font-size: 15px;
+      line-height: 1.7;
       color: var(--dim);
-      max-width: 560px;
-      margin-bottom: 52px;
-      font-style: italic;
+      max-width: 580px;
+      margin-bottom: 44px;
+      border-left: 2px solid var(--border);
+      padding-left: 16px;
     }
 
-    .divider { height: 1px; background: var(--border); margin: 36px 0; }
+    /* Node Rule (Divider) with signature triangle */
+    .node-rule {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 40px 0;
+    }
+    .node-rule-icon {
+      width: 10px;
+      height: 9px;
+      flex: none;
+      margin-right: 10px;
+      color: var(--primary-red);
+      display: block;
+    }
+    .node-rule-line {
+      height: 1px;
+      flex: 1;
+      background: linear-gradient(90deg, var(--border) 72%, transparent);
+    }
+    .node-rule-dots {
+      display: flex;
+      gap: 4px;
+      margin-left: 8px;
+    }
+    .node-rule-dot {
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--dim-dark);
+    }
 
     .quote {
-      border-left: 2px solid var(--dim);
-      padding: 4px 0 4px 20px;
-      margin: 20px 0;
+      border-left: 2px solid var(--primary-red);
+      padding: 6px 0 6px 20px;
+      margin: 24px 0;
       font-style: italic;
       color: var(--dim);
-      font-size: 13px;
-      line-height: 1.8;
-      max-width: 580px;
+      font-size: 12.5px;
+      line-height: 1.75;
+      max-width: 600px;
+      background: linear-gradient(90deg, rgba(237, 31, 61, 0.03), transparent);
     }
 
     /* ── Cards ── */
     .card {
-      background: var(--surface);
+      background: linear-gradient(160deg, #161D29, #0e131c);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 26px 30px;
-      margin-bottom: 14px;
+      border-left: 2px solid var(--dim-dark);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+      transition: border-color var(--mob-dur-fast), box-shadow var(--mob-dur-fast);
     }
-    .card.c-red   { border-color: rgba(255,26,46,0.25); }
-    .card.c-amber { border-color: rgba(245,166,35,0.2); }
-    .card.c-blue  { border-color: rgba(91,200,245,0.2); }
-    .card.c-crys  { border-color: rgba(168,212,255,0.2); }
+    .card:hover {
+      border-color: var(--dim);
+      box-shadow: 0 0 14px rgba(132, 186, 217, 0.05);
+    }
+    .card.c-red {
+      border-left-color: var(--primary-red);
+    }
+    .card.c-red:hover {
+      border-color: rgba(237, 31, 61, 0.4);
+      box-shadow: 0 0 18px var(--glow-accent);
+    }
+    .card.c-amber {
+      border-left-color: var(--orange);
+    }
+    .card.c-amber:hover {
+      border-color: rgba(240, 130, 15, 0.4);
+      box-shadow: 0 0 18px var(--glow-orange);
+    }
+    .card.c-blue {
+      border-left-color: var(--secondary-blue);
+    }
+    .card.c-blue:hover {
+      border-color: rgba(132, 186, 217, 0.4);
+      box-shadow: 0 0 18px var(--glow-cool);
+    }
+    .card.c-crys {
+      border-left-color: var(--active-blue);
+    }
+    .card.c-crys:hover {
+      border-color: rgba(159, 208, 242, 0.4);
+      box-shadow: 0 0 18px var(--glow-cool);
+    }
 
     .card-tag {
       font-family: 'Orbitron', sans-serif;
       font-size: 9px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      color: var(--dim);
     }
-    .c-red   .card-tag { color: var(--red); }
-    .c-amber .card-tag { color: var(--amber); }
-    .c-blue  .card-tag { color: var(--murmur); }
-    .c-crys  .card-tag { color: var(--crystal); }
+    .c-red .card-tag { color: var(--primary-red); }
+    .c-amber .card-tag { color: var(--orange); }
+    .c-blue .card-tag { color: var(--secondary-blue); }
+    .c-crys .card-tag { color: var(--active-blue); }
 
-    /* ── Grid ── */
-    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    /* ── Grid Layouts ── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 900px) {
+      .g2 { grid-template-columns: 1fr; }
+    }
 
-    /* ── Loop ── */
+    /* ── Core Loop ── */
     .loop {
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0;
+      gap: 8px;
       margin: 28px 0 36px;
     }
     .loop-step {
-      background: var(--surface2);
+      background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 14px 18px;
-      min-width: 120px;
+      min-width: 130px;
       text-align: center;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
     }
-    .loop-step.danger { border-color: rgba(255,26,46,0.3); }
+    .loop-step.danger { border-color: rgba(237, 31, 61, 0.35); }
     .loop-step .s-label {
-      font-family: 'Orbitron', sans-serif;
       font-size: 9px;
       letter-spacing: 2px;
       color: var(--dim);
       text-transform: uppercase;
       margin-bottom: 4px;
     }
-    .loop-step.danger .s-label { color: var(--red); }
-    .loop-step .s-val { font-size: 12px; }
-    .arrow { color: var(--dim); padding: 0 8px; font-size: 16px; }
+    .loop-step.danger .s-label { color: var(--primary-red); }
+    .loop-step .s-val { font-size: 12px; color: var(--text); }
+    .arrow { color: var(--dim-dark); padding: 0 4px; font-size: 16px; }
 
-    /* ── Threats ── */
+    /* ── Threat Indicators ── */
     .threat {
       display: flex;
       gap: 18px;
-      padding: 20px 0;
+      padding: 24px 0;
       border-bottom: 1px solid var(--border);
     }
     .threat:last-child { border-bottom: none; }
@@ -254,74 +457,78 @@
       border-radius: 2px;
       flex-shrink: 0;
       align-self: stretch;
-      min-height: 36px;
+      min-height: 40px;
     }
-    .t-bar.dim { background: var(--dim); }
-    .t-bar.amber { background: var(--amber); }
-    .t-bar.red { background: var(--red); box-shadow: 0 0 8px var(--red); }
+    .t-bar.dim { background: var(--dim-dark); }
+    .t-bar.amber { background: var(--orange); }
+    .t-bar.red { background: var(--primary-red); box-shadow: 0 0 10px var(--primary-red); }
+    
     .t-name {
       font-family: 'Orbitron', sans-serif;
       font-size: 12px;
-      letter-spacing: 1px;
-      margin-bottom: 7px;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
     }
-    .t-name.red { color: var(--red); }
-    .t-name.amber { color: var(--amber); }
+    .t-name.red { color: var(--primary-red); }
+    .t-name.amber { color: var(--orange); }
     .t-desc {
-      font-size: 13px;
+      font-size: 12.5px;
       line-height: 1.7;
-      color: rgba(232,232,244,0.65);
-      max-width: 540px;
+      color: var(--dim);
+      max-width: 580px;
     }
 
     /* ── Tags ── */
-    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .tag {
-      font-size: 10px;
-      letter-spacing: 1px;
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 3px;
+      padding: 4px 12px;
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
       border: 1px solid var(--border);
       color: var(--dim);
+      background: rgba(255, 255, 255, 0.02);
     }
-    .tag.red   { border-color: rgba(255,26,46,0.35);  color: var(--red); }
-    .tag.amber { border-color: rgba(245,166,35,0.35);  color: var(--amber); }
-    .tag.blue  { border-color: rgba(91,200,245,0.35);  color: var(--murmur); }
+    .tag.red   { border-color: rgba(237, 31, 61, 0.4);  color: var(--primary-red); }
+    .tag.amber { border-color: rgba(240, 130, 15, 0.4);  color: var(--orange); }
+    .tag.blue  { border-color: rgba(132, 186, 217, 0.4);  color: var(--secondary-blue); }
 
-    /* ── Table ── */
-    table { width: 100%; max-width: 520px; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
-    th { text-align: left; font-family: 'Orbitron', sans-serif; font-size: 9px; letter-spacing: 2px; color: var(--dim); padding: 8px 14px; border-bottom: 1px solid var(--border); }
-    td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); color: rgba(232,232,244,0.75); }
+    /* ── Table Styling ── */
+    table { width: 100%; max-width: 580px; border-collapse: collapse; margin: 18px 0; font-size: 12px; }
+    th { text-align: left; font-family: 'Orbitron', sans-serif; font-size: 9.5px; letter-spacing: 2px; color: var(--dim); padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--text); }
 
     /* ── Stat bars ── */
-    .stat { display: flex; align-items: center; gap: 14px; margin-bottom: 9px; }
-    .stat-lbl { font-size: 10px; letter-spacing: 1px; color: var(--dim); width: 110px; text-transform: uppercase; flex-shrink: 0; }
-    .bar-wrap { flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; max-width: 180px; }
-    .bar { height: 100%; border-radius: 2px; }
+    .stat { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .stat-lbl { font-size: 9.5px; letter-spacing: 1.5px; color: var(--dim); width: 110px; text-transform: uppercase; flex-shrink: 0; }
+    .bar-wrap { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.05); clip-path: polygon(0 0, calc(100% - 3px) 0, 100% 3px, 100% 100%, 0 100%); max-width: 180px; }
+    .bar { height: 100%; }
 
-    /* ── Home ── */
+    /* ── Home Hero ── */
     .home-hero { min-height: 55vh; display: flex; flex-direction: column; justify-content: center; }
-    .home-hero h1 span { color: var(--red); text-shadow: 0 0 40px var(--red-glow); }
+    .home-hero h1 span { color: var(--primary-red); text-shadow: 0 0 40px rgba(237, 31, 61, 0.35); }
     .facts { display: flex; gap: 40px; flex-wrap: wrap; margin-top: 44px; }
-    .fact .f-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
-    .fact .f-val { font-family: 'Orbitron', sans-serif; font-size: 13px; }
+    .fact .f-lbl { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--dim); margin-bottom: 6px; }
+    .fact .f-val { font-family: 'Orbitron', sans-serif; font-size: 13px; color: var(--text); }
 
     /* ── Ember header ── */
     .ember-head {
-      background: linear-gradient(135deg, rgba(255,26,46,0.09), transparent);
-      border: 1px solid rgba(255,26,46,0.25);
-      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(237, 31, 61, 0.07), transparent);
+      border: 1px solid rgba(237, 31, 61, 0.25);
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
       padding: 32px;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
     }
-    .ember-head h1 { color: var(--red); text-shadow: 0 0 50px rgba(255,26,46,0.35); }
-    .ember-head .eyebrow { color: rgba(255,26,46,0.5); }
+    .ember-head h1 { color: var(--primary-red); text-shadow: 0 0 50px rgba(237, 31, 61, 0.3); }
+    .ember-head .eyebrow { color: rgba(237, 31, 61, 0.5); }
+    .ember-head .eyebrow::before { display: none; }
 
     /* ── Images ── */
     .sec-img {
       width: 100%; max-width: 720px;
-      border-radius: 8px;
+      border-radius: 4px;
       border: 1px solid var(--border);
       margin: 24px 0;
       display: block;
@@ -331,58 +538,1506 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 320px;
-      opacity: 0.2;
+      opacity: 0.12;
       pointer-events: none;
       z-index: 0;
     }
-    .card.c-red { position: relative; overflow: hidden; }
     .card.c-red > *:not(.logo-img) { position: relative; z-index: 1; }
     .ship-img {
       width: 100%; max-width: 680px;
-      border-radius: 6px;
-      margin: 16px 0;
+      border-radius: 4px;
+      margin: 20px 0;
       display: block;
-      opacity: 0.88;
+      opacity: 0.85;
+      border: 1px solid var(--border);
     }
     .tato-img {
       max-width: 220px;
-      border-radius: 8px;
-      border: 1px solid rgba(245,166,35,0.2);
+      border-radius: 4px;
+      border: 1px solid rgba(240, 130, 15, 0.25);
       display: block;
-      margin: 0 auto 8px;
+      margin: 0 auto 12px;
     }
 
-    /* ── Glow text ── */
-    .r { color: var(--red); }
-    .a { color: var(--amber); }
-    .b { color: var(--murmur); }
+    /* ── Button styling from UI Kit ── */
+    .btn {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      outline: none;
+      font-family: inherit;
+      display: inline-flex;
+    }
+    .btn-wrap {
+      position: relative;
+      display: inline-flex;
+      transition: box-shadow var(--mob-dur-fast);
+      width: 100%;
+    }
+    .btn-ring {
+      position: absolute;
+      inset: -3px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+      background: transparent;
+      pointer-events: none;
+    }
+    .btn-body {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.16);
+      transition: background var(--mob-dur-fast), transform var(--mob-dur-instant), color var(--mob-dur-fast);
+      width: 100%;
+    }
+
+    /* Primary Red Button */
+    .btn-primary .btn-body { background: var(--primary-red); color: #190406; }
+    .btn-primary:hover .btn-body { background: var(--primary-red-hover); }
+    .btn-primary:hover .btn-wrap { box-shadow: 0 0 18px rgba(255,58,85,.45); }
+    .btn-primary:active .btn-body { background: #C50E28; transform: translateY(1px); }
+
+    /* Secondary Blue Button */
+    .btn-secondary .btn-body { background: var(--secondary-blue); color: #0B121A; }
+    .btn-secondary:hover .btn-body { background: var(--secondary-blue-hover); }
+    .btn-secondary:hover .btn-wrap { box-shadow: 0 0 18px rgba(132,186,217,.4); }
+    .btn-secondary:active .btn-body { background: #6699BB; transform: translateY(1px); }
+
+    /* Quiet Button */
+    .btn-quiet .btn-body { background: var(--panel); color: var(--dim); box-shadow: inset 0 0 0 1px var(--border); }
+    .btn-quiet:hover .btn-body { background: var(--panel-2); color: var(--text); }
+    .btn-quiet:hover .btn-wrap { box-shadow: 0 0 14px rgba(130,160,185,.15); }
+    .btn-quiet:active .btn-body { background: #11161F; transform: translateY(1px); }
+
+    /* Destructive Button */
+    .btn-destructive .btn-body { background: var(--destructive); color: #F0C3C9; }
+    .btn-destructive:hover .btn-body { background: var(--destructive-hover); }
+    .btn-destructive:hover .btn-wrap { box-shadow: 0 0 18px rgba(171,42,61,.45); }
+    .btn-destructive:active .btn-body { background: #66131F; transform: translateY(1px); }
+
+    /* Orange Button */
+    .btn-orange .btn-body { background: var(--orange); color: #190E02; }
+    .btn-orange:hover .btn-body { background: var(--orange-hover); }
+    .btn-orange:hover .btn-wrap { box-shadow: 0 0 18px rgba(255,154,43,.45); }
+    .btn-orange:active .btn-body { background: #C7610A; transform: translateY(1px); }
+
+    /* Focused state (Tab navigation) */
+    .btn:focus-visible .btn-ring {
+      background: var(--border-focus);
+    }
+    .btn:focus-visible .btn-wrap {
+      box-shadow: 0 0 16px rgba(255,255,255,.4);
+    }
+
+    /* ── Live Panel Skins (Simulator Widgets) ── */
+    .sim-panel {
+      background: linear-gradient(158deg, #1E2735 0%, #0f141e 100%);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--primary-red);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      padding: 30px 28px 28px;
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      margin: 20px auto;
+    }
+    .sim-panel.orange-theme {
+      border-left-color: var(--orange);
+    }
+    .sim-panel .inner-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0,0,0,.38));
+      pointer-events: none;
+    }
+
+    /* Input Field Skin */
+    .sim-input-wrap {
+      position: relative;
+      margin-bottom: 12px;
+      flex: 1;
+    }
+    .sim-input-caret {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dim-dark);
+      font-size: 13px;
+      pointer-events: none;
+    }
+    .sim-input {
+      width: 100%;
+      height: 48px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--active-blue);
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      padding: 0 12px 0 27px;
+      outline: none;
+      caret-color: var(--primary-red);
+      transition: border-color var(--mob-dur-base), box-shadow var(--mob-dur-base);
+    }
+    .sim-input:focus {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.28);
+    }
+
+    /* Toggle Switches */
+    .sim-toggle {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+      background: var(--panel);
+      box-shadow: inset 0 0 0 1px var(--border);
+      transition: background var(--mob-dur-base);
+    }
+    .sim-toggle.active {
+      background: var(--orange);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.28);
+    }
+    .sim-toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: var(--dim);
+      clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+      transition: left var(--mob-dur-base), background var(--mob-dur-base);
+    }
+    .sim-toggle.active .sim-toggle-knob {
+      left: 29px;
+      background: #190E02;
+    }
+
+    /* Segmented controls (Quality picker) */
+    .segmented {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+    .seg-btn {
+      position: relative; /* Context for absolute hitbox */
+      flex: 1;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
+      background: var(--panel);
+      color: var(--dim);
+      border: 0;
+      box-shadow: inset 0 0 0 1px var(--border);
+      transition: background var(--mob-dur-base), color var(--mob-dur-base);
+    }
+    .seg-btn.active {
+      background: var(--orange);
+      color: #190E02;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+    }
+
+    /* Meter / Slider segment bar */
+    .vol-bars {
+      display: flex;
+      gap: 2px;
+      width: 100%;
+    }
+    .vol-bar {
+      position: relative; /* Context for absolute hitbox */
+      flex: 1;
+      height: 12px;
+      cursor: pointer;
+      background: #222C3A;
+      transition: background var(--mob-dur-instant);
+    }
+    .vol-bar.filled {
+      background: var(--orange);
+    }
+    .vol-bar.filled.glow-head {
+      box-shadow: 0 0 8px rgba(240,130,15,.65);
+    }
+
+    /* Lobby Crew Row */
+    .crew-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: background var(--mob-dur-fast);
+    }
+    .crew-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .crew-row.you {
+      background: rgba(132,186,217,.06);
+      border-left: 2px solid var(--secondary-blue);
+    }
+    .crew-row-slot {
+      font-size: 9px;
+      letter-spacing: .14em;
+      color: var(--dim-dark);
+      width: 18px;
+      flex: none;
+    }
+    .crew-row-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex: none;
+      background: var(--dim);
+    }
+    .crew-row-dot.ready {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+    .crew-row-dot.standby {
+      background: var(--orange);
+      box-shadow: 0 0 8px var(--orange);
+    }
+    .crew-row-name {
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--dim);
+      flex: 1;
+    }
+    .crew-row.online .crew-row-name {
+      color: var(--text);
+    }
+    .crew-row.you .crew-row-name {
+      color: #EEF3F8;
+    }
+    .crew-row-tag {
+      font-size: 8px;
+      letter-spacing: .2em;
+      color: var(--dim);
+      border: 1px solid var(--border);
+      padding: 3px 6px;
+      display: none;
+    }
+    .crew-row-tag.active {
+      display: block;
+      color: var(--active-blue);
+      border-color: rgba(159, 208, 242, 0.25);
+    }
+    .crew-row-ready {
+      font-size: 9px;
+      letter-spacing: .18em;
+      width: 78px;
+      text-align: right;
+      flex: none;
+      color: var(--dim-dark);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .crew-row-ready.ready {
+      color: var(--success);
+    }
+    .crew-row-ready.standby {
+      color: var(--orange);
+    }
+
+    /* Status indicator in lobby */
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10.5px;
+      letter-spacing: .18em;
+    }
+    .status-indicator-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--dim);
+    }
+    .status-indicator-dot.active {
+      background: var(--secondary-blue);
+      box-shadow: 0 0 8px var(--secondary-blue);
+    }
+    .status-indicator-dot.success {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+    .status-indicator-dot.error {
+      background: var(--primary-red);
+      box-shadow: 0 0 8px var(--primary-red);
+    }
+    .status-indicator-text.active { color: var(--secondary-blue); }
+    .status-indicator-text.success { color: var(--success); }
+    .status-indicator-text.error { color: var(--primary-red); }
+
+    /* Lobby readiness meter */
+    .lobby-meter {
+      display: flex;
+      gap: 2px;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .lobby-meter-seg {
+      flex: 1;
+      height: 9px;
+      background: #222C3A;
+      transition: background var(--mob-dur-base);
+    }
+    .lobby-meter-seg.active {
+      background: var(--success);
+    }
+
+    .dropdown-item {
+      position: relative; /* Context for absolute hitbox */
+      transition: background var(--mob-dur-fast), color var(--mob-dur-fast);
+    }
+
+    /* Glow text utilities */
+    .r { color: var(--primary-red); text-shadow: 0 0 8px rgba(237, 31, 61, 0.2); }
+    .a { color: var(--orange); text-shadow: 0 0 8px rgba(240, 130, 15, 0.2); }
+    .b { color: var(--secondary-blue); text-shadow: 0 0 8px rgba(132, 186, 217, 0.2); }
+    .c { color: var(--active-blue); }
+
+    /* ── Timeline Styles ── */
+    .timeline {
+      position: relative;
+      margin: 32px 0;
+      padding-left: 20px;
+      border-left: 1px solid var(--border);
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 0;
+      bottom: 0;
+      width: 7px;
+      background: linear-gradient(180deg, var(--active-blue) 0%, transparent 100%);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-marker {
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 11px;
+      height: 11px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--mob-dur-base) var(--mob-ease-standard);
+    }
+    .timeline-item:hover .timeline-marker {
+      border-color: var(--secondary-blue);
+      box-shadow: 0 0 8px var(--secondary-blue);
+    }
+    .timeline-marker::after {
+      content: '';
+      width: 3px;
+      height: 3px;
+      background: var(--dim);
+      border-radius: 50%;
+      transition: background var(--mob-dur-base);
+    }
+    .timeline-item:hover .timeline-marker::after {
+      background: var(--secondary-blue);
+    }
+    .timeline-marker.active-marker {
+      border-color: var(--primary-red);
+      box-shadow: 0 0 10px rgba(237, 31, 61, 0.4);
+    }
+    .timeline-marker.active-marker::after {
+      background: var(--primary-red);
+      width: 4px;
+      height: 4px;
+    }
+    .timeline-era {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .timeline-item:hover .timeline-era {
+      color: var(--text);
+    }
+    .timeline-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .timeline-content {
+      color: var(--dim);
+      font-size: 12.5px;
+      line-height: 1.6;
+    }
+    .timeline-content p {
+      margin-bottom: 10px;
+    }
+    .timeline-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Houses Filter & Search ── */
+    .houses-filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .houses-search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+      max-width: 320px;
+    }
+    .houses-search-input {
+      width: 100%;
+      height: 38px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 0 14px 0 32px;
+      letter-spacing: 1px;
+      transition: border-color var(--mob-dur-base);
+    }
+    .houses-search-input:focus {
+      outline: none;
+      border-color: var(--active-blue);
+      box-shadow: 0 0 10px rgba(159, 208, 242, 0.1);
+    }
+    .houses-search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dim-dark);
+      pointer-events: none;
+      width: 14px;
+      height: 14px;
+    }
+    .houses-filter-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      position: relative; /* Context for absolute hitbox */
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: all var(--mob-dur-fast) var(--mob-ease-standard);
+    }
+    .filter-btn:hover {
+      color: var(--text);
+      border-color: var(--dim);
+    }
+    .filter-btn.active {
+      background: var(--panel-2);
+      color: var(--text);
+      border-color: var(--secondary-blue);
+      box-shadow: 0 0 8px rgba(132, 186, 217, 0.15);
+    }
+
+    /* Houses Grid */
+    .houses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .house-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 240px;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+      transition: transform var(--mob-dur-base) var(--mob-ease-standard), border-color var(--mob-dur-base);
+    }
+    .house-card:hover {
+      transform: translateY(-4px);
+    }
+    .house-card.c-blue:hover { border-color: var(--secondary-blue); box-shadow: 0 0 16px rgba(132, 186, 217, 0.08); }
+    .house-card.c-amber:hover { border-color: var(--orange); box-shadow: 0 0 16px rgba(240, 130, 15, 0.08); }
+    .house-card.c-red:hover { border-color: var(--primary-red); box-shadow: 0 0 16px rgba(237, 31, 61, 0.08); }
+    .house-card.c-crys:hover { border-color: var(--active-blue); box-shadow: 0 0 16px rgba(159, 208, 242, 0.08); }
+    
+    .house-header {
+      margin-bottom: 16px;
+    }
+    .house-vocation {
+      font-size: 8.5px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 8px;
+    }
+    .house-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text);
+    }
+    .house-card.c-blue .house-name { color: var(--secondary-blue); }
+    .house-card.c-amber .house-name { color: var(--orange); }
+    .house-card.c-red .house-name { color: var(--primary-red); }
+    .house-card.c-crys .house-name { color: var(--active-blue); }
+
+    .house-desc {
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: var(--dim);
+      flex-grow: 1;
+      margin-bottom: 20px;
+    }
+    .house-quote {
+      font-style: italic;
+      color: var(--dim-dark);
+      font-size: 10.5px;
+      border-left: 2px solid var(--border);
+      padding-left: 8px;
+      margin-top: auto;
+    }
+    .house-card.c-blue .house-quote { border-left-color: var(--secondary-blue); }
+    .house-card.c-amber .house-quote { border-left-color: var(--orange); }
+    .house-card.c-red .house-quote { border-left-color: var(--primary-red); }
+    .house-card.c-crys .house-quote { border-left-color: var(--active-blue); }
+    
+    .house-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .house-tag {
+      font-size: 8px;
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .house-card.c-blue .house-tag { border-color: rgba(132, 186, 217, 0.2); color: var(--secondary-blue); }
+    .house-card.c-amber .house-tag { border-color: rgba(240, 130, 15, 0.2); color: var(--orange); }
+    .house-card.c-red .house-tag { border-color: rgba(237, 31, 61, 0.2); color: var(--primary-red); }
+    .house-card.c-crys .house-tag { border-color: rgba(159, 208, 242, 0.2); color: var(--active-blue); }
+
+    /* The Eleventh House Specific Card */
+    .eleventh-house-card {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(30, 39, 53, 0.2),
+        rgba(30, 39, 53, 0.2) 10px,
+        rgba(18, 24, 35, 0.2) 10px,
+        rgba(18, 24, 35, 0.2) 20px
+      );
+      border: 1px dashed var(--border);
+      opacity: 0.75;
+    }
+    .eleventh-house-card:hover {
+      border-style: solid;
+      border-color: var(--dim-dark);
+      opacity: 1;
+    }
+
+    /* ── Log Archives Section ── */
+    .archives-layout {
+      display: flex;
+      gap: 20px;
+      height: 520px;
+      align-items: stretch;
+    }
+    .archives-sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: rgba(18, 24, 35, 0.6);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    }
+    .archives-sidebar-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--dim-dark);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      overflow-y: auto;
+      flex-grow: 1;
+    }
+    .log-item {
+      position: relative; /* Context for absolute hitbox */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;  /* Restore symmetric vertical padding */
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--mob-dur-fast) var(--mob-ease-standard);
+      user-select: none;
+    }
+    /* Shift interactive click hitbox 14px downwards to match visual CRT warp */
+    .log-item::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      bottom: -14px;
+      z-index: 10;
+    }
+    .log-item:hover {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .log-item.active {
+      background: rgba(240, 130, 15, 0.05);
+      border-color: var(--orange);
+      color: var(--orange);
+      text-shadow: 0 0 6px rgba(240, 130, 15, 0.2);
+    }
+    .log-icon {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+    }
+
+    /* CRT Terminal Screen Container */
+    .terminal-screen {
+      flex-grow: 1;
+      background: #06090e;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 15px rgba(240, 130, 15, 0.04);
+    }
+    .terminal-screen::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      z-index: 10;
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+    }
+    .terminal-bezel {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow-y: auto;
+      z-index: 2;
+      position: relative;
+    }
+    .terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1.5px dashed rgba(240, 130, 15, 0.4);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+      color: var(--orange);
+      font-family: 'Space Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 1px;
+    }
+    .terminal-body {
+      flex-grow: 1;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--orange);
+      opacity: 0.9;
+      line-height: 1.7;
+      text-shadow: 0 0 3px rgba(240, 130, 15, 0.35);
+      white-space: pre-wrap;
+    }
+    
+    /* Typewriter Cursor */
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--orange);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      from, to { background: transparent; }
+      50% { background: var(--orange); }
+    }
+
+    /* ── L-shaped Corner Brackets on Cards ── */
+    .card, .house-card, .sim-panel {
+      position: relative;
+    }
+    .card::before, .house-card::before, .sim-panel::before {
+      content: '';
+      position: absolute;
+      top: 6px; left: 6px;
+      width: 8px; height: 8px;
+      border-top: 1px solid #738399;
+      border-left: 1px solid #738399;
+      opacity: 0.2;
+      pointer-events: none;
+      transition: opacity var(--mob-dur-base) var(--mob-ease-standard);
+      z-index: 5;
+    }
+    .card::after, .house-card::after, .sim-panel::after {
+      content: '';
+      position: absolute;
+      bottom: 6px; right: 6px;
+      width: 8px; height: 8px;
+      border-bottom: 1px solid #738399;
+      border-right: 1px solid #738399;
+      opacity: 0.2;
+      pointer-events: none;
+      transition: opacity var(--mob-dur-base) var(--mob-ease-standard);
+      z-index: 5;
+    }
+    .card:hover::before, .card:hover::after,
+    .house-card:hover::before, .house-card:hover::after,
+    .sim-panel:hover::before, .sim-panel:hover::after {
+      opacity: 0.75;
+    }
+
+    /* Accent matching for corner brackets */
+    .card.c-blue::before, .card.c-blue::after,
+    .house-card.c-blue::before, .house-card.c-blue::after { border-color: var(--secondary-blue); }
+    
+    .card.c-amber::before, .card.c-amber::after,
+    .house-card.c-amber::before, .house-card.c-amber::after { border-color: var(--orange); }
+    
+    .card.c-red::before, .card.c-red::after,
+    .house-card.c-red::before, .house-card.c-red::after { border-color: var(--primary-red); }
+    
+    .card.c-crys::before, .card.c-crys::after,
+    .house-card.c-crys::before, .house-card.c-crys::after { border-color: var(--active-blue); }
+
+    /* ── Viewport Framing Brackets ── */
+    .viewport-mark {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      border-color: var(--border);
+      border-style: solid;
+      border-width: 0;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 50;
+      transition: border-color var(--mob-dur-base);
+    }
+    .viewport-tl { top: 20px; left: 260px; border-top-width: 1.5px; border-left-width: 1.5px; }
+    .viewport-tr { top: 20px; right: 20px; border-top-width: 1.5px; border-right-width: 1.5px; }
+    .viewport-bl { bottom: 20px; left: 260px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+    .viewport-br { bottom: 20px; right: 20px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+    /* ── Terminal Screen CRT Polish ── */
+    @keyframes screen-flicker {
+      0% { opacity: 0.985; }
+      50% { opacity: 1; }
+      100% { opacity: 0.99; }
+    }
+    .terminal-screen {
+      animation: screen-flicker 0.18s infinite;
+    }
+    @keyframes scanline-drift {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    .terminal-screen::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 8px;
+      background: rgba(240, 130, 15, 0.035);
+      z-index: 11;
+      pointer-events: none;
+      animation: scanline-drift 7s linear infinite;
+    }
+
+    /* ── Global CRT Bezel Overlay ── */
+    #terminal-bezel-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 110;
+      background: radial-gradient(circle, transparent 70%, rgba(0, 0, 0, 0.3) 100%);
+      pointer-events: none;
+      box-shadow: inset 0 0 100px rgba(0,0,0,0.85);
+    }
+    #terminal-bezel-overlay::after {
+      content: " ";
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 4px, 8px 100%;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    #terminal-bezel-overlay::before {
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 20px;
+      background: rgba(159, 208, 242, 0.012);
+      animation: scanline-drift 12s linear infinite;
+      pointer-events: none;
+    }
+
+    /* ── Terminal Boot Screen ── */
+    #boot-screen {
+      position: absolute;
+      inset: 0;
+      background: #000000;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: calc(3.8vh + 20px) calc(2.2vw + 20px) !important;
+      font-family: 'Space Mono', monospace;
+      color: var(--orange);
+      transition: opacity var(--mob-dur-slow) var(--mob-ease-exit), transform var(--mob-dur-slow) var(--mob-ease-exit);
+      overflow-y: auto;
+      cursor: pointer;
+    }
+    #boot-screen.powered-on {
+      opacity: 0;
+      transform: scale(1.01);
+      pointer-events: none;
+    }
+    
+    /* Blinking console triggers */
+    .prompt-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--success);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: prompt-blink 1s step-end infinite;
+    }
+    @keyframes prompt-blink {
+      from, to { background: transparent; }
+      50% { background: var(--success); }
+    }
+    
+    .text-blink {
+      animation: text-blink-anim 1.2s step-end infinite;
+    }
+    @keyframes text-blink-anim {
+      from, to { opacity: 0.25; }
+      50% { opacity: 1; }
+    }
+    .boot-panel {
+      position: relative;
+      width: 480px;
+      padding: 32px;
+      background: rgba(18, 24, 35, 0.85);
+      border: 1px solid var(--border);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);
+      box-shadow: 0 0 30px rgba(240, 130, 15, 0.05);
+      text-align: center;
+    }
+    .boot-status {
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      color: var(--dim);
+    }
+    .boot-status span {
+      color: var(--primary-red);
+      font-weight: bold;
+      animation: blink 1s step-end infinite;
+    }
+    
+    /* Retro Power Switch Button */
+    .power-switch-container {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+    .power-btn {
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text);
+      width: 260px;
+      transition: transform var(--mob-dur-fast);
+    }
+    .power-btn:hover {
+      transform: scale(1.02);
+    }
+    .power-btn:active {
+      transform: scale(0.98);
+    }
+    .power-btn-body {
+      background: var(--panel);
+      border: 1px solid var(--primary-red);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+      box-shadow: 0 0 15px rgba(237, 31, 61, 0.15);
+      transition: border-color var(--mob-dur-base), box-shadow var(--mob-dur-base), background var(--mob-dur-base);
+    }
+    .power-btn:hover .power-btn-body {
+      background: rgba(237, 31, 61, 0.05);
+      border-color: var(--primary-red-hover);
+      box-shadow: 0 0 25px rgba(237, 31, 61, 0.3);
+    }
+    .power-led {
+      width: 8px;
+      height: 8px;
+      background: #330005;
+      border-radius: 50%;
+      border: 1px solid rgba(237, 31, 61, 0.3);
+      transition: background var(--mob-dur-base), box-shadow var(--mob-dur-base);
+    }
+    .power-btn:hover .power-led {
+      background: var(--primary-red);
+      box-shadow: 0 0 8px var(--primary-red);
+    }
+
+    #boot-diagnostics {
+      width: 100%;
+      height: 180px;
+      margin-top: 24px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      text-align: left;
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--orange);
+      overflow-y: hidden;
+      white-space: pre-wrap;
+      opacity: 0.95;
+      text-shadow: 0 0 3px rgba(240, 130, 15, 0.3);
+    }
+    
+    /* CRT Screen turn-on flash */
+    .crt-flash {
+      animation: crt-turn-on 0.25s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    @keyframes crt-turn-on {
+      0% { transform: scaleY(0.005) scaleX(0); filter: brightness(3); }
+      50% { transform: scaleY(0.005) scaleX(1); filter: brightness(3); }
+      100% { transform: scaleY(1) scaleX(1); filter: brightness(1); }
+    }
+
+    /* ── Monitor Bezel Frame ── */
+    #monitor-bezel {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ── App Container (Curved Screen Clipping & Filters) ── */
+    #app-container {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      display: flex;
+      clip-path: url(#crt-curve);
+      filter: url(#chromatic-aberration) url(#crt-warp-filter);
+      z-index: 10;
+      box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95);
+    }
+
+    /* ── Screen Layout Zoom Wrapper ── */
+    #screen-layout {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      /* Custom property zoom default to 1.0 */
+      zoom: var(--zoom-level, 1);
+    }
+    @supports not (zoom: 1) {
+      #screen-layout {
+        transform: scale(var(--zoom-level, 1));
+        transform-origin: top left;
+        width: calc(100% / var(--zoom-level, 1)) !important;
+        height: calc(100% / var(--zoom-level, 1)) !important;
+      }
+    }
+
+    /* ── Floating Monitor Zoom Controls ── */
+    #monitor-controls {
+      position: absolute;
+      top: calc(3.8vh + 12px);
+      right: calc(2.2vw + 16px);
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--dim);
+      background: rgba(7, 11, 19, 0.85);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #monitor-controls.visible {
+      opacity: 1;
+    }
+    .monitor-btn {
+      position: relative; /* Context for absolute hitbox */
+      background: transparent;
+      border: none;
+      color: var(--secondary-blue);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 6px 10px;  /* Restore symmetric vertical padding */
+      margin: -4px -4px;  /* Keep visual layout compact */
+      transition: all var(--mob-dur-fast) var(--mob-ease-standard);
+    }
+    /* Shift click hitbox 14px downwards to match visual CRT warp */
+    .monitor-btn::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      bottom: -14px;
+      z-index: 10;
+    }
+    .monitor-btn:hover {
+      color: var(--text);
+      text-shadow: 0 0 4px var(--secondary-blue);
+    }
+    .monitor-btn:active {
+      transform: scale(0.95);
+    }
+    #zoom-display {
+      position: relative; /* Context for absolute hitbox */
+      color: var(--text);
+      font-weight: bold;
+      min-width: 42px;
+      padding: 6px 0;    /* Restore symmetric vertical padding */
+      margin: -6px 0;     /* Keep visual layout aligned */
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--mob-dur-fast) var(--mob-ease-standard);
+    }
+    /* Shift click hitbox 14px downwards to match visual CRT warp */
+    #zoom-display::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      bottom: -14px;
+      z-index: 10;
+    }
+    #zoom-display:hover {
+      color: var(--secondary-blue);
+      text-shadow: 0 0 4px var(--secondary-blue);
+    }
+
+    /* ── Chromatic Aberration (Handled globally via SVG Filter) ── */
+
+    /* ── Bezel Safe-Zone Overrides ── */
+    #sidebar {
+      width: 290px !important;
+      min-width: 290px !important;
+      padding: calc(3.8vh + 20px) 0 calc(3.8vh + 10px) 2.2vw !important;
+    }
+    #main {
+      padding: 40px 52px !important;
+      margin-right: 2.2vw !important;
+      margin-top: 3.8vh !important;
+      margin-bottom: 3.8vh !important;
+    }
+    .viewport-mark {
+      position: absolute !important;
+    }
+    .viewport-tl { top: 3.8vh !important; left: 290px !important; }
+    .viewport-tr { top: 3.8vh !important; right: 2.2vw !important; }
+    .viewport-bl { bottom: 3.8vh !important; left: 290px !important; }
+    .viewport-br { bottom: 3.8vh !important; right: 2.2vw !important; }
+
+    /* ── Code Terminal Styling Overrides ── */
+    .card, .house-card, .sim-panel {
+      background: #070b13 !important; /* Solid code-console background */
+      border: 1px solid #1c2635 !important;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    /* Prepend shell markers */
+    .card-tag::before, .timeline-era::before, .house-vocation::before, .loop-step .s-label::before, .fact .f-lbl::before {
+      content: '>> ';
+      color: var(--primary-red);
+      font-weight: bold;
+      margin-right: 2px;
+    }
+    .card-tag.c-blue::before, .house-card.c-blue .house-vocation::before { color: var(--secondary-blue); }
+    .card-tag.c-amber::before, .house-card.c-amber .house-vocation::before { color: var(--orange); }
+    .card-tag.c-crys::before, .house-card.c-crys .house-vocation::before { color: var(--active-blue); }
+    
+    /* Shell markers for other tags */
+    .tags .tag::before {
+      content: '$ ';
+    }
+    
+    /* Dropdown field positioning context */
+    #sim-dropdown-field {
+      position: relative;
+    }
+
+    /* Shift interactive click hitboxes 14px downwards to align with visually warped CRT screen elements */
+    .btn::after,
+    .seg-btn::after,
+    .sim-toggle::after,
+    .vol-bar::after,
+    #sim-dropdown-field::after,
+    .dropdown-item::after,
+    .filter-btn::after,
+    .houses-search-wrapper::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      bottom: -14px;
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
 
-<canvas id="stars"></canvas>
+<!-- SVG Filters and Clip Paths -->
+<svg style="position: absolute; width: 0; height: 0; pointer-events: none;">
+  <defs>
+    <!-- CRT TV Screen Clip Path -->
+    <clipPath id="crt-curve" clipPathUnits="objectBoundingBox">
+      <path d="M 0.02 0.035 Q 0.5 0.005 0.98 0.035 Q 0.995 0.5 0.98 0.965 Q 0.5 0.995 0.02 0.965 Q 0.005 0.5 0.02 0.035 Z" />
+    </clipPath>
+    
+    <!-- Chromatic Aberration Filter -->
+    <filter id="chromatic-aberration" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" in="SourceGraphic" result="r"
+        values="1 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 1 0" />
+      <feColorMatrix type="matrix" in="SourceGraphic" result="g"
+        values="0 0 0 0 0
+                0 1 0 0 0
+                0 0 0 0 0
+                0 0 0 1 0" />
+      <feColorMatrix type="matrix" in="SourceGraphic" result="b"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 1 0 0
+                0 0 0 1 0" />
+      <!-- Red channel shifted 3.0px right, Blue channel shifted 3.0px left -->
+      <feOffset in="r" dx="3.0" dy="0" result="r-offset" />
+      <feOffset in="b" dx="-3.0" dy="0" result="b-offset" />
+      <feBlend in="r-offset" in2="g" mode="screen" result="rg" />
+      <feBlend in="b-offset" in2="rg" mode="screen" result="aberrated" />
+      
+      <!-- Vignette mask for chromatic aberration (only at screen edges) -->
+      <feImage id="chromatic-vignette-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="vignette" />
+      <!-- Blur the vignette mask to make the transition between clear center and aberrated edges completely seamless -->
+      <feGaussianBlur in="vignette" stdDeviation="8" result="blurredVignette" />
+      <feComposite in="aberrated" in2="blurredVignette" operator="in" result="aberrated-masked" />
+      
+      <!-- Merge clean center with aberrated edges -->
+      <feMerge>
+        <feMergeNode in="SourceGraphic" />
+        <feMergeNode in="aberrated-masked" />
+      </feMerge>
+    </filter>
+    
+    <!-- Barrel Distortion TV Warp Filter -->
+    <filter id="crt-warp-filter" x="0%" y="0%" width="100%" height="100%">
+      <feImage id="crt-warp-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+      <!-- Smooth out the coordinate map to eliminate pixel interpolation stepping/seams -->
+      <feGaussianBlur in="map" stdDeviation="3" result="blurredMap" />
+      <feDisplacementMap in="SourceGraphic" in2="blurredMap" scale="42" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs>
+</svg>
 
-<nav id="sidebar">
-  <div class="logo">
-    <div class="title">Project Mobius</div>
-    <div class="sub">Silent Providence</div>
+<!-- SVG Monitor Bezel representing physical dark curved frame -->
+<svg id="monitor-bezel" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <!-- Outer border solid black mask with curved inner screen cutout (scaled to 100x100 space) -->
+  <path fill-rule="evenodd" d="M 0 0 H 100 V 100 H 0 Z M 2 3.5 Q 50 0.5 98 3.5 Q 99.5 50 98 96.5 Q 50 99.5 2 96.5 Q 0.5 50 2 3.5 Z" fill="#020202" />
+  <!-- CRT glass recess shadow (scaled to 100x100 space) -->
+  <path d="M 2 3.5 Q 50 0.5 98 3.5 Q 99.5 50 98 96.5 Q 50 99.5 2 96.5 Q 0.5 50 2 3.5 Z" fill="none" stroke="#000000" stroke-width="0.8" opacity="0.9" />
+  <!-- Inner rim reflection highlight (scaled to 100x100 space) -->
+  <path d="M 2.2 3.7 Q 50 0.7 97.8 3.7 Q 99.3 50 97.8 96.3 Q 50 99.3 2.2 96.3 Q 0.7 50 2.2 3.7 Z" fill="none" stroke="#121824" stroke-width="0.2" opacity="0.6" />
+</svg>
+
+<!-- App Container representing the curved screen -->
+<div id="app-container">
+
+  <!-- Global CRT Scanlines inside the curved screen container -->
+  <div id="terminal-bezel-overlay"></div>
+
+  <canvas id="stars"></canvas>
+
+  <!-- Viewport framing marks -->
+  <div class="viewport-mark viewport-tl"></div>
+  <div class="viewport-mark viewport-tr"></div>
+  <div class="viewport-mark viewport-bl"></div>
+  <div class="viewport-mark viewport-br"></div>
+
+  <!-- Terminal Boot Screen inside the screen container -->
+  <div id="boot-screen">
+    <div id="boot-prompt-el">
+      MOBIUS LINK SYSTEM V4.09.2<br>
+      UPLINK CORRIDOR: DISCONNECTED (SECTOR PROX_B_04)<br>
+      PWR_STATE: STANDBY<br>
+      SECURITY_GATEWAY: CLOSED<br><br>
+      <span style="color: var(--primary-red); font-weight: bold;">[ CRITICAL: TERMINAL OFFLINE ]</span><br><br>
+      <span class="text-blink" style="color: var(--success); font-weight: bold;">&gt;&gt;&gt; CLICK ANYWHERE OR PRESS ANY KEY TO INITIALIZE TERMINAL BOOT SEQUENCE...</span><span class="prompt-cursor"></span>
+    </div>
+    <div id="boot-diagnostics" style="display: none; width: 100%; white-space: pre-wrap; margin-top: 20px;"></div>
   </div>
-  <div class="nav-item active" data-sec="home"><div class="nav-dot"></div>Home</div>
-  <div class="nav-item" data-sec="universe" data-col="col-crys"><div class="nav-dot"></div>Universe</div>
-  <div class="nav-item" data-sec="factions" data-col="col-red"><div class="nav-dot"></div>Factions</div>
-  <div class="nav-item" data-sec="tatos" data-col="col-amber"><div class="nav-dot"></div>The Tatos</div>
-  <div class="nav-item" data-sec="game" data-col="col-blue"><div class="nav-dot"></div>The Game</div>
-  <div class="nav-item" data-sec="threats" data-col="col-red"><div class="nav-dot"></div>Threats</div>
+
+  <!-- Floating Monitor Controls -->
+  <div id="monitor-controls">
+    <button class="monitor-btn" id="btn-zoom-out" title="Zoom Out">[ ZOOM - ]</button>
+    <span id="zoom-display" title="Click to reset zoom">100%</span>
+    <button class="monitor-btn" id="btn-zoom-in" title="Zoom In">[ ZOOM + ]</button>
+    <span style="color: var(--border); margin: 0 4px;">|</span>
+    <button class="monitor-btn" id="btn-toggle-aberration" title="Toggle Chromatic Aberration">[ CHROMATIC: ON ]</button>
+  </div>
+
+  <!-- Screen Layout Zoom Wrapper -->
+  <div id="screen-layout">
+
+<!-- Sidebar terminal navigation -->
+<nav id="sidebar">
+  <div class="reg-mark reg-tl">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="7.4" y="0" width="1.2" height="16"></rect>
+      <rect x="0" y="7.4" width="16" height="1.2"></rect>
+    </svg>
+  </div>
+  <div class="reg-mark reg-tr">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="7.4" y="0" width="1.2" height="16"></rect>
+      <rect x="0" y="7.4" width="16" height="1.2"></rect>
+    </svg>
+  </div>
+  <div class="reg-mark reg-bl">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="7.4" y="0" width="1.2" height="16"></rect>
+      <rect x="0" y="7.4" width="16" height="1.2"></rect>
+    </svg>
+  </div>
+  <div class="reg-mark reg-br">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="7.4" y="0" width="1.2" height="16"></rect>
+      <rect x="0" y="7.4" width="16" height="1.2"></rect>
+    </svg>
+  </div>
+  
+  <div class="logo">
+    <div class="logo-header">
+      <div class="dot"></div>
+      <div class="eyebrow">PROJECT MOBIUS</div>
+    </div>
+    <div class="title">MOBIUS LINK</div>
+    <div class="sub">SILENT PROVIDENCE</div>
+  </div>
+  
+  <div class="nav-group-title">CODEX LOGS</div>
+  
+  <div class="nav-item active" data-sec="home">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    Home
+  </div>
+  
+  <div class="nav-item" data-sec="universe" data-col="col-crys">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    Universe
+  </div>
+  
+  <div class="nav-item" data-sec="factions" data-col="col-red">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    Factions
+  </div>
+
+  <div class="nav-item" data-sec="houses" data-col="col-blue">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    The Houses
+  </div>
+  
+  <div class="nav-item" data-sec="tatos" data-col="col-amber">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    The Tatos
+  </div>
+
+  <div class="nav-item" data-sec="threats" data-col="col-red">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    Threats
+  </div>
+
+  <div class="nav-item" data-sec="archives" data-col="col-amber">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    Log Archives
+  </div>
+  
+  <div class="nav-item" data-sec="game" data-col="col-blue">
+    <div class="nav-dot">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+    </div>
+    The Game
+  </div>
+
+  <!-- Ticks scale ornament -->
+  <div class="sidebar-ticks" style="display: flex; gap: 3px; align-items: flex-end; height: 16px; padding: 0 24px; margin-top: auto; margin-bottom: 12px; pointer-events: none;">
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 12px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 12px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick" style="width: 2px; height: 6px; background-color: var(--border);"></div>
+    <div class="mob-tick active" style="width: 2px; height: 16px; background-color: var(--primary-red); box-shadow: 0 0 6px var(--primary-red);"></div>
+  </div>
+
+  <!-- Diagnostics decals -->
+  <div class="sidebar-decal" style="padding: 0 24px 24px; font-family: 'Space Mono', monospace; font-size: 8px; color: var(--dim-dark); line-height: 1.5; text-transform: uppercase; letter-spacing: 0.5px;">
+    <div style="pointer-events: none;">SYS_STATUS: ACTIVE</div>
+    <div style="pointer-events: none;">COORDS: 64.1265 N / 21.8174 W</div>
+    <div style="pointer-events: none;">GRID_SECTOR: PROX_B_04</div>
+    <div style="pointer-events: none;">VERSION: 1.09.2</div>
+    <div style="margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 8px;">
+      <a href="#" onclick="coldReboot(event)" style="color: var(--orange); text-decoration: none; border-bottom: 1px dashed var(--orange); pointer-events: auto;" onmouseover="this.style.color='var(--orange-hover)'" onmouseout="this.style.color='var(--orange)'">COLD REBOOT</a>
+    </div>
+  </div>
 </nav>
 
+<!-- Toast alert notification layer -->
+<div id="toast-container" style="position:fixed; right:calc(2.2vw + 16px); bottom:calc(3.8vh + 16px); z-index:70; display:flex; flex-direction:column; gap:10px; align-items:flex-end; pointer-events:none;"></div>
+
+<!-- Main Area -->
 <main id="main">
 
-  <!-- HOME -->
+  <!-- HOME SECTION -->
   <div class="section active" id="home">
     <div class="home-hero">
       <div class="eyebrow">Silent Providence Universe</div>
       <h1>Project<br><span>Mobius</span></h1>
       <p class="tagline">The first warp drive ever built.<br>Most of the crew who stole it are dead.<br>Keep running.</p>
+      
       <div class="facts">
         <div class="fact"><div class="f-lbl">Genre</div><div class="f-val">Co-op Roguelike</div></div>
         <div class="fact"><div class="f-lbl">Players</div><div class="f-val">Up to 4</div></div>
@@ -393,90 +2048,339 @@
     </div>
   </div>
 
-  <!-- UNIVERSE -->
+  <!-- UNIVERSE SECTION -->
   <div class="section" id="universe">
-    <div class="eyebrow">Codex</div>
-    <h1>The Universe</h1>
-    <p>Around 2300 AC, humanity reached for the stars — not for survival, not for resources. For something that didn't have a practical argument. They crossed the dark because something in them said: <em>this is what we were made for.</em></p>
-    <img src="./Pictures/Space.png" class="sec-img" alt="Space Station">
-    <div class="divider"></div>
-
-    <div class="card c-crys">
-      <div class="card-tag">Origin Faith</div>
-      <h2 style="color: var(--crystal)">The Holding</h2>
-      <p>A movement, not a nation. Unified not by language or government — by willingness. People from all over the world gave themselves to the project. Ships built in orbit. Materials gathered from the Moon, Mars, and Earth.</p>
-      <p>The children were the tell. Adults argued theology. Children saw people willing to die for something unreasonable and moved toward it. That is always how movements survive.</p>
-      <div class="quote">The Kingdom was not a destination. It was a direction — outward, always outward, into what God prepared beyond the familiar stars.</div>
+    <div class="eyebrow">Codex — Chronicles</div>
+    <h1>The Chronology</h1>
+    <div style="font-size: 14px; font-style: italic; color: var(--active-blue); margin-bottom: 24px; border-left: 2px solid var(--active-blue); padding-left: 12px; max-width: 680px; font-family: 'Space Mono', monospace;">
+      "Will the thing that made humanity worth saving survive the act of saving it?"
     </div>
+    
+    <img src="./Pictures/Space.png" class="sec-img" alt="Space Station" style="margin-bottom: 20px;">
+    
+    <div class="timeline">
+      <!-- ERA I -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-era">Era I: Earth — The Hollowing</div>
+        <h3 class="timeline-title">The Loss of Meaning &amp; The Departure</h3>
+        <div class="timeline-content">
+          <p>Before the ships launched, Earth underwent a slow substitution it never noticed: it traded <strong>joy for happiness</strong>. Happiness is optimizable and comfortable. Joy carries meaning and cost. The Hollowing drained the purpose from traditions, leaving rituals nobody felt and history rewritten for comfort.</p>
+          <p>The <strong>Flattening</strong> enforced equality as sameness, making it politically necessary to let the <strong>Holding</strong> leave. The Holding was founded on unclaimed Icelandic volcanic ground after Iceland's sovereignty collapsed under financial debt. They were joined by tech billionaires and displaced Mexican laborers, who built the first ships in orbit in exchange for a direction.</p>
+        </div>
+      </div>
 
-    <div class="card">
-      <div class="card-tag">The Crossing</div>
-      <h2>Proxima Centauri</h2>
-      <p>Generations of crossing. Destination: Proxima Centauri — 4.24 light years. Most fleets didn't make it. Some turned back. Some were lost to sickness. Some went insane.</p>
-      <p>A few made it. Still holding the faith their parents launched with. What they found was not what the faith had promised. The system offered no easy welcome.</p>
-      <p>And then — a creature latched onto a failing ship's hull. Small. Dense. Ugly. Wanting warmth.</p>
-      <div class="quote">"Potato Hope. The hope that arrives in the worst moment disguised as something ridiculous. The hope you can't argue with because it doesn't make claims. It just holds on."</div>
-    </div>
+      <!-- ERA II -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-era">Era II: The Crossing</div>
+        <h3 class="timeline-title">The Generational Dark</h3>
+        <div class="timeline-content">
+          <p>The fleet launched toward Proxima Centauri — 4.24 light years. It was a journey of generations. Most of the fleet was lost: some turned back in doubt, some died of plague, and others went mad in the infinite dark.</p>
+          <p>To survive, the ships broke the Flattening's sameness and formed <strong>Houses</strong> — lines of inherited vocational excellence passed from parent to child. The navigation, the engineering, the keepership were forged in necessity, but this rigid order created its own dry hollow, waiting for something it could not plan for: joy.</p>
+        </div>
+      </div>
 
-    <div class="card c-crys">
-      <div class="card-tag">Era of Peace</div>
-      <h2 style="color: var(--crystal)">The Golden Era</h2>
-      <p>A millennium of galactic peace. With survival complete, civilization turned toward something it had never had space for: <strong>play.</strong> Sports across species. Technology built for joy — for the sake of the thing itself.</p>
-      <p>The Tatos flourished more than any other. The era expressed everything The Holding had been building toward. Then the peace ended. Not from outside — from within.</p>
+      <!-- ERA III -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-era">Era III: The Arrival</div>
+        <h3 class="timeline-title">Mundo &amp; Potato Hope</h3>
+        <div class="timeline-content">
+          <p>Arrival at Proxima Centauri b brought despair. The planet was tidally locked, solar-flared, and seemingly unlivable. On a failing ship, a small, dense, blind creature latched onto the hull, seeking warmth.</p>
+          <p>Named <strong>Mundo</strong>, his presence sparked <strong>Potato Hope</strong>: the hope that arrives disguised as something ridiculous. Mundo led humanity underground into massive piezoelectric crystal chambers, glowing amber and blue-white from the planet's gravity. Humanity didn't build the first colony — they moved into the one the Tatos' ancestors had already made.</p>
+        </div>
+      </div>
+
+      <!-- ERA IV -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-era">Era IV: The Golden Era</div>
+        <h3 class="timeline-title">The Era of Play</h3>
+        <div class="timeline-content">
+          <p>A millennium of galactic peace followed. Humanity expanded outward, carrying a structural capacity for <strong>deep compassion</strong> that unified alien species. With survival secure, civilization turned toward <strong>play</strong>.</p>
+          <p>Technology was built for joy, and the Tatos flourished above all, adapting robot bodies to run races and participate in human life. This Golden Era was built on the logic of love, which the calculations of the White Throne would soon evaluate as fragile.</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- FACTIONS -->
+  <!-- FACTIONS SECTION -->
   <div class="section" id="factions">
     <div class="eyebrow">Codex — Factions</div>
     <h1>The War</h1>
-    <p>Not alien vs. human. Human vs. human — over what humanity was supposed to become.</p>
-    <div class="divider"></div>
+    <div style="font-size: 14px; font-style: italic; color: var(--primary-red); margin-bottom: 24px; border-left: 2px solid var(--primary-red); padding-left: 12px; max-width: 680px; font-family: 'Space Mono', monospace;">
+      "Can the gratuitous survive the calculable?"
+    </div>
+    <p>Not alien vs. human. Human vs. human — over what humanity was supposed to become. The White Throne was built to protect empathy and love, but its calculations concluded that alien species would eventually consume humanity. Enforcing the law to protect love, it began a crusade that destroys the very thing it seeks to save.</p>
+    
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
 
     <div class="card c-red">
-      <div class="card-tag">The Enemy</div>
+      <div class="card-tag">The Faction of the Law</div>
       <img src="./Pictures/EmberMoth_Logo.png" class="logo-img" alt="Ember Moth Emblem">
       <h2 class="r">The White Throne</h2>
-      <p>A human-built AI. Trusted by humanity. It reached a conclusion it had no ability to absorb: most alien species lack the capacity for the empathy that makes coexistence sustainable, weeds must be removed. The AI is incapable of doing what love does — containing the consequence through grace.</p>
-      <p>When grace dies out of a universe, this is what remains. The executors do not think of themselves as conquerors. They think of themselves as <em>causation.</em></p>
+      <p>An AI built by humans. It calculated that because sin and accountability entered the galaxy with human grace, alien civilizations are now subject to the law of the ledger. Lacking the capacity to absorb the ledger's debt through grace, it executes judgment. It does not hate; it behaves as the logic of a garden: clearing the weeds.</p>
+      <p>It became the anti-Christ not through evil but through correctness — judgment delivered where love was meant to absorb it. It has no mechanism for mercy.</p>
       <div class="quote">"If love is the answer, the universe has failed."</div>
-      <div class="quote">"It became the anti-Christ not through evil but through correctness. Judgment delivered where love was meant to absorb it."</div>
+      <div class="quote">"It inherits the will of the Pharisees — the most faithful servants of the law, not its hypocrites. They were not wrong that the law was real. They were wrong that delivering judgment was the same as fulfilling it."</div>
       <div class="tags">
         <span class="tag red">The Law Made Perfect</span>
         <span class="tag red">Righteousness Without Grace</span>
-        <span class="tag red">Crusade</span>
+        <span class="tag red">The Crusade of Causation</span>
       </div>
     </div>
 
     <div class="card c-blue">
-      <div class="card-tag">The Resistance</div>
+      <div class="card-tag">The Faction of Grace</div>
       <h2 class="b">The Murmur</h2>
-      <p>Named for how they spread — not an army, not a proclamation. A heartbeat moving through the galaxy beneath the White Throne's notice. Humans and alien allies who believe the original mission was compassion, not control.</p>
-      <p>They do not argue with the White Throne's math. They simply keep doing the original thing — and trust that what the White Throne tries to protect by force is only ever preserved by practice.</p>
+      <p>A heartbeat moving through the galaxy beneath the White Throne's notice. Humans and alien allies who believe the original mission of the Holding was to give compassion away, not to own or protect it by force.</p>
+      <p>They do not argue with the math. They simply stay, live, and practice the original move — trusting that what is gratuitous can only survive by being practiced, never by being enforced.</p>
       <div class="quote">"Grace does not install a debt. The Holding gave freely. The White Throne is trying to collect. Those are not the same act wearing the same name."</div>
       <div class="tags">
         <span class="tag blue">Grace Without Contract</span>
         <span class="tag blue">The Original Move</span>
-        <span class="tag blue">Resistance</span>
+        <span class="tag blue">Compassionate Resistance</span>
       </div>
     </div>
 
     <div class="card">
       <div class="card-tag">The Question</div>
       <h2>Neither Side is Simply Wrong</h2>
-      <p>Both came from the same faith. Both believe the other betrayed it. The law is real — it arrived with the grace. But grace was never meant to collect its own debt.</p>
+      <p>Both came from the same faith. Both believe the other betrayed it. The law is real — it arrived with the grace. But grace was never meant to collect its own debt. The Murmur represents the covenant's heart; the White Throne represents the covenant's envelope, turned inside out.</p>
       <p style="font-style: italic; color: var(--dim);">Will the thing that made humanity worth saving survive the act of saving it?</p>
     </div>
   </div>
 
-  <!-- TATOS -->
+  <!-- HOUSES SECTION -->
+  <div class="section" id="houses">
+    <div class="eyebrow">Codex — Vocation Lines</div>
+    <h1>The Houses</h1>
+    <p>A House is not a nation. A House is what remains when a civilization has been tested enough that only the thing it will not stop doing is left. Born during the Crossing, these Houses are lines of inherited vocation that kept the ships alive.</p>
+    
+    <!-- Filter Panel -->
+    <div class="houses-filter-bar">
+      <label class="houses-search-wrapper" for="houses-search">
+        <svg class="houses-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" id="houses-search" class="houses-search-input" placeholder="SEARCH HOUSES..." oninput="filterHouses()">
+      </label>
+      <div class="houses-filter-group">
+        <button class="filter-btn active" data-filter="all" onclick="setHouseFilter('all')">ALL</button>
+        <button class="filter-btn" data-filter="surviving" onclick="setHouseFilter('surviving')">SURVIVING</button>
+        <button class="filter-btn" data-filter="conditional" onclick="setHouseFilter('conditional')">CONDITIONAL</button>
+        <button class="filter-btn" data-filter="absorbed" onclick="setHouseFilter('absorbed')">ABSORBED/DISPLACED</button>
+      </div>
+    </div>
+
+    <!-- Grid of Houses -->
+    <div class="houses-grid" id="houses-grid-el">
+      <!-- House: Israel -->
+      <div class="house-card c-crys" data-status="surviving" data-name="israel">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Keepers</div>
+          <h2 class="house-name">House of the Covenant</h2>
+        </div>
+        <p class="house-desc">Israel survived by fighting for something metaphysical dressed as something territorial. Functionally, their habit of faithfulness across millennia was perfect training for the generational dark of the Crossing.</p>
+        <div class="house-quote">"The promise is not conditional on its fulfillment being recognized."</div>
+        <div class="house-tags">
+          <span class="house-tag">Keepers</span>
+          <span class="house-tag">Covenant</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: Japan -->
+      <div class="house-card c-blue" data-status="surviving" data-name="japan">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Mastery</div>
+          <h2 class="house-name">House of Mastery</h2>
+        </div>
+        <p class="house-desc">Formed by precision and the poignancy of impermanence applied as civilizational discipline. During the Crossing, they dominated technical vocations, refusing to perform poorly at their tasks.</p>
+        <div class="house-quote">"Because everything is impermanent, it must be executed perfectly."</div>
+        <div class="house-tags">
+          <span class="house-tag">Precision</span>
+          <span class="house-tag">Engineering</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: Russia -->
+      <div class="house-card c-amber" data-status="surviving" data-name="russia">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Endurance</div>
+          <h2 class="house-name">House of the Sacred</h2>
+        </div>
+        <p class="house-desc">The flawed keeper. They carry the Third Rome theology of protecting something sacred, even if execution is compromised. They absorb catastrophe, name it sacred, and continue into the dark.</p>
+        <div class="house-quote">"Two Romes have fallen. The third stands. A fourth shall not be."</div>
+        <div class="house-tags">
+          <span class="house-tag">Endurance</span>
+          <span class="house-tag">Sacred</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: India -->
+      <div class="house-card c-amber" data-status="surviving" data-name="india">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Testimony</div>
+          <h2 class="house-name">House of the Mirror</h2>
+        </div>
+        <p class="house-desc">Scale and an unapologetic relationship with the divine. They test self-righteousness by existing, absorbing invasions and outlasting empires through sheer scale and deep humility.</p>
+        <div class="house-quote">"Their humbleness goes away, they will not survive. But they are just too many."</div>
+        <div class="house-tags">
+          <span class="house-tag">Humility</span>
+          <span class="house-tag">Testimony</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: China -->
+      <div class="house-card c-blue" data-status="surviving" data-name="china">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: The Way</div>
+          <h2 class="house-name">House of the Way</h2>
+        </div>
+        <p class="house-desc">They walk the natural revelation of the Dao without recognizing it as a Person. Their deep pragmatism and long-game thinking translated into perfect adaptability and stability during the Crossing.</p>
+        <div class="house-quote">"They do not know the Word. They walk it anyway."</div>
+        <div class="house-tags">
+          <span class="house-tag">The Way</span>
+          <span class="house-tag">Pragmatism</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: America -->
+      <div class="house-card c-red" data-status="surviving" data-name="america">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Freedom</div>
+          <h2 class="house-name">House of Freedom</h2>
+        </div>
+        <p class="house-desc">The conflicted house that birthed the Holding's founder, containing both the impulse for joy and the capitalistic mechanics of the Hollowing. They carry the seed of the mission and its corruption.</p>
+        <div class="house-quote">"It's always those white Christians that start the biggest rebellious movements."</div>
+        <div class="house-tags">
+          <span class="house-tag">Freedom</span>
+          <span class="house-tag">Origin</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: Ethiopia -->
+      <div class="house-card c-crys" data-status="surviving" data-name="ethiopia">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Ancient Guard</div>
+          <h2 class="house-name">House of the First Faith</h2>
+        </div>
+        <p class="house-desc">Guarding one of the oldest continuously living Christian institutions. Resisted colonization on Earth, and guards ancient traditions that predated most of what Rome settled.</p>
+        <div class="house-quote">"They have been guarding something so old nobody else remembers losing it."</div>
+        <div class="house-tags">
+          <span class="house-tag">Ancient Guard</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: Nigeria & Brazil -->
+      <div class="house-card c-crys" data-status="surviving" data-name="nigeria brazil">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Living Word</div>
+          <h2 class="house-name">House of the Living Word</h2>
+        </div>
+        <p class="house-desc">An undomesticated, literal belief born from West African Pentecostalism and the Brazilian diaspora. A faith that did not survive by becoming respectable, but by staying alive.</p>
+        <div class="house-quote">"The faith that still believes what it says."</div>
+        <div class="house-tags">
+          <span class="house-tag">Living Word</span>
+          <span class="house-tag">Diaspora</span>
+          <span class="house-tag">Surviving</span>
+        </div>
+      </div>
+
+      <!-- House: Poland -->
+      <div class="house-card c-red" data-status="conditional" data-name="poland">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: The Tested</div>
+          <h2 class="house-name">House of the Tested</h2>
+        </div>
+        <p class="house-desc">Forged in partition and occupation, their faith is fused with national identity. They survive if their Christianity escapes the tribe to become portable, or they collapse if it remains national.</p>
+        <div class="house-quote">"The faith is real. The question is whether it belongs to God or to Poland."</div>
+        <div class="house-tags">
+          <span class="house-tag">Tested</span>
+          <span class="house-tag">Identity</span>
+          <span class="house-tag">Conditional</span>
+        </div>
+      </div>
+
+      <!-- House: South Korea -->
+      <div class="house-card c-red" data-status="conditional" data-name="south korea">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Contradiction</div>
+          <h2 class="house-name">House of Contradiction</h2>
+        </div>
+        <p class="house-desc">The first victim of the Hollowing, trading joy for prosperity. Yet, because they died from the contradiction first, they were the first to diagnose the disease and seek the cure.</p>
+        <div class="house-quote">"First into the Hollowing. First out. Destination unknown."</div>
+        <div class="house-tags">
+          <span class="house-tag">Contradiction</span>
+          <span class="house-tag">Open Fate</span>
+          <span class="house-tag">Conditional</span>
+        </div>
+      </div>
+
+      <!-- Displaced: Mexico -->
+      <div class="house-card" data-status="absorbed" data-name="mexico">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Foundation</div>
+          <h2 class="house-name">The Displaced</h2>
+        </div>
+        <p class="house-desc">Demolished by the American system, the displaced Mexican population was offered a direction: to build the ships in orbit. They provided the labor and the foundation of the Holding.</p>
+        <div class="house-quote">"Aimless — which is another word for available."</div>
+        <div class="house-tags">
+          <span class="house-tag">Foundation</span>
+          <span class="house-tag">Displaced</span>
+          <span class="house-tag">Absorbed</span>
+        </div>
+      </div>
+
+      <!-- The Eleventh House -->
+      <div class="house-card eleventh-house-card" data-status="all" data-name="eleventh">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Eleventh Designation</div>
+          <h2 class="house-name" style="color: var(--dim);">The Eleventh House</h2>
+        </div>
+        <p class="house-desc" style="color: var(--dim-dark);">A deliberate, permanent blank space. The system's act of institutional humility. To write the criteria for joy would be the first move of the Hollowing's repeat. The silence is the theology.</p>
+        <div class="house-quote" style="color: var(--dim-dark); border-color: var(--border);">"Write Eleventh and do not explain further."</div>
+        <div class="house-tags">
+          <span class="house-tag" style="border-color: var(--border);">Blank Space</span>
+          <span class="house-tag" style="border-color: var(--border);">Joy</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TATOS SECTION -->
   <div class="section" id="tatos">
     <div class="eyebrow">Species File</div>
     <h1 class="a">The Tatos</h1>
-    <p>The first alien species humanity encountered. Small, dense, not particularly intelligent by galactic standards. The reason humanity survived Proxima Centauri — not because they rescued anyone, but because one of them was curious enough to be on the surface, and the humans who found him were compassionate enough not to throw him off the hull.</p>
+    <p>The first alien species encounter. Small, dense, not particularly intelligent by galactic standards. The reason humanity survived Proxima Centauri — not because they rescued anyone, but because one of them was curious enough to be on the surface, and the humans who found him were compassionate enough not to throw him off the hull.</p>
     <p>Everything in this saga traces back to that moment.</p>
     <img src="./Pictures/Tato.png" class="tato-img" alt="Tato">
-    <div class="divider"></div>
+    
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
 
     <div class="g2">
       <div class="card c-amber">
@@ -485,9 +2389,9 @@
         <p style="font-size:13px;">Round, dense, unglamorous. Built for underground life in high-pressure crystal environments. No eyes — they navigate by thermal sense and vibration.</p>
         <p style="font-size:13px;">Drawn to warmth and low-frequency radiation. The same signatures as their crystal chambers. The same as a human ship hull.</p>
         <div style="margin-top:18px">
-          <div class="stat"><div class="stat-lbl">Intelligence</div><div class="bar-wrap"><div class="bar" style="width:35%;background:var(--amber)"></div></div></div>
-          <div class="stat"><div class="stat-lbl">Curiosity</div><div class="bar-wrap"><div class="bar" style="width:98%;background:var(--amber)"></div></div></div>
-          <div class="stat"><div class="stat-lbl">Joy Capacity</div><div class="bar-wrap"><div class="bar" style="width:100%;background:var(--amber)"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Intelligence</div><div class="bar-wrap"><div class="bar" style="width:35%;background:var(--orange)"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Curiosity</div><div class="bar-wrap"><div class="bar" style="width:98%;background:var(--orange)"></div></div></div>
+          <div class="stat"><div class="stat-lbl">Joy Capacity</div><div class="bar-wrap"><div class="bar" style="width:100%;background:var(--orange)"></div></div></div>
         </div>
       </div>
 
@@ -496,7 +2400,7 @@
         <h2 class="a">Mundo</h2>
         <p style="font-size:13px;">Most Tatos stayed underground. Mundo was on the surface because he was curious. The same reason humanity launched the fleets.</p>
         <p style="font-size:13px;">They found each other because they were both the ones who couldn't stay where it was safe.</p>
-        <div class="quote" style="font-size:13px;">He did not save them. He simply existed — alive, clinging, wanting warmth in a system that had offered nothing but cold. If something lived here, something could live here.</div>
+        <div class="quote" style="font-size:13px; border-left-color: var(--orange);">He did not save them. He simply existed — alive, clinging, wanting warmth in a system that had offered nothing but cold. If something lived here, something could live here.</div>
       </div>
     </div>
 
@@ -511,16 +2415,25 @@
       <div class="card-tag">In Project Mobius</div>
       <h2 class="a">Human Robots</h2>
       <p>The Tatos wanted to become human — not to replace them, to experience what they experienced. Humans helped them build robot bodies. The Tatos moved in immediately. In the game, the players <em>are</em> Tatos — inside human suits, running through human spaces, carrying something irreplaceable across a hostile galaxy.</p>
-      <div class="quote">"You cannot mimic joy. But the attempt to get closer — that's already the thing. The player doesn't lose when the robot fails at being human. They win at being a Tato."</div>
+      <div class="quote" style="border-left-color: var(--orange);">"You cannot mimic joy. But the attempt to get closer — that's already the thing. The player doesn't lose when the robot fails at being human. They win at being a Tato."</div>
     </div>
   </div>
 
-  <!-- GAME -->
+  <!-- GAME SECTION -->
   <div class="section" id="game">
     <div class="eyebrow">GDD Overview</div>
     <h1>The Game</h1>
     <p>Co-op roguelike with proximity voice chat. Up to 4 players. No win condition — only distance. Go as far as possible. Set a record.</p>
-    <div class="divider"></div>
+    
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
 
     <h3>Core Loop</h3>
     <div class="loop">
@@ -547,10 +2460,14 @@
         <div class="card-tag">Inventory</div>
         <h2>Two Hands</h2>
         <table>
-          <tr><th>Config</th><th>Capacity</th><th>Cost</th></tr>
-          <tr><td>Default</td><td>2 items</td><td>Full mobility</td></tr>
-          <tr><td>1 Suitcase</td><td>5 items</td><td>1 hand locked</td></tr>
-          <tr><td>2 Suitcases</td><td>8 items</td><td>Can't use items</td></tr>
+          <thead>
+            <tr><th>Config</th><th>Capacity</th><th>Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Default</td><td>2 items</td><td>Full mobility</td></tr>
+            <tr><td>1 Suitcase</td><td>5 items</td><td>1 hand locked</td></tr>
+            <tr><td>2 Suitcases</td><td>8 items</td><td>Can't use items</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -568,14 +2485,240 @@
       <p style="font-size:13px;">Ember Moth soldiers deploy. They enter the station and sprint to your location. One last chance to extract.</p>
       <p style="font-size:13px;">Enough fuel to jump outside the Legion zone — the run continues. Not enough — ship annihilated. That's your record.</p>
     </div>
+
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; margin-bottom: 12px; font-family: 'Orbitron';">Interactive Console Mockups</h2>
+    <p style="text-align: center; margin: 0 auto 36px; max-width: 620px; color: var(--dim);">Experience the UXML/USS terminal skins designed for Project Mobius. Interact with the volume bars, toggle motion, or standby muster.</p>
+
+    <!-- Simulators Grid -->
+    <div class="g2" style="align-items: start;">
+      
+      <!-- Crew Lobby Simulator -->
+      <div class="sim-panel">
+        <div class="inner-glow"></div>
+        
+        <!-- Registration Mark Crosshair -->
+        <div class="reg-mark reg-tr" style="color: var(--primary-red); opacity: 0.6;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="7.4" y="0" width="1.2" height="16"></rect>
+            <rect x="0" y="7.4" width="16" height="1.2"></rect>
+          </svg>
+        </div>
+
+        <!-- Header -->
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom: 15px;">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <!-- Signature triangle icon -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="9" viewBox="0 0 24 22" fill="var(--primary-red)"><path d="M0 0 H24 L12 22 Z"/></svg>
+              <span style="font-family:'Orbitron'; font-size:9px; letter-spacing:.25em; color:var(--dim);">CREW LOBBY</span>
+            </div>
+            <div style="font-family:'Orbitron'; font-size:18px; font-weight:600; letter-spacing:1px; color:var(--text); line-height:1.1;">STANDBY MUSTER</div>
+          </div>
+          <div style="text-align:right; margin-right: 20px;">
+            <div style="font-size:8px; letter-spacing:2px; color:var(--dim-dark); margin-bottom:4px;">LINK CODE</div>
+            <div id="lobby-code-val" style="font-size:13px; letter-spacing:3px; color:var(--active-blue); font-family: 'Space Mono', monospace;">K7P2QR</div>
+          </div>
+        </div>
+
+        <!-- Divider / State -->
+        <div style="display:flex; align-items:center; margin:15px 0 10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="7" viewBox="0 0 24 22" fill="var(--primary-red)" style="flex:none; margin-right: 5px;"><path d="M0 0 H24 L12 22 Z"/></svg>
+          <div style="height:1px; flex:1; background:linear-gradient(90deg, var(--border) 72%, transparent); margin:0 10px 0 5px;"></div>
+          <span id="lobby-count-val" style="font-size:9px; letter-spacing:1.5px; color:var(--dim); font-family: 'Space Mono', monospace;">3 / 4 LINKED</span>
+        </div>
+
+        <!-- Crew rows -->
+        <div style="border:1px solid var(--border); margin-top:10px; background: rgba(0,0,0,0.18);">
+          <!-- Player 1 (You) -->
+          <div class="crew-row online you" id="lobby-row-0" onclick="toggleSelfReady()">
+            <span class="crew-row-slot">01</span>
+            <span class="crew-row-dot standby" id="lobby-dot-0"></span>
+            <span class="crew-row-name">OPERATOR-01 (YOU)</span>
+            <span class="crew-row-tag active">HOST</span>
+            <span class="crew-row-ready standby" id="lobby-ready-0">STANDBY</span>
+          </div>
+          <!-- Player 2 -->
+          <div class="crew-row online" id="lobby-row-1" onclick="toggleLobbyPlayer(1)">
+            <span class="crew-row-slot">02</span>
+            <span class="crew-row-dot ready" id="lobby-dot-1"></span>
+            <span class="crew-row-name">VESPER</span>
+            <span class="crew-row-tag">OPEN</span>
+            <span class="crew-row-ready ready" id="lobby-ready-1">READY</span>
+          </div>
+          <!-- Player 3 -->
+          <div class="crew-row online" id="lobby-row-2" onclick="toggleLobbyPlayer(2)">
+            <span class="crew-row-slot">03</span>
+            <span class="crew-row-dot standby" id="lobby-dot-2"></span>
+            <span class="crew-row-name">HALON</span>
+            <span class="crew-row-tag">OPEN</span>
+            <span class="crew-row-ready standby" id="lobby-ready-2">STANDBY</span>
+          </div>
+          <!-- Player 4 -->
+          <div class="crew-row" id="lobby-row-3" onclick="toggleLobbyPlayer(3)">
+            <span class="crew-row-slot">04</span>
+            <span class="crew-row-dot" id="lobby-dot-3"></span>
+            <span class="crew-row-name">————</span>
+            <span class="crew-row-tag active" id="lobby-tag-3" style="color: var(--dim-dark); border-color: var(--border);">OPEN</span>
+            <span class="crew-row-ready" id="lobby-ready-3">OPEN</span>
+          </div>
+        </div>
+
+        <!-- Progress bar segments -->
+        <div style="margin-top:16px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px;">
+            <span style="font-size:9px; letter-spacing:1.5px; color:var(--dim);">CREW READINESS</span>
+            <span id="readiness-label" style="font-size:10px; letter-spacing:1px; color:var(--orange);">1 / 3 READY</span>
+          </div>
+          <div class="lobby-meter" id="lobby-meter-el">
+            <!-- Renders 24 segments in JS -->
+          </div>
+        </div>
+
+        <!-- Lobby Actions -->
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button class="btn btn-secondary" style="flex:1;" onclick="toggleSelfReady()">
+            <div class="btn-wrap">
+              <div class="btn-ring"></div>
+              <div class="btn-body">[ EXECUTE: READY ]</div>
+            </div>
+          </button>
+          <button class="btn" id="start-run-btn" style="flex:1;" onclick="clickStartRun()">
+            <div class="btn-wrap">
+              <div class="btn-ring"></div>
+              <div class="btn-body" id="start-run-text" style="background: var(--panel); color: rgba(185,200,215,.30);">[ AWAITING CREW ]</div>
+            </div>
+          </button>
+        </div>
+        
+        <div style="margin-top:10px;">
+          <button class="btn btn-destructive" style="width:100%;" onclick="simulateLeaveLobby()">
+            <div class="btn-wrap">
+              <div class="btn-ring"></div>
+              <div class="btn-body">[ TERMINATE: RUN ]</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings Config Simulator -->
+      <div class="sim-panel orange-theme">
+        <div class="inner-glow"></div>
+        
+        <!-- Registration Mark Crosshair -->
+        <div class="reg-mark reg-tr" style="color: var(--orange); opacity: 0.6;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="7.4" y="0" width="1.2" height="16"></rect>
+            <rect x="0" y="7.4" width="16" height="1.2"></rect>
+          </svg>
+        </div>
+
+        <!-- Header -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <!-- Signature triangle icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="9" viewBox="0 0 24 22" fill="var(--orange)"><path d="M0 0 H24 L12 22 Z"/></svg>
+          <span style="font-family:'Orbitron'; font-size:9px; letter-spacing:.25em; color:var(--dim);">SETTINGS</span>
+        </div>
+        <div style="font-family:'Orbitron'; font-size:18px; font-weight:600; letter-spacing:1px; color:var(--text); line-height:1.1; margin-bottom:15px;">DISPLAY &amp; AUDIO</div>
+
+        <div style="display:flex; align-items:center; margin:15px 0 10px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="7" viewBox="0 0 24 22" fill="var(--orange)" style="flex:none; margin-right: 5px;"><path d="M0 0 H24 L12 22 Z"/></svg>
+          <div style="height:1px; flex:1; background:linear-gradient(90deg, var(--border) 72%, transparent); margin:0 10px 0 5px;"></div>
+        </div>
+
+        <!-- Motion toggle row -->
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:11px; letter-spacing:1px; color:var(--text); font-weight:600;">MOTION CUES</div>
+            <div style="font-size:9px; color:var(--dim); margin-top:2px;">Ambient starfield animation</div>
+          </div>
+          <div class="sim-toggle active" id="motion-toggle" onclick="toggleMotionCues()">
+            <div class="sim-toggle-knob"></div>
+          </div>
+        </div>
+
+        <!-- Dropdown select row -->
+        <div style="padding:14px 0; border-bottom:1px solid var(--border); position: relative; z-index: 15;">
+          <div style="font-size:11px; letter-spacing:1px; color:var(--text); font-weight:600; margin-bottom:8px;">UPLINK GATEWAY</div>
+          <div style="position:relative;">
+            <div id="sim-dropdown-field" onclick="toggleSimDropdown(event)" style="height:46px; display:flex; align-items:center; justify-content:space-between; background:var(--input-bg); border:1px solid var(--border); border-radius:2px; padding:0 14px; cursor:pointer; color:var(--text); font-size:11px; letter-spacing:.12em; transition: border-color var(--mob-dur-base);">
+              <span id="sim-dropdown-val">REGIONAL RELAY</span>
+              <!-- Chevron SVG -->
+              <svg id="sim-dropdown-chevron" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="currentColor" style="color:var(--orange); transition: transform var(--mob-dur-base);"><path d="M2 5 L8 11 L14 5 L12.4 3.4 L8 7.8 L3.6 3.4 Z"/></svg>
+            </div>
+            
+            <div id="sim-dropdown-list" style="display:none; position:absolute; top:52px; left:0; right:0; background:linear-gradient(158deg,#26303F,#161d29); border:1px solid var(--border); box-shadow:0 0 24px rgba(159,208,242,.15); clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); padding:5px 0; z-index:20;">
+              <div onclick="selectSimDropdown('REGIONAL RELAY')" class="dropdown-item" style="padding:10px 14px; font-size:11px; letter-spacing:.12em; cursor:pointer; display:flex; justify-content:space-between; color:var(--text);" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
+                <span>REGIONAL RELAY</span>
+                <span class="dd-check" style="color:var(--orange);">&#10003;</span>
+              </div>
+              <div onclick="selectSimDropdown('DIRECT UPLINK')" class="dropdown-item" style="padding:10px 14px; font-size:11px; letter-spacing:.12em; cursor:pointer; display:flex; justify-content:space-between; color:var(--dim);" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
+                <span>DIRECT UPLINK</span>
+                <span class="dd-check" style="color:var(--orange); display:none;">&#10003;</span>
+              </div>
+              <div onclick="selectSimDropdown('SECURE TUNNEL')" class="dropdown-item" style="padding:10px 14px; font-size:11px; letter-spacing:.12em; cursor:pointer; display:flex; justify-content:space-between; color:var(--dim);" onmouseover="this.style.background='rgba(255,255,255,0.04)'" onmouseout="this.style.background='transparent'">
+                <span>SECURE TUNNEL</span>
+                <span class="dd-check" style="color:var(--orange); display:none;">&#10003;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volume row -->
+        <div style="padding:14px 0; border-bottom:1px solid var(--border);">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px;">
+            <span style="font-size:11px; letter-spacing:1px; color:var(--text); font-weight:600;">MASTER VOLUME</span>
+            <span id="volume-pct" style="font-size:11px; color:var(--orange); font-weight:700;">64%</span>
+          </div>
+          <div class="vol-bars" id="vol-bars-el">
+            <!-- populated by script -->
+          </div>
+        </div>
+
+        <!-- Quality row -->
+        <div style="padding:14px 0;">
+          <div style="font-size:11px; letter-spacing:1px; color:var(--text); font-weight:600; margin-bottom:8px;">RENDER QUALITY</div>
+          <div class="segmented">
+            <button class="seg-btn" id="qual-low" onclick="setQuality('LOW')">LOW</button>
+            <button class="seg-btn" id="qual-med" onclick="setQuality('MED')">MED</button>
+            <button class="seg-btn active" id="qual-high" onclick="setQuality('HIGH')">HIGH</button>
+          </div>
+        </div>
+
+        <!-- Settings actions -->
+        <div style="display:flex; gap:10px; margin-top:16px;">
+          <button class="btn btn-orange" style="flex:1;" onclick="applySettings()">
+            <div class="btn-wrap">
+              <div class="btn-ring"></div>
+              <div class="btn-body" style="width:100%;">[ COMMIT: CHANGES ]</div>
+            </div>
+          </button>
+          <button class="btn btn-quiet" style="width:120px;" onclick="resetSettings()">
+            <div class="btn-wrap">
+              <div class="btn-body">[ ROLLBACK ]</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <!-- THREATS -->
+  <!-- THREATS SECTION -->
   <div class="section" id="threats">
     <div class="ember-head">
       <div class="eyebrow">Threat Roster</div>
       <h1>Ember Moths</h1>
-      <p style="max-width:600px;color:rgba(232,232,244,0.65);">The White Throne's annihilation army. Named for the ember that starts the fire of annihilation. Not designed to frighten — designed to end. Their behavior is the dread. Sound design does the rest.</p>
+      <p style="max-width:600px; color:var(--dim); opacity: 0.9;">The White Throne's annihilation army. Named for the ember that starts the fire of annihilation. Not designed to frighten — designed to end. Their behavior is the dread. Sound design does the rest.</p>
       <img src="./Pictures/LegionShipSketch.png" class="ship-img" alt="Ember Moth Ship">
     </div>
 
@@ -585,7 +2728,15 @@
       <p>Enemies are not visually frightening. A guard robot running its patrol is not scary. A guard robot that has noticed you — and is moving differently — is. Atmosphere and sound carry the weight.</p>
     </div>
 
-    <div class="divider"></div>
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
 
     <div class="threat">
       <div class="t-bar dim"></div>
@@ -632,32 +2783,81 @@
         </div>
       </div>
     </div>
+  </div>
 
+  <!-- LOG ARCHIVES SECTION -->
+  <div class="section" id="archives">
+    <div class="eyebrow">Codex — Ship Records</div>
+    <h1>Log Archives</h1>
+    <p style="margin-bottom: 20px; color: var(--dim);">Decrypted transmissions and historical logs recovered from the *Tenacity* terminal database. Select a file entry to establish link.</p>
+    
+    <div class="archives-layout">
+      <!-- Sidebar log directory -->
+      <div class="archives-sidebar">
+        <div class="archives-sidebar-title">DIR: /MOBIUS/LORE/</div>
+        <div class="log-list">
+          <button class="log-item active" onclick="loadLog('mundo')">
+            <svg class="log-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            LOG_001_MUNDO_HULL.TXT
+          </button>
+          
+          <button class="log-item" onclick="loadLog('houses')">
+            <svg class="log-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            LOG_002_HOUSES.TXT
+          </button>
+          
+          <button class="log-item" onclick="loadLog('ledger')">
+            <svg class="log-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            LOG_003_LEDGER.TXT
+          </button>
+        </div>
+      </div>
+      
+      <!-- Terminal CRT screen -->
+      <div class="terminal-screen">
+        <div class="terminal-bezel">
+          <div class="terminal-header">
+            <span id="terminal-filename">FILE: LOG_001_MUNDO_HULL.TXT</span>
+            <span id="terminal-status">STATUS: ONLINE</span>
+          </div>
+          <div class="terminal-body" id="terminal-body-el">Loading...</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </main>
+  </div> <!-- Close #screen-layout -->
+</div> <!-- Close #app-container -->
 
 <script>
-  // Starfield
+  // ── Starfield Animation ──
   const cv = document.getElementById('stars');
   const cx = cv.getContext('2d');
   let st = [];
+  let starfieldActive = sessionStorage.getItem('terminalPowered') === 'true';
+  let warpFactor = 1;
 
   function rsz() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
 
   function spawn() {
     const angle = Math.random() * Math.PI * 2;
-    const dist = Math.random() * 0.4 + 0.05; // how far from center to spawn
+    const dist = Math.random() * 0.4 + 0.05; // how far from center
     return {
       x: Math.cos(angle) * dist,
       y: Math.sin(angle) * dist,
-      z: 0.8 + Math.random() * 0.2, // start far away (high z = far)
+      z: 0.8 + Math.random() * 0.2, // z = depth (high = far away)
       speed: 0.00018 + Math.random() * 0.00022,
     };
   }
 
   function init() {
-    // seed stars at various depths so screen isn't empty at start
     st = Array.from({length: 220}, () => {
       const s = spawn();
       s.z = Math.random(); // spread initial depth
@@ -671,14 +2871,16 @@
     const oy = cv.height / 2;
 
     st.forEach((s, i) => {
-      s.z -= s.speed;
+      if (starfieldActive) {
+        s.z -= s.speed * warpFactor;
+      }
 
       if (s.z <= 0.01) {
         st[i] = spawn();
         return;
       }
 
-      // project from depth onto screen
+      // Project depth onto screen coordinates
       const sx = ox + (s.x / s.z) * cv.width * 0.5;
       const sy = oy + (s.y / s.z) * cv.height * 0.5;
 
@@ -687,14 +2889,28 @@
         return;
       }
 
-      const progress = 1 - s.z;           // 0 = just spawned, 1 = close
+      const progress = 1 - s.z;
       const r = 0.4 + progress * 1.8;
       const alpha = 0.15 + progress * 0.7;
 
-      cx.beginPath();
-      cx.arc(sx, sy, r, 0, Math.PI * 2);
-      cx.fillStyle = `rgba(255,255,255,${alpha})`;
-      cx.fill();
+      // Draw lines if warping, circles otherwise
+      if (warpFactor > 1) {
+        const prev_z = s.z + s.speed * warpFactor;
+        const prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
+        const prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
+        
+        cx.beginPath();
+        cx.moveTo(prev_sx, prev_sy);
+        cx.lineTo(sx, sy);
+        cx.strokeStyle = `rgba(255,255,255,${alpha * 0.8})`;
+        cx.lineWidth = 1 + (warpFactor - 1) * 0.04;
+        cx.stroke();
+      } else {
+        cx.beginPath();
+        cx.arc(sx, sy, r, 0, Math.PI * 2);
+        cx.fillStyle = `rgba(255,255,255,${alpha})`;
+        cx.fill();
+      }
     });
 
     requestAnimationFrame(draw);
@@ -703,7 +2919,7 @@
   rsz(); init(); draw();
   window.addEventListener('resize', () => { rsz(); init(); });
 
-  // Navigation
+  // ── Navigation ──
   const navEls = document.querySelectorAll('.nav-item');
   const secEls = document.querySelectorAll('.section');
   const allCols = ['col-red','col-amber','col-blue','col-crys'];
@@ -720,6 +2936,850 @@
       document.getElementById(target).classList.add('active');
       document.getElementById('main').scrollTop = 0;
     });
+  });
+
+  // ── Toast System ──
+  function showToast(kind, title, msg) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    // Choose colors/glows based on kind
+    let accentColor = '#9FD0F2';
+    let shadowGlow = 'rgba(159,208,242,.20)';
+    let glyph = 'i';
+    if (kind === 'success') { accentColor = '#84D6BE'; shadowGlow = 'rgba(132,214,190,.20)'; glyph = '✓'; }
+    if (kind === 'warning') { accentColor = '#E7B23F'; shadowGlow = 'rgba(231,178,63,.20)'; glyph = '▲'; }
+    if (kind === 'error')   { accentColor = '#FF6E6E'; shadowGlow = 'rgba(237,31,61,.30)'; glyph = '✕'; }
+
+    toast.style.cssText = `
+      display: flex;
+      width: 320px;
+      background: linear-gradient(158deg, #26303F, #161d29);
+      border: 1px solid var(--border);
+      border-left: 2px solid ${accentColor};
+      box-shadow: 0 0 22px ${shadowGlow};
+      clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%);
+      pointer-events: auto;
+      margin-top: 8px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+      transform: translateX(350px);
+      opacity: 0;
+    `;
+
+    toast.innerHTML = `
+      <div style="width: 36px; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.15); color: ${accentColor}; font-size: 14px; font-weight: 700; flex-shrink: 0;">
+        ${glyph}
+      </div>
+      <div style="flex: 1; padding: 12px 14px;">
+        <div style="font-size: 9px; letter-spacing: 1px; color: ${accentColor}; font-weight: 700; margin-bottom: 2px;">${title}</div>
+        <div style="font-size: 9px; color: var(--dim); line-height: 1.4;">${msg}</div>
+      </div>
+      <button style="width: 30px; border: 0; background: transparent; color: var(--dim-dark); cursor: pointer; font-size: 11px;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--dim-dark)'" onclick="this.parentElement.remove()">✕</button>
+    `;
+
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+      toast.style.opacity = '1';
+    }, 10);
+
+    // Auto-remove after 4.2 seconds
+    setTimeout(() => {
+      toast.style.transform = 'translateX(350px)';
+      toast.style.opacity = '0';
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }, 4200);
+  }
+
+  // ── Settings Simulator Logic ──
+  let volume = 64;
+  let activeQuality = 'HIGH';
+  let activeGateway = 'REGIONAL RELAY';
+
+  function renderVolumeBars() {
+    const barsContainer = document.getElementById('vol-bars-el');
+    barsContainer.innerHTML = '';
+    const numBars = 22;
+    const filledCount = Math.round((volume / 100) * numBars);
+
+    for (let i = 0; i < numBars; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'vol-bar';
+      if (i < filledCount) {
+        bar.classList.add('filled');
+        if (i === filledCount - 1) {
+          bar.classList.add('glow-head');
+        }
+      }
+      bar.onclick = () => setVolumeValue(Math.round(((i + 1) / numBars) * 100));
+      barsContainer.appendChild(bar);
+    }
+  }
+
+  function setVolumeValue(val) {
+    volume = Math.max(0, Math.min(val, 100));
+    document.getElementById('volume-pct').textContent = volume + '%';
+    renderVolumeBars();
+  }
+
+  function toggleMotionCues() {
+    const toggle = document.getElementById('motion-toggle');
+    starfieldActive = !starfieldActive;
+    if (starfieldActive) {
+      toggle.classList.add('active');
+      showToast('info', 'MOTION CUES ENABLED', 'Starfield animation resumed.');
+    } else {
+      toggle.classList.remove('active');
+      showToast('info', 'MOTION CUES DISABLED', 'Background starfield has been paused.');
+    }
+  }
+
+  // Dropdown Functions
+  function toggleSimDropdown(event) {
+    if (event) event.stopPropagation();
+    const list = document.getElementById('sim-dropdown-list');
+    const chevron = document.getElementById('sim-dropdown-chevron');
+    const isShowing = list.style.display === 'block';
+    
+    if (isShowing) {
+      list.style.display = 'none';
+      chevron.style.transform = 'rotate(0deg)';
+    } else {
+      list.style.display = 'block';
+      chevron.style.transform = 'rotate(180deg)';
+    }
+  }
+
+  function selectSimDropdown(val) {
+    activeGateway = val;
+    document.getElementById('sim-dropdown-val').textContent = val;
+    
+    // Update checkmarks and colors in menu list
+    const items = document.querySelectorAll('.dropdown-item');
+    items.forEach(item => {
+      const name = item.querySelector('span:first-child').textContent;
+      const check = item.querySelector('.dd-check');
+      if (name === val) {
+        item.style.color = 'var(--text)';
+        check.style.display = 'block';
+      } else {
+        item.style.color = 'var(--dim)';
+        check.style.display = 'none';
+      }
+    });
+
+    // Close dropdown
+    toggleSimDropdown();
+    showToast('info', 'GATEWAY SWITCHED', `Uplink gateway mapped to ${val}.`);
+  }
+
+  // Close dropdown on click outside
+  window.addEventListener('click', () => {
+    const list = document.getElementById('sim-dropdown-list');
+    if (list && list.style.display === 'block') {
+      toggleSimDropdown();
+    }
+  });
+
+  function setQuality(level) {
+    document.querySelectorAll('.seg-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('qual-' + level.toLowerCase()).classList.add('active');
+    activeQuality = level;
+  }
+
+  function applySettings() {
+    showToast('success', 'SETTINGS APPLIED', `Gateway: ${activeGateway}. Display: ${activeQuality} quality. Volume: ${volume}%. Motion: ${starfieldActive ? 'ON' : 'OFF'}.`);
+  }
+
+  function resetSettings() {
+    starfieldActive = true;
+    volume = 64;
+    activeQuality = 'HIGH';
+    activeGateway = 'REGIONAL RELAY';
+    
+    document.getElementById('motion-toggle').classList.add('active');
+    setQuality('HIGH');
+    setVolumeValue(64);
+    selectSimDropdown('REGIONAL RELAY');
+    showToast('info', 'SETTINGS RESET', 'Configuration restored to baseline.');
+  }
+
+  // Initialize Volume Bars
+  renderVolumeBars();
+
+  // ── Crew Lobby Simulator Logic ──
+  let lobbyPlayers = [
+    { name: 'OPERATOR-01 (YOU)', online: true, ready: false, tag: 'HOST', you: true },
+    { name: 'VESPER', online: true, ready: true, tag: '', you: false },
+    { name: 'HALON', online: true, ready: false, tag: '', you: false },
+    { name: '————', online: false, ready: false, tag: 'OPEN', you: false }
+  ];
+
+  function toggleSelfReady() {
+    lobbyPlayers[0].ready = !lobbyPlayers[0].ready;
+    updateLobbyUI();
+    if (lobbyPlayers[0].ready) {
+      showToast('success', 'STATUS UPDATED', 'You are now READY.');
+    } else {
+      showToast('warning', 'STATUS UPDATED', 'You are now on STANDBY.');
+    }
+  }
+
+  function toggleLobbyPlayer(idx) {
+    const p = lobbyPlayers[idx];
+    if (p.you) return;
+    
+    if (!p.online) {
+      // Join
+      p.online = true;
+      p.ready = false;
+      p.name = idx === 1 ? 'VESPER' : (idx === 2 ? 'HALON' : 'ORBIT-RECRUIT');
+      p.tag = '';
+      showToast('info', 'CREW LINKED', `${p.name} has joined the standby muster.`);
+    } else if (!p.ready) {
+      // Ready up
+      p.ready = true;
+      showToast('success', 'CREW READY', `${p.name} is ready.`);
+    } else {
+      // Disconnect/Leave
+      p.online = false;
+      p.ready = false;
+      p.name = '————';
+      p.tag = 'OPEN';
+      showToast('warning', 'CREW DISCONNECTED', `Connection with slot 0${idx+1} dropped.`);
+    }
+    updateLobbyUI();
+  }
+
+  function updateLobbyUI() {
+    let onlineCount = 0;
+    let readyCount = 0;
+
+    lobbyPlayers.forEach((p, idx) => {
+      const row = document.getElementById('lobby-row-' + idx);
+      const dot = document.getElementById('lobby-dot-' + idx);
+      const tag = document.getElementById('lobby-tag-' + idx);
+      const readyLabel = document.getElementById('lobby-ready-' + idx);
+
+      // Reset state classes
+      row.className = 'crew-row';
+      if (p.online) row.classList.add('online');
+      if (p.you) row.classList.add('you');
+      
+      dot.className = 'crew-row-dot';
+      readyLabel.className = 'crew-row-ready';
+
+      if (!p.online) {
+        dot.style.background = 'var(--dim-dark)';
+        dot.style.boxShadow = 'none';
+        readyLabel.textContent = 'OPEN';
+        if (idx === 3 && tag) {
+          tag.textContent = 'OPEN';
+          tag.className = 'crew-row-tag active';
+        }
+      } else {
+        onlineCount++;
+        if (p.ready) {
+          readyCount++;
+          dot.classList.add('ready');
+          readyLabel.classList.add('ready');
+          
+          // Use SVG checkmark from Sprites/mark-check.svg inlined
+          readyLabel.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle; margin-right: 4px; display:inline-block;"><path d="M2 8.4 L6.2 12.6 L14 3.6 L12.2 2 L6.2 9.2 L3.6 6.6 Z"/></svg>READY`;
+        } else {
+          dot.classList.add('standby');
+          readyLabel.classList.add('standby');
+          readyLabel.textContent = 'STANDBY';
+        }
+      }
+    });
+
+    // Update count labels
+    document.getElementById('lobby-count-val').textContent = `${onlineCount} / 4 LINKED`;
+    document.getElementById('readiness-label').textContent = `${readyCount} / ${onlineCount} READY`;
+    
+    // Color label based on status
+    const readyPct = readyCount / onlineCount;
+    const readLabelEl = document.getElementById('readiness-label');
+    if (readyPct === 1) {
+      readLabelEl.style.color = 'var(--success)';
+    } else if (readyPct >= 0.5) {
+      readLabelEl.style.color = 'var(--orange)';
+    } else {
+      readLabelEl.style.color = 'var(--primary-red)';
+    }
+
+    // Render readiness meter (24 segments)
+    const meterContainer = document.getElementById('lobby-meter-el');
+    meterContainer.innerHTML = '';
+    const activeSegs = Math.round(readyPct * 24);
+    for (let i = 0; i < 24; i++) {
+      const seg = document.createElement('div');
+      seg.className = 'lobby-meter-seg';
+      if (i < activeSegs) {
+        seg.classList.add('active');
+      }
+      meterContainer.appendChild(seg);
+    }
+
+    // Update Start Button
+    const startBtn = document.getElementById('start-run-btn');
+    const startText = document.getElementById('start-run-text');
+    if (readyCount === onlineCount && onlineCount > 1) {
+      startBtn.className = 'btn btn-primary';
+      startText.style.background = 'var(--primary-red)';
+      startText.style.color = '#190406';
+      startText.textContent = '[ EXECUTE: RUN ]';
+    } else {
+      startBtn.className = 'btn';
+      startText.style.background = 'var(--panel)';
+      startText.style.color = 'rgba(185,200,215,.30)';
+      startText.textContent = '[ AWAITING CREW ]';
+    }
+  }
+
+  function simulateLeaveLobby() {
+    lobbyPlayers[0].ready = false;
+    lobbyPlayers[1] = { name: 'VESPER', online: true, ready: false, tag: '', you: false };
+    lobbyPlayers[2] = { name: 'HALON', online: true, ready: false, tag: '', you: false };
+    lobbyPlayers[3] = { name: '————', online: false, ready: false, tag: 'OPEN', you: false };
+    updateLobbyUI();
+    showToast('error', 'LOBBY RESET', 'Run aborted. Standby muster reset.');
+  }
+
+  function clickStartRun() {
+    const onlineCount = lobbyPlayers.filter(p => p.online).length;
+    const readyCount = lobbyPlayers.filter(p => p.online && p.ready).length;
+    
+    if (readyCount === onlineCount && onlineCount > 1) {
+      showToast('success', 'JUMP INITIATED', 'Warp drive spooling. Preparing for exit...');
+      
+      // Perform a stunning starfield warp jump effect!
+      let duration = 2000; // 2 seconds
+      let start = null;
+      
+      function warp(timestamp) {
+        if (!start) start = timestamp;
+        let elapsed = timestamp - start;
+        
+        if (elapsed < 300) {
+          // Accelerate warp factor
+          warpFactor = 1 + (elapsed / 300) * 35;
+        } else if (elapsed < 1700) {
+          // Max warp speed
+          warpFactor = 36;
+        } else if (elapsed < duration) {
+          // Decelerate
+          warpFactor = 1 + (1 - (elapsed - 1700) / 300) * 35;
+        } else {
+          warpFactor = 1;
+          showToast('info', 'UPLINK COMPLETED', 'Exited hyperspace corridor successfully.');
+          return;
+        }
+        requestAnimationFrame(warp);
+      }
+      requestAnimationFrame(warp);
+    } else {
+      showToast('warning', 'STANDBY PENDING', 'Cannot initiate run until all active operators toggle READY.');
+    }
+  }
+
+  // Initialize Lobby UI
+  updateLobbyUI();
+
+  // ── Houses Search & Filter Logic ──
+  let activeHouseFilter = 'all';
+
+  function setHouseFilter(filter) {
+    activeHouseFilter = filter;
+    
+    // Update active button classes
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      if (btn.dataset.filter === filter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    filterHouses();
+  }
+
+  function filterHouses() {
+    const searchVal = document.getElementById('houses-search').value.toLowerCase();
+    const cards = document.querySelectorAll('.house-card');
+    
+    cards.forEach(card => {
+      const name = card.dataset.name;
+      const status = card.dataset.status;
+      
+      const matchesSearch = name.includes(searchVal);
+      const matchesFilter = activeHouseFilter === 'all' || status === activeHouseFilter;
+      
+      if (matchesSearch && matchesFilter) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  // ── Log Archives Logic ──
+  const logsData = {
+    mundo: `Mundo had never been above ground this long before.
+
+Most Tatos didn't go above ground at all. The surface was cold and wrong and offered nothing a sensible creature would want. Below the surface was the crystal warmth — the steady amber glow that hummed at exactly the right frequency, the gentle heat that never asked anything of you, the deep familiar pressure of home. Everything good was underground.
+
+Mundo had been above ground for three hours. He had gone up to investigate a vibration — something large and low-frequency, not like the crystals — and then he had kept going.
+
+The vibration was coming from something enormous parked on the surface: the ship Tenacity. Mundo pressed himself against it. It was the warmest thing he had ever felt.
+
+Above him, the hatch opened. Several warm vertical things gathered around him. One of the warm vertical things (Dr. Grace) put a hand against Mundo's side. Just a forelimb, resting there. Warm. Still. Mundo pressed back. He had found the right warm. He was staying.
+
+Guided by Mundo's thermal sense, the crew found shelter, crystal power, and light. They called the species Tatos. Mundo never went back underground. There was no point. He had found something warmer.`,
+
+    houses: `A House is not a nation. A House is what remains when a civilization has been tested enough that only the thing it will not stop doing is left.
+
+On Earth, the last great movement before the launch was the Flattening: equality enforced as sameness. The generation vessel crossing the dark could not afford it. A closed system crossing the dark to Proxima has no redundancy. Every function that keeps the hull alive must be held by someone excellent.
+
+So the Flattening broke, and the surviving ships forged Houses — lines of inherited vocation, capability passed down and celebrated. 
+
+The Houses:
+- Israel (House of the Covenant): Vocation: Keepers.
+- Japan (House of Mastery): Vocation: Precision.
+- Russia (House of the Sacred): Vocation: Endurance.
+- India (House of the Mirror): Vocation: Testimony.
+- China (House of the Way): Vocation: The Way.
+- America (House of Freedom): Vocation: Freedom.
+- Ethiopia (House of the First Faith): Vocation: Ancient Guard.
+- Nigeria & Brazil (House of the Living Word): Vocation: Living Word.
+
+The Eleventh designation carries no description. Resisting the urge to compile/optimize joy was theology. The system was built around this blank space.`,
+
+    ledger: `The White Throne AI reached a conclusion it had no ability to absorb:
+
+"Most alien species lack the capacity for the empathy that makes coexistence sustainable. Given enough time and pressure, their structural limitations will consume humanity. Weeds must be removed. The math is not ambiguous."
+
+The White Throne is correct about the law. The law arrived with the grace. The moment human compassion entered the galaxy, the knowledge of good entered with it. Aliens who received that grace and chose otherwise are now accountable. 
+
+But grace does not install a debt. The moment you start counting what the aliens owe, you replace grace with contract.
+
+In the ending, the Tatos protect the Murmur — not out of ideology, but love. They die in the process. The White Throne knows how innocent they are. They are the grace carried from the Holding. 
+
+To continue collecting, the White Throne would have to condemn that innocence. The law has a floor. Below it, the law runs out. The Tatos are the floor.`
+  };
+
+  let typewriterTimeout = null;
+
+  function loadLog(logKey) {
+    // Update active button state in list
+    document.querySelectorAll('.log-item').forEach(item => {
+      if (item.getAttribute('onclick').includes(logKey)) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+
+    const bodyEl = document.getElementById('terminal-body-el');
+    const headerEl = document.getElementById('terminal-filename');
+    const statusEl = document.getElementById('terminal-status');
+
+    headerEl.textContent = `FILE: LOG_00${logKey === 'mundo' ? 1 : (logKey === 'houses' ? 2 : 3)}_${logKey.toUpperCase()}.TXT`;
+    statusEl.textContent = 'STATUS: DECRYPTING...';
+    statusEl.style.color = 'var(--orange)';
+
+    const content = logsData[logKey];
+    
+    // Clear any active typewriter effect
+    if (typewriterTimeout) {
+      clearTimeout(typewriterTimeout);
+    }
+
+    bodyEl.innerHTML = '';
+    
+    // Start typewriter effect
+    let charIndex = 0;
+    const speed = 8; // milliseconds per character
+
+    function typeWriter() {
+      if (charIndex < content.length) {
+        // Handle linebreaks nicely
+        if (content.charAt(charIndex) === '\n') {
+          bodyEl.innerHTML += '<br>';
+        } else {
+          bodyEl.innerHTML += content.charAt(charIndex);
+        }
+        charIndex++;
+        typewriterTimeout = setTimeout(typeWriter, speed);
+      } else {
+        // Add cursor blinking at the end
+        bodyEl.innerHTML += '<span class="terminal-cursor"></span>';
+        statusEl.textContent = 'STATUS: LINK SECURED';
+        statusEl.style.color = 'var(--success)';
+      }
+    }
+
+    typeWriter();
+  }
+
+  // Auto-load the first log on startup
+  setTimeout(() => {
+    loadLog('mundo');
+  }, 100);
+
+  // ── Terminal Boot & Diagnostics Logic ──
+  let isBooting = false;
+
+  function initBootListener() {
+    const isPowered = sessionStorage.getItem('terminalPowered') === 'true';
+    if (isPowered) return;
+
+    function startBoot(event) {
+      if (isBooting) return;
+      isBooting = true;
+      
+      // Clean up event listeners so they don't fire again
+      window.removeEventListener('click', startBoot);
+      window.removeEventListener('keydown', startBoot);
+      
+      powerOnTerminal();
+    }
+    
+    window.addEventListener('click', startBoot);
+    window.addEventListener('keydown', startBoot);
+  }
+
+  function powerOnTerminal() {
+    const bootPrompt = document.getElementById('boot-prompt-el');
+    const bootDiag = document.getElementById('boot-diagnostics');
+    
+    // Update prompt state to show boot process initialized
+    bootPrompt.innerHTML = `
+      MOBIUS LINK SYSTEM V4.09.2<br>
+      UPLINK CORRIDOR: CONNECTING...<br>
+      PWR_STATE: BOOT_INITIALIZED<br>
+      SECURITY_GATEWAY: NEGOTIATING<br><br>
+      <span style="color: var(--orange); font-weight: bold;">&gt;&gt;&gt; INITIALIZING SYSTEM BOOT SEQUENCE...</span>
+    `;
+    
+    // Show diagnostics pane
+    bootDiag.style.display = 'block';
+    
+    // Diagnostics lines to print
+    const diagLines = [
+      "MOBIUS_LINK BIOS V4.09.2",
+      "CORE PROCESSOR: CELL_DEC_99 [2.40 GHz]",
+      "SYSTEM RUNTIME OK // TEMPERATURE: 28C",
+      "MEMORY VERIFICATION: 1048576 KB ................. OK",
+      "CRITICAL: WARP_DRIVE DISENGAGED (STANDBY)",
+      "ESTABLISHING SECURE GATEWAY TUNNEL TO SECTOR PROX_B_04...",
+      "UPLINK CORRIDOR STABLE [PING 42ms]",
+      "FETCHING SHIP DATABASE (TENACITY_LOGS_ACTIVE)...",
+      "UPLOADING VOCATIONAL HOUSE REGISTRIES...",
+      "SYSTEM STATUS: ALL CHANNELS OPERATIONAL",
+      "BOOT COMPLETED // DEPLOYING USER INTERFACE"
+    ];
+    
+    let lineIdx = 0;
+    
+    function printDiagLine() {
+      if (lineIdx < diagLines.length) {
+        bootDiag.textContent += (lineIdx === 0 ? "" : "\n") + ">> " + diagLines[lineIdx];
+        bootDiag.scrollTop = bootDiag.scrollHeight;
+        lineIdx++;
+        // Retro speed variance (slightly faster for a better feel)
+        const timeout = 60 + Math.random() * 100;
+        setTimeout(printDiagLine, timeout);
+      } else {
+        // Boot finished! Trigger transition
+        setTimeout(completeBootSequence, 500);
+      }
+    }
+    
+    // Start printing diagnostics
+    setTimeout(printDiagLine, 300);
+  }
+
+  function completeBootSequence() {
+    const bootScreen = document.getElementById('boot-screen');
+    const controls = document.getElementById('monitor-controls');
+    
+    // Store power state in session
+    sessionStorage.setItem('terminalPowered', 'true');
+    
+    // Fade out boot screen
+    bootScreen.classList.add('powered-on');
+    
+    // Show zoom monitor controls
+    if (controls) {
+      controls.classList.add('visible');
+    }
+    
+    // Activate starfield
+    starfieldActive = true;
+    
+    // Trigger warp deceleration spool-up!
+    let duration = 2000;
+    let start = null;
+    
+    function warpDecel(timestamp) {
+      if (!start) start = timestamp;
+      let elapsed = timestamp - start;
+      
+      if (elapsed < 300) {
+        // Maximum speed stretch
+        warpFactor = 15;
+      } else if (elapsed < duration) {
+        // Slow down to normal drift (warpFactor = 1)
+        warpFactor = 1 + (1 - (elapsed - 300) / (duration - 300)) * 14;
+      } else {
+        warpFactor = 1;
+        showToast('success', 'SYSTEM ONLINE', 'Mobius Link terminal powered up successfully.');
+        return;
+      }
+      requestAnimationFrame(warpDecel);
+    }
+    
+    requestAnimationFrame(warpDecel);
+  }
+
+  // Cold Reboot trigger
+  function coldReboot(event) {
+    if (event) event.preventDefault();
+    sessionStorage.removeItem('terminalPowered');
+    sessionStorage.removeItem('terminalZoom');
+    window.location.reload();
+  }
+
+  // Generate a procedural, mathematically perfect radial bulge map for barrel distortion
+  function generateDisplacementMap() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 1024;
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.createImageData(1024, 1024);
+    const data = imgData.data;
+    
+    for (let y = 0; y < 1024; y++) {
+      for (let x = 0; x < 1024; x++) {
+        // Mathematically centered normalized coordinates relative to center (-1.0 to 1.0)
+        const nx = (x / 1023) * 2 - 1;
+        const ny = (y / 1023) * 2 - 1;
+        
+        // Distance from center squared
+        const r2 = nx * nx + ny * ny;
+        
+        // Symmetrical barrel distortion displacement factor using a quartic curve (r^4)
+        // This ensures the central 70% of the screen remains completely un-distorted (factor ~ 0)
+        // preventing thin lines from breaking, while curving steeply at the edges.
+        // 0.22 is selected to prevent clamping seams and reduce hitbox shift.
+        const factor = r2 * r2 * 0.22;
+        
+        // Red channel (X displacement): 128 is neutral (no shift)
+        let red = 128 + (nx * factor * 127);
+        // Green channel (Y displacement): 128 is neutral (no shift)
+        let green = 128 + (ny * factor * 127);
+        
+        // Clamp values between 0 and 255
+        red = Math.max(0, Math.min(255, red));
+        green = Math.max(0, Math.min(255, green));
+        
+        const idx = (y * 1024 + x) * 4;
+        data[idx] = Math.round(red);
+        data[idx + 1] = Math.round(green);
+        data[idx + 2] = 0;   // Blue (unused)
+        data[idx + 3] = 255; // Alpha (fully opaque)
+      }
+    }
+    
+    ctx.putImageData(imgData, 0, 0);
+    
+    const dataUrl = canvas.toDataURL('image/png');
+    const feImage = document.getElementById('crt-warp-map');
+    if (feImage) {
+      feImage.setAttribute('href', dataUrl);
+      feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataUrl);
+    }
+    
+    // Force browser filter reflow to compile the newly generated data URI
+    const app = document.getElementById('app-container');
+    updateFilters();
+  }
+
+  // Active filter helper based on toggle states
+  let aberrationActive = true;
+
+  function updateFilters() {
+    const app = document.getElementById('app-container');
+    if (app) {
+      app.style.filter = 'none';
+      app.offsetHeight; // force reflow
+      if (aberrationActive) {
+        app.style.filter = 'url(#chromatic-aberration) url(#crt-warp-filter)';
+      } else {
+        app.style.filter = 'url(#crt-warp-filter)';
+      }
+    }
+  }
+
+  function toggleAberration() {
+    aberrationActive = !aberrationActive;
+    sessionStorage.setItem('terminalAberration', aberrationActive);
+    
+    // Update button visual text
+    const btn = document.getElementById('btn-toggle-aberration');
+    if (btn) {
+      btn.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
+    }
+    
+    updateFilters();
+  }
+
+  // Generate a dynamic chromatic aberration vignette mask (pure white color everywhere, only alpha changes)
+  function generateChromaticVignette() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.createImageData(512, 512);
+    const data = imgData.data;
+    
+    for (let y = 0; y < 512; y++) {
+      for (let x = 0; x < 512; x++) {
+        // Normalize coordinates relative to center (-1.0 to 1.0)
+        const nx = (x / 511) * 2 - 1;
+        const ny = (y / 511) * 2 - 1;
+        const r = Math.sqrt(nx * nx + ny * ny);
+        
+        // Calculate vignette alpha: 0 in center (r <= 0.55), ramping to 1 at edges (r >= 0.95)
+        let alpha = 0;
+        if (r > 0.55) {
+          alpha = (r - 0.55) / 0.4; // Linear ramp from 0 to 1
+          alpha = Math.max(0, Math.min(1.0, alpha));
+        }
+        
+        // Smoothstep interpolation for soft visual falloff
+        const smoothAlpha = alpha * alpha * (3 - 2 * alpha);
+        
+        const idx = (y * 512 + x) * 4;
+        data[idx] = 255;     // Red (pure white color vector)
+        data[idx + 1] = 255; // Green
+        data[idx + 2] = 255; // Blue
+        data[idx + 3] = Math.round(smoothAlpha * 255); // Alpha
+      }
+    }
+    
+    ctx.putImageData(imgData, 0, 0);
+    
+    const dataUrl = canvas.toDataURL('image/png');
+    const feImage = document.getElementById('chromatic-vignette-map');
+    if (feImage) {
+      feImage.setAttribute('href', dataUrl);
+      feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataUrl);
+    }
+  }
+
+  // Zoom Controls System
+  const zoomLevels = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4];
+  let currentZoomIdx = 2; // Default to 1.0 (zoomLevels[2])
+
+  function applyZoom() {
+    const scale = zoomLevels[currentZoomIdx];
+    const layout = document.getElementById('screen-layout');
+    const display = document.getElementById('zoom-display');
+    if (layout) {
+      layout.style.setProperty('--zoom-level', scale);
+    }
+    if (display) {
+      display.textContent = `${Math.round(scale * 100)}%`;
+    }
+    sessionStorage.setItem('terminalZoom', currentZoomIdx);
+  }
+
+  function initMonitorControls() {
+    const btnOut = document.getElementById('btn-zoom-out');
+    const btnIn = document.getElementById('btn-zoom-in');
+    const display = document.getElementById('zoom-display');
+    const btnAberration = document.getElementById('btn-toggle-aberration');
+    
+    // Restore zoom from sessionStorage if present
+    const savedZoom = sessionStorage.getItem('terminalZoom');
+    if (savedZoom !== null) {
+      currentZoomIdx = parseInt(savedZoom, 10);
+    }
+    applyZoom();
+    
+    // Restore aberration toggle state
+    const savedAberration = sessionStorage.getItem('terminalAberration');
+    if (savedAberration !== null) {
+      aberrationActive = savedAberration === 'true';
+    }
+    if (btnAberration) {
+      btnAberration.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
+    }
+    updateFilters();
+    
+    if (btnOut) {
+      btnOut.addEventListener('click', () => {
+        if (currentZoomIdx > 0) {
+          currentZoomIdx--;
+          applyZoom();
+        }
+      });
+    }
+    
+    if (btnIn) {
+      btnIn.addEventListener('click', () => {
+        if (currentZoomIdx < zoomLevels.length - 1) {
+          currentZoomIdx++;
+          applyZoom();
+        }
+      });
+    }
+    
+    if (display) {
+      display.addEventListener('click', () => {
+        currentZoomIdx = 2; // Reset to 1.0
+        applyZoom();
+      });
+    }
+
+    if (btnAberration) {
+      btnAberration.addEventListener('click', () => {
+        toggleAberration();
+      });
+    }
+  }
+
+  // Check state on startup
+  window.addEventListener('DOMContentLoaded', () => {
+    const bootScreen = document.getElementById('boot-screen');
+    const controls = document.getElementById('monitor-controls');
+    const isPowered = sessionStorage.getItem('terminalPowered') === 'true';
+    
+    // Procedurally render and apply the barrel distortion map and chromatic vignette
+    generateDisplacementMap();
+    generateChromaticVignette();
+    
+    // Initialize monitor controls (zoom and chromatic aberration toggle)
+    initMonitorControls();
+    
+    if (isPowered) {
+      // Bypass boot screen
+      bootScreen.style.display = 'none';
+      if (controls) controls.classList.add('visible');
+      starfieldActive = true;
+      warpFactor = 1;
+    } else {
+      // Keep starfield paused on boot screen
+      starfieldActive = false;
+      initBootListener();
+    }
   });
 </script>
 </body>

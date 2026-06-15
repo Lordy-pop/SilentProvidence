@@ -1,0 +1,61 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <!-- Settings.uxml — demonstrates the ORANGE accent theme. The only change
+         from a red screen is the .theme-orange class on the panel: it remaps
+         --mob-accent, so the mark, panel edge, toggle, meter, segments and the
+         orange APPLY button all pick up orange. Red is never used here. -->
+    <Style src="MobiusKit.uss" />
+
+    <ui:VisualElement class="mobius-root" style="align-items: center; justify-content: center;">
+        <ui:VisualElement name="panel" class="mob-panel theme-orange" style="width: 392px;">
+
+            <ui:VisualElement style="flex-direction: row; align-items: center; margin-bottom: 18px;">
+                <ui:VisualElement class="mob-mark" style="margin-right: 9px;" />
+                <ui:Label text="SETTINGS" class="mob-display mob-eyebrow" />
+            </ui:VisualElement>
+
+            <ui:Label text="SYSTEM CONFIG" class="mob-title" style="font-size: 26px;" />
+
+            <ui:VisualElement class="mob-noderule" style="margin: 20px 0 4px 0;">
+                <ui:VisualElement class="mob-mark mob-mark--sm" />
+                <ui:VisualElement class="mob-rule" />
+                <ui:VisualElement class="mob-dot" />
+                <ui:VisualElement class="mob-dot" />
+                <ui:VisualElement class="mob-dot" />
+            </ui:VisualElement>
+
+            <!-- toggle row -->
+            <ui:VisualElement style="flex-direction: row; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom-width: 1px; border-bottom-color: var(--mob-line-dim);">
+                <ui:Label text="MOTION CUES" style="font-size: 10px; letter-spacing: 1.4px; color: var(--mob-text);" />
+                <ui:VisualElement name="motion-toggle" class="mob-toggle is-on" focusable="true">
+                    <ui:VisualElement class="mob-toggle__knob" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- volume meter -->
+            <ui:VisualElement style="padding: 15px 0; border-bottom-width: 1px; border-bottom-color: var(--mob-line-dim);">
+                <ui:VisualElement style="flex-direction: row; justify-content: space-between; margin-bottom: 11px;">
+                    <ui:Label text="MASTER VOLUME" style="font-size: 10px; letter-spacing: 1.4px; color: var(--mob-text);" />
+                    <ui:Label name="vol-pct" text="62%" style="font-size: 11px; color: var(--mob-orange-hi);" />
+                </ui:VisualElement>
+                <!-- populate ~22 .mob-meter__seg in C#; add .is-filled to the first k -->
+                <ui:VisualElement name="vol-meter" class="mob-meter" />
+            </ui:VisualElement>
+
+            <!-- quality segmented -->
+            <ui:VisualElement style="padding: 15px 0;">
+                <ui:Label text="RENDER QUALITY" style="font-size: 10px; letter-spacing: 1.4px; color: var(--mob-text); margin-bottom: 11px;" />
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Button text="LOW"  name="q-low"  class="mob-seg" style="margin-right: 8px;" />
+                    <ui:Button text="MED"  name="q-med"  class="mob-seg" style="margin-right: 8px;" />
+                    <ui:Button text="HIGH" name="q-high" class="mob-seg is-selected" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement style="flex-direction: row; margin-top: 18px;">
+                <ui:Button text="APPLY"  name="apply-btn"  class="mob-btn mob-btn--orange" style="flex-grow: 1; height: 46px; margin-right: 10px;" />
+                <ui:Button text="CANCEL" name="cancel-btn" class="mob-btn mob-btn--quiet"  style="min-width: 0; width: 110px; height: 46px;" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

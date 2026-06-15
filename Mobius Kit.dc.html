@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:#0B0F16;}
+  input::placeholder{color:#46566A;letter-spacing:.28em;}
+  ::selection{background:rgba(237,31,61,0.72);color:#fff;}
+  @keyframes mb-blink{0%,48%{opacity:1}49%,100%{opacity:0}}
+  @keyframes mb-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-46px,28px,0)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:radial-gradient(120% 78% at 50% -8%, #141A26 0%, #0B0F16 58%); color:#EEF3F8; font-family:'JetBrains Mono', monospace; padding:44px 48px 90px;">
+
+  <!-- ===================== HEADER / DESIGN NOTES ===================== -->
+  <div style="display:flex; gap:30px; align-items:stretch; flex-wrap:wrap;">
+    <div style="flex:1; min-width:340px;">
+      <div style="display:flex; align-items:center; gap:11px; margin-bottom:14px;">
+        <div style="width:0; height:0; border-left:7px solid transparent; border-right:7px solid transparent; border-top:12px solid #ED1F3D;"></div>
+        <span style="font-family:'Orbitron'; font-size:11px; letter-spacing:.42em; color:#93A6BB;">PROJECT&nbsp;MOBIUS</span>
+        <span style="font-size:9.5px; letter-spacing:.24em; color:#5A6A7E;">// SILENT PROVIDENCE</span>
+      </div>
+      <div style="font-family:'Orbitron'; font-size:42px; font-weight:600; letter-spacing:.06em; line-height:1.0; color:#EEF3F8;">UI KIT &nbsp;<span style="color:#ED1F3D;">/</span>&nbsp; MAIN MENU SKIN</div>
+      <div style="display:flex; gap:18px; margin-top:16px; font-size:10px; letter-spacing:.2em; color:#738399; flex-wrap:wrap;">
+        <span style="color:#ED1F3D;">MOB&#8209;108</span><span>REUSABLE BUTTON &amp; FOCUS KIT</span>
+        <span style="color:#303C4C;">|</span>
+        <span style="color:#ED1F3D;">MOB&#8209;109</span><span>MAIN MENU SKIN</span>
+        <span style="color:#303C4C;">|</span>
+        <span>UNITY UI TOOLKIT &middot; UXML/USS</span>
+      </div>
+    </div>
+
+    <div style="flex:none; width:392px; border:1px solid #25303E; background:linear-gradient(160deg,#161D29,#0e131c); padding:18px 20px;">
+      <div style="font-size:9px; letter-spacing:.28em; color:#5A6A7E; margin-bottom:13px;">DESIGN NOTES — DECISIONS TAKEN</div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#ED1F3D;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">TWO REDS RESOLVED</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Primary = bright <span style="color:#FF3A55;">#ED1F3D</span> (go / active / error family). Destructive = deep blood <span style="color:#c66f7a;">#8E2030</span> — related, darker, heavier.</div></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#FFFFFF;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">FOCUS = WHITE RING</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Keyboard focus gets a crisp <span style="color:#fff;">white</span> outline + glow — reads distinctly from Hover (fill brightens) and Pressed (darkens + insets). Closes the a11y gap.</div></div>
+      </div>
+      <div style="display:flex; gap:10px; margin-bottom:11px;">
+        <div style="width:5px; flex:none; background:#84BAD9;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">COOL × HOT PALETTE</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">Bright red primary + <span style="color:#9ECCE7;">light steel&#8209;blue</span> secondary, on desaturated cool blue&#8209;grey panels. Dark labels ride the bright fills.</div></div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <div style="width:5px; flex:none; background:#F0820F;"></div>
+        <div><div style="font-size:10px; letter-spacing:.12em; color:#EEF3F8; margin-bottom:3px;">ORANGE = SPARING FLAVOR</div><div style="font-size:9.5px; line-height:1.55; color:#8595a8;">A single warm <span style="color:#FF9A2B;">orange</span> #F0820F — flavor here &amp; there, and the calmer accent for non&#8209;destructive menus (Settings). Used sparingly; red stays oppressive.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 01 TYPE ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:58px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">01</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">TYPEFACE EVALUATION</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">You asked about Orbitron — here it is against three monospaces. Recommendation below.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:16px;">
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;"><span style="font-size:10px; letter-spacing:.2em; color:#88B4D6;">ORBITRON</span><span style="font-size:8.5px; letter-spacing:.16em; color:#5A6A7E;">TITLE / WORDMARK</span></div>
+      <div style="font-family:'Orbitron'; font-weight:600; font-size:26px; letter-spacing:.04em; color:#EEF3F8; line-height:1.05;">RUNTIME LINK</div>
+      <div style="font-family:'Orbitron'; font-weight:400; font-size:10px; letter-spacing:.18em; color:#93A6BB; margin-top:12px;">GATE / 192.160.80.90 — LINE 06</div>
+      <div style="font-size:9px; line-height:1.5; color:#647488; margin-top:13px; border-top:1px solid #1B2330; padding-top:11px;">Geometric, unmistakably sci&#8209;fi. Wide &amp; soft at small sizes; not monospaced — coordinate/code columns won't align. <span style="color:#84D6BE;">Use for the title moment only.</span></div>
+    </div>
+    <div style="border:1px solid #3a4a5a; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; box-shadow:0 0 0 1px rgba(159,208,242,.18), 0 0 22px rgba(159,208,242,.08);">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;"><span style="font-size:10px; letter-spacing:.2em; color:#88B4D6;">JETBRAINS MONO</span><span style="font-size:8.5px; letter-spacing:.16em; color:#84D6BE;">★ RECOMMENDED · UI</span></div>
+      <div style="font-family:'JetBrains Mono'; font-weight:700; font-size:26px; letter-spacing:.02em; color:#EEF3F8; line-height:1.05;">RUNTIME LINK</div>
+      <div style="font-family:'JetBrains Mono'; font-weight:500; font-size:10px; letter-spacing:.14em; color:#93A6BB; margin-top:12px;">GATE / 192.160.80.90 — LINE 06</div>
+      <div style="font-size:9px; line-height:1.5; color:#647488; margin-top:13px; border-top:1px solid #1B2330; padding-top:11px;">Engineered, legible at 10px, true monospace — codes &amp; columns lock to a grid. <span style="color:#84D6BE;">Carries every label, button, status.</span></div>
+    </div>
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;"><span style="font-size:10px; letter-spacing:.2em; color:#88B4D6;">SPACE MONO</span><span style="font-size:8.5px; letter-spacing:.16em; color:#5A6A7E;">ALT · TERMINAL</span></div>
+      <div style="font-family:'Space Mono'; font-weight:700; font-size:26px; letter-spacing:0; color:#EEF3F8; line-height:1.05;">RUNTIME LINK</div>
+      <div style="font-family:'Space Mono'; font-weight:400; font-size:10px; letter-spacing:.08em; color:#93A6BB; margin-top:12px;">GATE / 192.160.80.90 — LINE 06</div>
+      <div style="font-size:9px; line-height:1.5; color:#647488; margin-top:13px; border-top:1px solid #1B2330; padding-top:11px;">Retro&#8209;terminal character, distinctive zero/G. A touch quirky for dense data — good for accents.</div>
+    </div>
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px;"><span style="font-size:10px; letter-spacing:.2em; color:#88B4D6;">IBM PLEX MONO</span><span style="font-size:8.5px; letter-spacing:.16em; color:#5A6A7E;">ALT · NEUTRAL</span></div>
+      <div style="font-family:'IBM Plex Mono'; font-weight:600; font-size:26px; letter-spacing:.01em; color:#EEF3F8; line-height:1.05;">RUNTIME LINK</div>
+      <div style="font-family:'IBM Plex Mono'; font-weight:400; font-size:10px; letter-spacing:.1em; color:#93A6BB; margin-top:12px;">GATE / 192.160.80.90 — LINE 06</div>
+      <div style="font-size:9px; line-height:1.5; color:#647488; margin-top:13px; border-top:1px solid #1B2330; padding-top:11px;">Institutional, calm, very neutral. Safe choice; reads less "ship&#8209;system" than JetBrains.</div>
+    </div>
+  </div>
+
+  <div style="margin-top:16px; border:1px solid #303C4C; background:linear-gradient(90deg,rgba(237,31,61,.08),transparent); padding:14px 18px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+    <span style="font-size:9px; letter-spacing:.24em; color:#ED1F3D;">PAIRING</span>
+    <span style="font-family:'Orbitron'; font-size:15px; letter-spacing:.08em; color:#EEF3F8;">Orbitron</span>
+    <span style="font-size:9px; color:#5A6A7E;">title / wordmark</span>
+    <span style="color:#303C4C;">+</span>
+    <span style="font-family:'JetBrains Mono'; font-weight:700; font-size:15px; letter-spacing:.04em; color:#EEF3F8;">JetBrains Mono</span>
+    <span style="font-size:9px; color:#5A6A7E;">every label, code, button &amp; status — used throughout this kit</span>
+  </div>
+
+  <!-- ===================== 02 PALETTE ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:58px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">02</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">PALETTE &amp; STATUS TOKENS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">Cool desaturated blue-greys, one hot red, a light steel-blue secondary.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:12px;">
+    <sc-for list="{{ tokens }}" as="t" hint-placeholder-count="14">
+      <div style="border:1px solid #1f2733; background:#0a0e15; padding:11px;">
+        <div style="{{ t.sw }}"></div>
+        <div style="font-size:9.5px; letter-spacing:.12em; color:#C3CEDB; margin-top:9px;">{{ t.name }}</div>
+        <div style="font-size:9px; letter-spacing:.08em; color:#5A6A7E; margin-top:2px;">{{ t.hex }}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- ===================== 03 FLAVOR ===================== -->
+  <div style="display:flex; align-items:flex-end; gap:16px; margin:58px 0 22px;">
+    <div style="font-family:'Orbitron'; font-size:11px; letter-spacing:.18em; color:#ED1F3D; border:1px solid #ED1F3D; padding:5px 9px;">03</div>
+    <div style="flex:none;"><div style="font-family:'Orbitron'; font-size:17px; letter-spacing:.14em; color:#EEF3F8;">FLAVOR — LINES &amp; DOTS</div><div style="font-size:10px; letter-spacing:.12em; color:#738399; margin-top:5px;">Reusable ornaments. Monochrome by default — one red node, or an occasional orange, carries the weight.</div></div>
+    <div style="flex:1; height:1px; background:linear-gradient(90deg,#303C4C,transparent); margin-bottom:9px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(264px,1fr)); gap:16px;">
+    <!-- registration marks -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">REGISTRATION MARKS</div>
+      <div style="display:flex; gap:30px; align-items:center; justify-content:center; flex:1; padding:18px 0;">
+        <div style="position:relative; width:13px; height:13px;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#3a4658; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#3a4658; transform:translateX(-50%);"></div></div>
+        <div style="position:relative; width:13px; height:13px;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#3a4658; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#3a4658; transform:translateX(-50%);"></div></div>
+        <div style="position:relative; width:15px; height:15px;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#F0820F; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#F0820F; transform:translateX(-50%);"></div></div>
+        <div style="position:relative; width:13px; height:13px;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#3a4658; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#3a4658; transform:translateX(-50%);"></div></div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">Corner / coordinate marks · one warm flavor</div>
+    </div>
+
+    <!-- node rule -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">NODE RULE</div>
+      <div style="flex:1; display:flex; align-items:center; padding:18px 0;">
+        <div style="display:flex; align-items:center; width:100%;">
+          <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #ED1F3D; flex:none;"></div>
+          <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin-left:6px;"></div>
+          <div style="display:flex; gap:4px; margin-left:7px;"><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div></div>
+        </div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">Section divider · accent node</div>
+    </div>
+
+    <!-- tick scale -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">TICK SCALE</div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:18px 0;">
+        <div style="display:flex; align-items:flex-end; gap:4px; height:18px;">
+          <sc-for list="{{ ticks }}" as="tk" hint-placeholder-count="21"><div style="{{ tk }}"></div></sc-for>
+        </div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">Measurement / progress scale</div>
+    </div>
+
+    <!-- dot run -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">DOT RUN</div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:18px 0;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <sc-for list="{{ dots }}" as="dt" hint-placeholder-count="13"><div style="{{ dt }}"></div></sc-for>
+        </div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">Data run · sparse red &amp; orange beats</div>
+    </div>
+
+    <!-- segment meter -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">SEGMENT METER</div>
+      <div style="flex:1; display:flex; align-items:center; padding:18px 0;">
+        <div style="display:flex; gap:2px; width:100%;">
+          <sc-for list="{{ segs }}" as="sg" hint-placeholder-count="26"><div style="{{ sg }}"></div></sc-for>
+        </div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">Fill meter · red body, orange head</div>
+    </div>
+
+    <!-- bracket + label -->
+    <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:18px; min-height:128px; display:flex; flex-direction:column; justify-content:space-between;">
+      <div style="font-size:9px; letter-spacing:.2em; color:#88B4D6;">FRAME CORNER + CAPS</div>
+      <div style="flex:1; display:flex; align-items:center; justify-content:center; gap:22px; padding:14px 0;">
+        <div style="position:relative; width:46px; height:30px;">
+          <div style="position:absolute; top:0; left:0; width:11px; height:11px; border-top:1.5px solid #6f8294; border-left:1.5px solid #6f8294;"></div>
+          <div style="position:absolute; top:0; right:0; width:11px; height:11px; border-top:1.5px solid #6f8294; border-right:1.5px solid #6f8294;"></div>
+          <div style="position:absolute; bottom:0; left:0; width:11px; height:11px; border-bottom:1.5px solid #6f8294; border-left:1.5px solid #6f8294;"></div>
+          <div style="position:absolute; bottom:0; right:0; width:11px; height:11px; border-bottom:1.5px solid #6f8294; border-right:1.5px solid #6f8294;"></div>
+        </div>
+        <div style="display:flex; align-items:center; gap:7px; font-size:10px; letter-spacing:.22em; color:#93A6BB;"><span style="color:#ED1F3D;">[</span>SYSTEM<span style="color:#ED1F3D;">]</span></div>
+      </div>
+      <div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E;">9&#8209;slice corner + bracket label caps</div>
+    </div>
+  </div>
+
+  <!-- ===================== DIRECTION A ===================== -->
+  <div style="margin-top:62px; border-top:1px solid #ED1F3D; padding-top:8px;">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+      <span style="font-family:'Orbitron'; font-size:22px; letter-spacing:.12em; color:#EEF3F8;">THE KIT</span>
+      <span style="font-size:11px; letter-spacing:.3em; color:#ED1F3D;">STRUCTURAL</span>
+      <span style="font-size:9px; letter-spacing:.2em; color:#5A6A7E;">LOCKED DIRECTION</span>
+    </div>
+    <div style="font-size:10px; letter-spacing:.1em; color:#738399; max-width:760px; line-height:1.6;">Restrained framing — single top&#8209;right corner notch, thin 1px structural borders, a 2px accent rule on the leading edge. Reads "instrument", not "game UI".</div>
+
+    <!-- matrix -->
+    <div style="margin-top:30px; border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:6px 22px 18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:13px 0 4px; border-bottom:1px solid #1B2330; margin-bottom:6px;">
+        <span style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB;">BUTTON STATE MATRIX — 4 VARIANTS × 5 STATES</span>
+        <span style="font-size:9px; letter-spacing:.18em; color:#5A6A7E;">CORNER · TOP&#8209;RIGHT NOTCH</span>
+      </div>
+      <sc-for list="{{ matrixA }}" as="row" hint-placeholder-count="4">
+        <div style="display:flex; align-items:center; gap:18px; padding:15px 0; border-bottom:1px solid rgba(27,35,48,.8);">
+          <div style="width:158px; flex:none;">
+            <div style="font-size:11px; letter-spacing:.16em; color:#EEF3F8; font-weight:700;">{{ row.label }}</div>
+            <div style="font-size:9px; letter-spacing:.08em; color:#738399; margin-top:4px;">{{ row.sub }}</div>
+          </div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap;">
+            <sc-for list="{{ row.cells }}" as="c" hint-placeholder-count="5">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                <div style="{{ c.wrap }}"><div style="{{ c.ring }}"></div><div style="{{ c.btn }}">{{ c.text }}</div></div>
+                <div style="font-size:8px; letter-spacing:.18em; color:#5A6A7E;">{{ c.cap }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- two-col: kit pieces / live menu -->
+    <div style="display:grid; grid-template-columns:1fr 480px; gap:24px; margin-top:24px; align-items:start;">
+
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div style="border:1px solid #1f2733; background:linear-gradient(160deg,#121823,#0b1018); padding:20px 22px;">
+          <div style="font-size:9.5px; letter-spacing:.24em; color:#93A6BB; margin-bottom:16px;">INPUT FIELD SKIN — JOIN CODE</div>
+          <div style="font-size:8.5px; letter-spacing:.18em; color:#5A6A7E; margin-bottom:7px;">IDLE</div>
+          <div style="position:relative; margin-bottom:20px;">
+            <span style="position:absolute; left:13px; top:50%; transform:translateY(-50%); color:#46566A; font-size:13px;">&rsaquo;</span>
+            <div style="height:46px; display:flex; align-items:center; background:#0E141D; border:1px solid #46566A; border-radius:2px; padding:0 14px 0 28px; color:#46566A; font-size:13px; letter-spacing:.28em;">LINK CODE</div>
+          </div>
+          <div style="font-size:8.5px; letter-spacing:.18em; color:#9FD0F2; margin-bottom:7px;">FOCUSED</div>
+          <div style="position:relative;">
+            <span style="position:absolute; left:13px; top:50%; transform:translateY(-50%); color:#ED1F3D; font-size:13px;">&rsaquo;</span>
+            <div style="height:46px; display:flex; align-items:center; background:#0E141D; border:1px solid #ED1F3D; border-radius:2px; padding:0 14px 0 28px; color:#9FD0F2; font-size:13px; letter-spacing:.3em; box-shadow:0 0 0 1px rgba(237,31,61,.35), 0 0 16px rgba(237,31,61,.28);">7K9Q<span style="display:inline-block; width:2px; height:17px; background:#ED1F3D; margin-left:4px; animation:mb-blink 1s step-end infinite;"></span></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:9px; letter-spacing:.24em; color:#738399; margin-bottom:12px;">PANEL FRAME — HOLDS AT LOBBY WIDTH (520)</div>
+          <div style="position:relative; width:100%; max-width:520px; background:linear-gradient(158deg,#1E2735 0%,#10151f 100%); border:1px solid #303C4C; border-left:2px solid #ED1F3D; clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);">
+            <div style="position:absolute; inset:0; background:radial-gradient(130% 100% at 50% 0%, transparent 42%, rgba(0,0,0,.42)); pointer-events:none;"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:13px 16px; border-bottom:1px solid #2a3545;">
+              <div style="display:flex; align-items:center; gap:9px;"><div style="width:0; height:0; border-left:5px solid transparent; border-right:5px solid transparent; border-top:9px solid #ED1F3D;"></div><span style="font-size:10px; letter-spacing:.2em; color:#93A6BB;">LOBBY PANEL</span></div>
+              <span style="font-size:9px; letter-spacing:.18em; color:#5A6A7E;">520PX</span>
+            </div>
+            <div style="padding:18px 16px 20px; position:relative;">
+              <div style="height:84px; border:1px dashed #2e3a4a; background:repeating-linear-gradient(135deg, rgba(255,255,255,.014) 0 6px, transparent 6px 12px); display:flex; align-items:center; justify-content:center;"><span style="font-size:9px; letter-spacing:.2em; color:#566578;">9&#8209;SLICE CONTENT REGION</span></div>
+              <div style="display:flex; gap:5px; margin-top:14px;"><div style="height:3px; flex:1; background:#ED1F3D;"></div><div style="height:3px; width:22px; background:#84BAD9;"></div><div style="height:3px; width:9px; background:#33414f;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE MAIN MENU -->
+      <div>
+        <div style="font-size:9px; letter-spacing:.24em; color:#738399; margin-bottom:12px;">LIVE MAIN MENU — HOVER · TAB&#8209;FOCUS · CLICK</div>
+        <div style="position:relative; border:1px solid #25303E; background:#080b11; overflow:hidden; min-height:560px; display:flex; align-items:center; justify-content:center; padding:34px;">
+          <div style="position:absolute; inset:-30px; background-image:radial-gradient(1.6px 1.6px at 12% 18%, rgba(255,255,255,.55), transparent 60%),radial-gradient(1px 1px at 27% 64%, rgba(200,215,230,.4), transparent 60%),radial-gradient(1.4px 1.4px at 47% 30%, rgba(159,208,242,.6), transparent 60%),radial-gradient(1px 1px at 63% 80%, rgba(255,255,255,.32), transparent 60%),radial-gradient(2px 2px at 80% 22%, rgba(255,255,255,.5), transparent 60%),radial-gradient(1px 1px at 90% 56%, rgba(185,205,225,.38), transparent 60%),radial-gradient(1px 1px at 8% 84%, rgba(255,255,255,.3), transparent 60%),radial-gradient(1.5px 1.5px at 36% 90%, rgba(237,31,61,.55), transparent 60%),radial-gradient(1px 1px at 56% 12%, rgba(255,255,255,.3), transparent 60%),radial-gradient(1px 1px at 72% 46%, rgba(255,255,255,.4), transparent 60%); background-repeat:no-repeat; animation:mb-drift 26s linear infinite alternate;"></div>
+          <div style="position:absolute; inset:0; background:radial-gradient(90% 70% at 50% 45%, transparent 30%, rgba(7,10,16,.86)); pointer-events:none;"></div>
+          <div style="position:absolute; top:18px; left:18px; width:12px; height:12px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#2f3a49; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#2f3a49; transform:translateX(-50%);"></div></div>
+          <div style="position:absolute; top:18px; right:18px; width:13px; height:13px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#F0820F; opacity:.65; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#F0820F; opacity:.65; transform:translateX(-50%);"></div></div>
+          <div style="position:absolute; bottom:18px; left:18px; width:12px; height:12px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#2f3a49; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#2f3a49; transform:translateX(-50%);"></div></div>
+          <div style="position:absolute; bottom:18px; right:18px; width:12px; height:12px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#2f3a49; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#2f3a49; transform:translateX(-50%);"></div></div>
+
+          <div style="position:relative; width:392px; background:linear-gradient(158deg,#1E2735 0%,#0f141e 100%); border:1px solid #303C4C; border-left:2px solid #ED1F3D; clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%); padding:30px 28px 28px;">
+            <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0,0,0,.38)); pointer-events:none;"></div>
+            <div style="position:relative;">
+              <div style="display:flex; align-items:center; gap:9px; margin-bottom:20px;">
+                <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #ED1F3D;"></div>
+                <span style="font-family:'Orbitron'; font-size:9.5px; letter-spacing:.34em; color:#93A6BB;">PROJECT&nbsp;MOBIUS</span>
+              </div>
+              <div style="font-family:'Orbitron'; font-size:29px; font-weight:600; letter-spacing:.04em; color:#EEF3F8; line-height:1;">RUNTIME LINK</div>
+              <div style="font-size:11px; letter-spacing:.06em; color:#AEBBCB; margin-top:9px;">Private co&#8209;op session</div>
+              <div style="display:flex; align-items:center; margin:20px 0;">
+                <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #ED1F3D; flex:none;"></div>
+                <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin-left:6px;"></div>
+                <div style="display:flex; gap:4px; margin-left:7px;"><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div></div>
+              </div>
+
+              <button onClick="{{ onHostA }}" style="display:block; width:100%; border:0; margin:0 0 12px; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                <div style="height:48px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#ED1F3D; color:#190406; font-size:12px; font-weight:700; letter-spacing:.24em; box-shadow:inset 0 1px 0 rgba(255,255,255,.22); transition:background .12s, transform .06s;" style-hover="background:#FF3A55;" style-active="background:#C50E28; transform:translateY(1px);">HOST SESSION</div>
+              </button>
+
+              <div style="display:flex; gap:10px; margin-bottom:12px;">
+                <div style="position:relative; flex:1;">
+                  <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#46566A; font-size:13px; pointer-events:none;">&rsaquo;</span>
+                  <input type="text" value="{{ joinValueA }}" onChange="{{ onInputA }}" maxLength="6" placeholder="LINK CODE" style="width:100%; height:48px; background:#0E141D; border:1px solid #46566A; border-radius:2px; color:#9FD0F2; font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:.3em; text-transform:uppercase; padding:0 12px 0 27px; outline:none; caret-color:#ED1F3D; transition:border-color .12s, box-shadow .12s;" style-focus="border-color:#ED1F3D; box-shadow:0 0 0 1px rgba(237,31,61,.4), 0 0 16px rgba(237,31,61,.28);">
+                </div>
+                <button onClick="{{ onJoinA }}" style="flex:none; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                  <div style="height:48px; display:flex; align-items:center; justify-content:center; padding:0 22px; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#84BAD9; color:#0B121A; font-size:12px; font-weight:700; letter-spacing:.22em; box-shadow:inset 0 1px 0 rgba(255,255,255,.28); transition:background .12s, transform .06s;" style-hover="background:#9ECCE7;" style-active="background:#6699BB; transform:translateY(1px);">JOIN</div>
+                </button>
+              </div>
+
+              <button onClick="{{ onQuitA }}" style="display:block; width:100%; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                <div style="height:44px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#19212D; color:#93A6BB; font-size:11px; font-weight:600; letter-spacing:.24em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s, color .12s, transform .06s;" style-hover="background:#232E3D; color:#C3CEDB;" style-active="background:#11161F; transform:translateY(1px);">QUIT</div>
+              </button>
+
+              <div style="margin-top:20px; padding-top:16px; border-top:1px solid #1B2330; min-height:58px;">
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="{{ statusDotA }}"></span>
+                  <span style="{{ statusTextA }}">{{ statusA }}</span>
+                </div>
+                <sc-if value="{{ hostingA }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:10.5px; letter-spacing:.34em; color:#9FD0F2; margin-top:9px;">LINK CODE &middot; {{ codeA }}</div>
+                </sc-if>
+                <sc-if value="{{ hasErrorA }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:9.5px; letter-spacing:.12em; color:#FF6E6E; margin-top:9px;">&#9888; {{ errorA }}</div>
+                </sc-if>
+              </div>
+
+              <div style="margin-top:18px; padding-top:14px; border-top:1px solid #1B2330;">
+                <div style="font-size:8px; letter-spacing:.22em; color:#5A6A7E; margin-bottom:9px;">DESTRUCTIVE — CONFIRM ACTIONS</div>
+                <button onClick="{{ onLeaveA }}" style="display:block; width:100%; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                  <div style="height:44px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#8E2030; color:#F0C3C9; font-size:11px; font-weight:600; letter-spacing:.24em; box-shadow:inset 0 1px 0 rgba(255,255,255,.09); transition:background .12s, transform .06s;" style-hover="background:#AB2A3D;" style-active="background:#66131F; transform:translateY(1px);">LEAVE RUN</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ORANGE IN CONTEXT ===================== -->
+  <div style="margin-top:62px; border-top:1px solid #F0820F; padding-top:8px;">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+      <span style="font-family:'Orbitron'; font-size:22px; letter-spacing:.12em; color:#EEF3F8;">ORANGE IN CONTEXT</span>
+      <span style="font-size:11px; letter-spacing:.3em; color:#F0820F;">SETTINGS ACCENT</span>
+    </div>
+    <div style="font-size:10px; letter-spacing:.1em; color:#738399; max-width:760px; line-height:1.6;">Non&#8209;destructive config swaps the hot red accent for orange — same kit, calmer signal. Try the toggle, volume bar, and quality picker.</div>
+
+    <div style="display:grid; grid-template-columns:420px 1fr; gap:24px; margin-top:26px; align-items:start;">
+
+      <!-- settings panel -->
+      <div style="position:relative; width:100%; background:linear-gradient(158deg,#1E2735 0%,#0f141e 100%); border:1px solid #303C4C; border-left:2px solid #F0820F; clip-path:polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%); padding:28px 26px 26px;">
+        <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0,0,0,.38)); pointer-events:none;"></div>
+        <div style="position:relative;">
+          <div style="display:flex; align-items:center; gap:9px; margin-bottom:18px;">
+            <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #F0820F;"></div>
+            <span style="font-family:'Orbitron'; font-size:9.5px; letter-spacing:.34em; color:#93A6BB;">SETTINGS</span>
+          </div>
+          <div style="font-family:'Orbitron'; font-size:26px; font-weight:600; letter-spacing:.04em; color:#EEF3F8; line-height:1;">SYSTEM CONFIG</div>
+
+          <div style="display:flex; align-items:center; margin:20px 0 4px;">
+            <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #F0820F; flex:none;"></div>
+            <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin-left:6px;"></div>
+            <div style="display:flex; gap:4px; margin-left:7px;"><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div><div style="width:3px;height:3px;border-radius:50%;background:#3a4658;"></div></div>
+          </div>
+
+          <!-- toggle row -->
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid #1B2330;">
+            <div><div style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8;">MOTION CUES</div><div style="font-size:8.5px; letter-spacing:.1em; color:#5A6A7E; margin-top:3px;">Ambient drift &amp; flicker</div></div>
+            <button onClick="{{ onToggleMotion }}" style="border:0; background:transparent; padding:0; cursor:pointer; position:relative; outline:none;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 12px rgba(255,255,255,.3);">
+              <div style="{{ toggleTrack }}"><div style="{{ toggleKnob }}"></div></div>
+            </button>
+          </div>
+
+          <!-- volume row -->
+          <div style="padding:15px 0; border-bottom:1px solid #1B2330;">
+            <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:11px;">
+              <span style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8;">MASTER VOLUME</span>
+              <span style="font-size:11px; letter-spacing:.12em; color:#FF9A2B;">{{ volPct }}</span>
+            </div>
+            <div style="display:flex; gap:2px;">
+              <sc-for list="{{ volSegs }}" as="vs" hint-placeholder-count="22"><div style="{{ vs.style }}" onClick="{{ vs.onClick }}"></div></sc-for>
+            </div>
+          </div>
+
+          <!-- quality row -->
+          <div style="padding:15px 0;">
+            <div style="font-size:10.5px; letter-spacing:.14em; color:#EEF3F8; margin-bottom:11px;">RENDER QUALITY</div>
+            <div style="display:flex; gap:8px;">
+              <sc-for list="{{ qual }}" as="q" hint-placeholder-count="3"><div style="{{ q.style }}" onClick="{{ q.onClick }}">{{ q.q }}</div></sc-for>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:18px;">
+            <button style="flex:1; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+              <div style="height:46px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#F0820F; color:#190E02; font-size:12px; font-weight:700; letter-spacing:.24em; box-shadow:inset 0 1px 0 rgba(255,255,255,.28); transition:background .12s, transform .06s;" style-hover="background:#FF9A2B;" style-active="background:#C7610A; transform:translateY(1px);">APPLY</div>
+            </button>
+            <button style="flex:none; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+              <div style="height:46px; display:flex; align-items:center; justify-content:center; padding:0 24px; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#19212D; color:#93A6BB; font-size:11px; font-weight:600; letter-spacing:.24em; box-shadow:inset 0 0 0 1px #2a3545; transition:background .12s, color .12s, transform .06s;" style-hover="background:#232E3D; color:#C3CEDB;" style-active="background:#11161F; transform:translateY(1px);">CANCEL</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- explainer + orange variant row -->
+      <div style="border:1px solid #25303E; background:linear-gradient(160deg,#121823,#0c1119); padding:22px 24px;">
+        <div style="font-size:9.5px; letter-spacing:.24em; color:#88B4D6; margin-bottom:13px;">WHEN TO REACH FOR ORANGE</div>
+        <div style="font-size:11px; line-height:1.8; color:#AEBBCB; max-width:560px;">Non&#8209;destructive config — Settings, toggles, calibration — swaps the hot <span style="color:#FF6E6E;">red</span> accent for <span style="color:#FF9A2B;">orange</span>. It reads calmer and less alarming, so the kit can stay warm without raising an alert. <span style="color:#FF6E6E;">Red</span> stays reserved for run&#8209;critical and destructive moments; the two never compete on one screen.</div>
+
+        <div style="display:flex; align-items:center; margin:24px 0 18px;">
+          <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #F0820F; flex:none;"></div>
+          <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin-left:6px;"></div>
+        </div>
+
+        <div style="font-size:9px; letter-spacing:.2em; color:#5A6A7E; margin-bottom:16px;">PRIMARY · ORANGE VARIANT — 5 STATES</div>
+        <div style="display:flex; gap:16px; flex-wrap:wrap;">
+          <sc-for list="{{ orangeCells }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+              <div style="{{ c.wrap }}"><div style="{{ c.ring }}"></div><div style="{{ c.btn }}">{{ c.text }}</div></div>
+              <div style="font-size:8px; letter-spacing:.18em; color:#5A6A7E;">{{ c.cap }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN · LOBBY ===================== -->
+  <div style="margin-top:62px; border-top:1px solid #ED1F3D; padding-top:8px;">
+    <div style="display:flex; align-items:center; gap:14px; margin-bottom:6px;">
+      <span style="font-family:'Orbitron'; font-size:22px; letter-spacing:.12em; color:#EEF3F8;">SCREEN · LOBBY</span>
+      <span style="font-size:11px; letter-spacing:.3em; color:#ED1F3D;">KIT REUSE</span>
+      <span style="font-size:9px; letter-spacing:.2em; color:#5A6A7E;">NO NEW STYLES — SAME CLASSES, WIDER PANEL</span>
+    </div>
+    <div style="font-size:10px; letter-spacing:.1em; color:#738399; max-width:760px; line-height:1.6;">Demonstrates the "case 1" workflow: a brand&#8209;new screen built entirely from the existing kit — same panel, buttons, status grammar, and ornaments. The only new pattern is the crew&#8209;row list (player + state), which becomes a reusable kit class.</div>
+
+    <div style="display:flex; justify-content:center; margin-top:30px;">
+      <div style="position:relative; border:1px solid #25303E; background:#080b11; overflow:hidden; width:100%; max-width:760px; min-height:600px; display:flex; align-items:center; justify-content:center; padding:40px;">
+        <div style="position:absolute; inset:-30px; background-image:radial-gradient(1.6px 1.6px at 14% 20%, rgba(255,255,255,.5), transparent 60%),radial-gradient(1px 1px at 30% 66%, rgba(200,215,230,.38), transparent 60%),radial-gradient(1.4px 1.4px at 50% 28%, rgba(159,208,242,.55), transparent 60%),radial-gradient(1px 1px at 66% 80%, rgba(255,255,255,.3), transparent 60%),radial-gradient(2px 2px at 82% 20%, rgba(255,255,255,.45), transparent 60%),radial-gradient(1px 1px at 90% 56%, rgba(185,205,225,.35), transparent 60%),radial-gradient(1px 1px at 9% 82%, rgba(255,255,255,.28), transparent 60%),radial-gradient(1.5px 1.5px at 38% 88%, rgba(237,31,61,.5), transparent 60%); background-repeat:no-repeat; animation:mb-drift 30s linear infinite alternate;"></div>
+        <div style="position:absolute; inset:0; background:radial-gradient(90% 70% at 50% 45%, transparent 30%, rgba(7,10,16,.86)); pointer-events:none;"></div>
+        <div style="position:absolute; top:18px; left:18px; width:12px; height:12px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#2f3a49; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#2f3a49; transform:translateX(-50%);"></div></div>
+        <div style="position:absolute; top:18px; right:18px; width:13px; height:13px; pointer-events:none;"><div style="position:absolute; top:50%; left:0; width:100%; height:1px; background:#F0820F; opacity:.6; transform:translateY(-50%);"></div><div style="position:absolute; left:50%; top:0; height:100%; width:1px; background:#F0820F; opacity:.6; transform:translateX(-50%);"></div></div>
+
+        <!-- LOBBY PANEL (520) -->
+        <div style="position:relative; width:520px; background:linear-gradient(158deg,#1E2735 0%,#0f141e 100%); border:1px solid #303C4C; border-left:2px solid #ED1F3D; clip-path:polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 0 100%); padding:30px 30px 28px;">
+          <div style="position:absolute; inset:0; background:radial-gradient(120% 90% at 50% 0%, transparent 45%, rgba(0,0,0,.38)); pointer-events:none;"></div>
+          <div style="position:relative;">
+
+            <!-- header row: wordmark + join code -->
+            <div style="display:flex; align-items:flex-start; justify-content:space-between;">
+              <div>
+                <div style="display:flex; align-items:center; gap:9px; margin-bottom:16px;">
+                  <div style="width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:11px solid #ED1F3D;"></div>
+                  <span style="font-family:'Orbitron'; font-size:9.5px; letter-spacing:.34em; color:#93A6BB;">CREW LOBBY</span>
+                </div>
+                <div style="font-family:'Orbitron'; font-size:27px; font-weight:600; letter-spacing:.04em; color:#EEF3F8; line-height:1;">STANDBY MUSTER</div>
+              </div>
+              <div style="text-align:right; flex:none;">
+                <div style="font-size:8px; letter-spacing:.22em; color:#5A6A7E; margin-bottom:5px;">LINK CODE</div>
+                <div style="font-size:15px; letter-spacing:.3em; color:#9FD0F2;">{{ lobbyCode }}</div>
+              </div>
+            </div>
+
+            <!-- node-rule divider with count -->
+            <div style="display:flex; align-items:center; margin:20px 0 6px;">
+              <div style="width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid #ED1F3D; flex:none;"></div>
+              <div style="height:1px; flex:1; background:linear-gradient(90deg,#303C4C 72%, transparent); margin:0 12px;"></div>
+              <span style="font-size:9px; letter-spacing:.2em; color:#738399;">{{ lobbyCount }}</span>
+            </div>
+
+            <!-- crew rows -->
+            <div style="border:1px solid #1B2330; border-bottom:0; margin-top:10px;">
+              <sc-for list="{{ lobbyPlayers }}" as="p" hint-placeholder-count="4">
+                <div style="{{ p.rowStyle }}" onClick="{{ p.onToggle }}">
+                  <span style="{{ p.slotStyle }}">{{ p.slot }}</span>
+                  <span style="{{ p.dot }}"></span>
+                  <span style="{{ p.nameStyle }}">{{ p.name }}</span>
+                  <span style="{{ p.tagStyle }}">{{ p.tag }}</span>
+                  <span style="{{ p.readyStyle }}">{{ p.readyText }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <!-- ready meter -->
+            <div style="margin-top:18px;">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:9px;">
+                <span style="font-size:9px; letter-spacing:.18em; color:#738399;">CREW READINESS</span>
+                <span style="font-size:10px; letter-spacing:.14em; color:#84D6BE;">{{ lobbyReadyLabel }}</span>
+              </div>
+              <div style="display:flex; gap:2px;">
+                <sc-for list="{{ lobbyMeter }}" as="m" hint-placeholder-count="24"><div style="{{ m }}"></div></sc-for>
+              </div>
+            </div>
+
+            <!-- actions -->
+            <div style="display:flex; gap:10px; margin-top:22px;">
+              <button onClick="{{ onSelfReady }}" style="flex:none; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                <div style="height:48px; display:flex; align-items:center; justify-content:center; padding:0 24px; clip-path:polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); background:#84BAD9; color:#0B121A; font-size:12px; font-weight:700; letter-spacing:.22em; box-shadow:inset 0 1px 0 rgba(255,255,255,.28); transition:background .12s, transform .06s;" style-hover="background:#9ECCE7;" style-active="background:#6699BB; transform:translateY(1px);">TOGGLE READY</div>
+              </button>
+              <button style="flex:1; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                <div style="{{ lobbyStartStyle }}">{{ lobbyStartText }}</div>
+              </button>
+            </div>
+
+            <!-- destructive -->
+            <div style="margin-top:12px;">
+              <button style="display:block; width:100%; border:0; margin:0; padding:0; background:transparent; cursor:pointer; position:relative; outline:none; font:inherit;" style-focus="outline:2px solid #FFFFFF; outline-offset:3px; box-shadow:0 0 14px rgba(255,255,255,.32);">
+                <div style="height:44px; display:flex; align-items:center; justify-content:center; clip-path:polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%); background:#8E2030; color:#F0C3C9; font-size:11px; font-weight:600; letter-spacing:.24em; box-shadow:inset 0 1px 0 rgba(255,255,255,.09); transition:background .12s, transform .06s;" style-hover="background:#AB2A3D;" style-active="background:#66131F; transform:translateY(1px);">LEAVE RUN</div>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px; border:1px solid #303C4C; background:linear-gradient(90deg,rgba(237,31,61,.06),transparent); padding:13px 18px; font-size:9.5px; letter-spacing:.06em; line-height:1.6; color:#8595a8; max-width:760px;">
+      <span style="color:#ED1F3D; letter-spacing:.18em;">HANDOFF NOTE</span> &nbsp; This screen ships to Unity as a single <span style="color:#C3CEDB;">Lobby.uxml</span> — it reuses <span style="color:#C3CEDB;">.mob-panel</span>, <span style="color:#C3CEDB;">.mob-btn--secondary/--destructive</span>, <span style="color:#C3CEDB;">.mob-status</span> dot colors, <span style="color:#C3CEDB;">.mob-noderule</span> and <span style="color:#C3CEDB;">.mob-meter</span>. The one new pattern, <span style="color:#C3CEDB;">.mob-crew-row</span>, is added to MobiusKit.uss so every future roster screen inherits it.
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    mA: { hosting:false, code:'', status:'STANDBY · LINK IDLE', kind:'idle', error:'', join:'' },
+    settings: { motion:true, quality:'HIGH', volume:0.62 },
+    lobby: {
+      code: 'K7P2QR',
+      players: [
+        { name:'OPERATOR-01', tag:'HOST', online:true,  ready:true,  you:true },
+        { name:'VESPER',      tag:'',     online:true,  ready:true,  you:false },
+        { name:'HALON',       tag:'',     online:true,  ready:false, you:false },
+        { name:'————',        tag:'OPEN', online:false, ready:false, you:false },
+      ],
+    },
+  };
+
+  CHARS = 'ABCDEFGHJKLMNPRTUVWXY3479';
+  gen(){ let c=''; for(let i=0;i<6;i++) c += this.CHARS[Math.floor(Math.random()*this.CHARS.length)]; return c; }
+  kc(k){ return ({ idle:'#738399', active:'#9FD0F2', green:'#84D6BE', error:'#FF6E6E' })[k] || '#738399'; }
+
+  host(key){ this.setState(s => ({ [key]: { ...s[key], hosting:true, code:this.gen(), status:'HOSTING · AWAITING LINK', kind:'active', error:'' } })); }
+  input(key,e){ const v = (e.target.value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6); this.setState(s => ({ [key]: { ...s[key], join:v, error:'' } })); }
+  join(key){
+    const v = (this.state[key].join||'').trim();
+    if(v.length < 6){ this.setState(s => ({ [key]: { ...s[key], error:'INVALID LINK CODE — NEEDS 6 CHARS', status:'STANDBY · LINK IDLE', kind:'idle', hosting:false } })); return; }
+    this.setState(s => ({ [key]: { ...s[key], error:'', status:'LINKING…', kind:'green', hosting:false } }));
+    clearTimeout(this['_t'+key]);
+    this['_t'+key] = setTimeout(() => this.setState(s => ({ [key]: { ...s[key], status:'LINKED · SESSION READY', kind:'green' } })), 950);
+  }
+  quit(key){
+    this.setState(s => ({ [key]: { ...s[key], status:'SHUTDOWN…', kind:'error' } }));
+    clearTimeout(this['_q'+key]);
+    this['_q'+key] = setTimeout(() => this.setState(s => ({ [key]: { ...s[key], status:'STANDBY · LINK IDLE', kind:'idle' } })), 800);
+  }
+  leave(key){
+    this.setState(s => ({ [key]: { ...s[key], hosting:false, code:'', status:'RUN ABORTED', kind:'error' } }));
+    clearTimeout(this['_l'+key]);
+    this['_l'+key] = setTimeout(() => this.setState(s => ({ [key]: { ...s[key], status:'STANDBY · LINK IDLE', kind:'idle' } })), 1100);
+  }
+
+  toggleReady(i){ this.setState(s => { const players = s.lobby.players.map((p,idx) => idx===i && p.online && !p.you ? { ...p, ready:!p.ready } : p); return { lobby: { ...s.lobby, players } }; }); }
+  toggleSelfReady(){ this.setState(s => { const players = s.lobby.players.map(p => p.you ? { ...p, ready:!p.ready } : p); return { lobby: { ...s.lobby, players } }; }); }
+
+  toggleMotion(){ this.setState(s => ({ settings: { ...s.settings, motion: !s.settings.motion } })); }
+  setQuality(q){ this.setState(s => ({ settings: { ...s.settings, quality: q } })); }
+  setVolume(v){ this.setState(s => ({ settings: { ...s.settings, volume: Math.max(0.05, Math.min(1, v)) } })); }
+
+  cells(v){
+    const clip = 'polygon(0 0, calc(100% - 7px) 0, 100% 7px, 100% 100%, 0 100%)';
+    const states = ['default','hover','focused','pressed','disabled'];
+    const cap = { default:'IDLE', hover:'HOVER', focused:'FOCUSED', pressed:'PRESSED', disabled:'DISABLED' };
+    return states.map(st => {
+      const btn = {
+        position:'relative', display:'flex', alignItems:'center', justifyContent:'center',
+        height:'44px', minWidth:'120px', padding:'0 16px',
+        fontFamily:"'JetBrains Mono', monospace", fontSize:'10.5px', fontWeight: v.bold ? 700 : 600,
+        letterSpacing:'.2em', textTransform:'uppercase', whiteSpace:'nowrap',
+        clipPath: clip, background: v.fill, color: v.fg,
+        boxShadow:'inset 0 1px 0 rgba(255,255,255,.16)'
+      };
+      let ringBg = 'transparent';
+      const wrap = { position:'relative', display:'inline-flex' };
+      if(st === 'hover'){ btn.background = v.hover; wrap.boxShadow = '0 0 18px ' + v.glow; }
+      if(st === 'focused'){ ringBg = '#FFFFFF'; wrap.boxShadow = '0 0 16px rgba(255,255,255,.4)'; }
+      if(st === 'pressed'){ btn.background = v.press; btn.transform = 'translateY(1px)'; btn.boxShadow = 'inset 0 2px 5px rgba(0,0,0,.45)'; }
+      if(st === 'disabled'){ btn.background = '#222C3A'; btn.color = 'rgba(185,200,215,.30)'; btn.boxShadow = 'inset 0 1px 0 rgba(255,255,255,.05)'; }
+      return {
+        wrap, ring: { position:'absolute', inset:'-3px', clipPath: clip, background: ringBg, pointerEvents:'none' },
+        btn, text: v.text, cap: cap[st]
+      };
+    });
+  }
+
+  buildMatrix(){
+    const V = {
+      primary:    { label:'PRIMARY',     sub:'Go · Host / Start',      text:'HOST',      bold:true,  fg:'#190406', fill:'#ED1F3D', hover:'#FF3A55', press:'#C50E28', glow:'rgba(255,58,85,.55)' },
+      secondary:  { label:'SECONDARY',   sub:'Neutral · Join / Leave', text:'JOIN',      bold:true,  fg:'#0B121A', fill:'#84BAD9', hover:'#9ECCE7', press:'#6699BB', glow:'rgba(132,186,217,.5)' },
+      quiet:      { label:'QUIET',       sub:'Low · Quit',             text:'QUIT',      bold:false, fg:'#93A6BB', fill:'#19212D', hover:'#232E3D', press:'#11161F', glow:'rgba(130,160,185,.24)' },
+      destructive:{ label:'DESTRUCTIVE', sub:'Confirm · Leave Run',    text:'LEAVE RUN', bold:false, fg:'#F0C3C9', fill:'#8E2030', hover:'#AB2A3D', press:'#66131F', glow:'rgba(171,42,61,.5)' },
+    };
+    const order = ['primary','secondary','quiet','destructive'];
+    return order.map(k => ({ key:k, label:V[k].label, sub:V[k].sub, cells:this.cells(V[k]) }));
+  }
+
+  menu(s){
+    return {
+      status: s.status,
+      statusDot: { width:'7px', height:'7px', borderRadius:'50%', background:this.kc(s.kind), boxShadow:'0 0 8px '+this.kc(s.kind), flex:'none', display:'inline-block' },
+      statusText: { fontFamily:"'JetBrains Mono', monospace", fontSize:'10.5px', letterSpacing:'.18em', color:this.kc(s.kind) },
+      hosting: s.hosting, code: s.code, hasError: !!s.error, error: s.error, join: s.join,
+    };
+  }
+
+  renderVals(){
+    const tokens = [
+      ['BASE','#0B0F16'],['PANEL','#161D29'],['PRIMARY','#ED1F3D'],['ORANGE','#F0820F'],['DESTRUCTIVE','#8E2030'],
+      ['SECONDARY','#84BAD9'],['QUIET','#19212D'],['FOCUS','#FFFFFF'],['ACTIVE','#9FD0F2'],
+      ['SUCCESS','#84D6BE'],['ERROR','#FF6E6E'],['BORDER','#46566A'],['INPUT','#0E141D'],
+      ['TITLE','#EEF3F8'],['SUBTITLE','#AEBBCB'],
+    ].map(([name,hex]) => ({
+      name, hex,
+      sw: { height:'40px', background:hex, border:'1px solid rgba(130,150,175,.22)', boxShadow: (hex==='#0B0F16'||hex==='#0E141D') ? 'inset 0 0 0 1px rgba(130,150,175,.12)' : 'none' }
+    }));
+
+    const ticks = Array.from({length:21}, (_,i) => ({ width:'2px', height:(i%5===0?15:7)+'px', background:(i===10?'#ED1F3D':'#3a4658'), flex:'none' }));
+    const dots = Array.from({length:13}, (_,i) => { let bg='#3a4658', sz=3; if(i===4){bg='#F0820F';sz=4;} if(i===9){bg='#ED1F3D';sz=4;} return { width:sz+'px', height:sz+'px', borderRadius:'50%', background:bg, flex:'none' }; });
+    const segs = Array.from({length:26}, (_,i) => ({ flex:'1', height:'9px', background:(i<6?'#ED1F3D':(i===6?'#F0820F':'#222C3A')) }));
+
+    const set = this.state.settings;
+    const volFill = Math.max(1, Math.round(set.volume*22));
+    const volSegs = Array.from({length:22}, (_,i) => ({ style:{ flex:'1', height:'12px', cursor:'pointer', background:(i<volFill?'#F0820F':'#222C3A'), boxShadow:(i===volFill-1?'0 0 8px rgba(240,130,15,.65)':'none'), transition:'background .1s' }, onClick:()=>this.setVolume((i+1)/22) }));
+    const qual = ['LOW','MED','HIGH'].map(q => { const on = set.quality===q; return { q, style:{ flex:'1', height:'36px', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', fontFamily:"'JetBrains Mono', monospace", fontSize:'10px', fontWeight:on?700:600, letterSpacing:'.18em', clipPath:'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%)', background:on?'#F0820F':'#19212D', color:on?'#190E02':'#93A6BB', boxShadow:on?'inset 0 1px 0 rgba(255,255,255,.22)':'inset 0 0 0 1px #2a3545' }, onClick:()=>this.setQuality(q) }; });
+    const toggleTrack = { position:'relative', width:'50px', height:'24px', flex:'none', cursor:'pointer', clipPath:'polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%)', background:set.motion?'#F0820F':'#19212D', boxShadow:set.motion?'inset 0 1px 0 rgba(255,255,255,.28)':'inset 0 0 0 1px #2a3545', transition:'background .15s' };
+    const toggleKnob = { position:'absolute', top:'3px', left:set.motion?'29px':'3px', width:'18px', height:'18px', background:set.motion?'#190E02':'#46566A', clipPath:'polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%)', transition:'left .15s, background .15s' };
+
+    const lob = this.state.lobby;
+    const lobbyPlayers = lob.players.map((p,i) => {
+      const slotIdx = String(i+1).padStart(2,'0');
+      const stateColor = !p.online ? '#5A6A7E' : (p.ready ? '#84D6BE' : '#F0820F');
+      return {
+        name:p.name, tag:p.tag, you:p.you, open:!p.online,
+        slot:slotIdx,
+        rowStyle:{ display:'flex', alignItems:'center', gap:'12px', padding:'13px 14px', background:p.you?'rgba(132,186,217,.06)':'transparent', borderLeft:'2px solid '+(p.you?'#84BAD9':'transparent'), borderBottom:'1px solid #1B2330', cursor: (p.online ? 'pointer' : 'default') },
+        dot:{ width:'7px', height:'7px', borderRadius:'50%', flex:'none', background:stateColor, boxShadow: p.online?('0 0 8px '+stateColor):'none' },
+        slotStyle:{ fontSize:'9px', letterSpacing:'.14em', color:'#5A6A7E', width:'18px', flex:'none' },
+        nameStyle:{ fontSize:'12px', letterSpacing:'.08em', color:p.online?(p.you?'#EEF3F8':'#C3CEDB'):'#46566A', flex:'1' },
+        tagStyle:{ fontSize:'8px', letterSpacing:'.2em', color: p.tag==='HOST'?'#9FD0F2':'#5A6A7E', border:'1px solid '+(p.tag==='HOST'?'#2f4a5c':'#2a3545'), padding:'3px 6px', display:p.tag?'block':'none' },
+        readyStyle:{ fontSize:'9px', letterSpacing:'.18em', color:stateColor, width:'74px', textAlign:'right', flex:'none' },
+        readyText: !p.online ? 'OPEN' : (p.ready ? 'READY' : 'STANDBY'),
+        canToggle: p.online && !p.you,
+        onToggle: () => p.you ? this.toggleSelfReady() : this.toggleReady(i),
+      };
+    });
+    const online = lob.players.filter(p=>p.online);
+    const readyCount = online.filter(p=>p.ready).length;
+    const allReady = readyCount === online.length;
+    const lobbyMeter = Array.from({length:24}, (_,i) => ({ flex:'1', height:'9px', background: i < Math.round((readyCount/online.length)*24) ? '#84D6BE' : '#222C3A' }));
+
+    const A = this.menu(this.state.mA);
+    return {
+      tokens, ticks, dots, segs,
+      lobbyPlayers, lobbyCode:lob.code, lobbyCount:online.length+' / 4 LINKED',
+      lobbyReadyLabel: readyCount+' / '+online.length+' READY', lobbyMeter,
+      lobbyAllReady: allReady, lobbyStartText: allReady ? 'START RUN' : 'AWAITING CREW',
+      lobbyStartStyle: { height:'48px', display:'flex', alignItems:'center', justifyContent:'center', clipPath:'polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%)', background: allReady?'#ED1F3D':'#222C3A', color: allReady?'#190406':'rgba(185,200,215,.30)', fontSize:'12px', fontWeight:700, letterSpacing:'.24em', boxShadow: allReady?'inset 0 1px 0 rgba(255,255,255,.22)':'inset 0 1px 0 rgba(255,255,255,.05)', transition:'background .12s' },
+      onSelfReady:()=>this.toggleSelfReady(),
+      volSegs, qual, toggleTrack, toggleKnob, motionOn:set.motion, volPct:Math.round(set.volume*100)+'%',
+      onToggleMotion:()=>this.toggleMotion(),
+      orangeCells: this.cells({ text:'APPLY', bold:true, fg:'#190E02', fill:'#F0820F', hover:'#FF9A2B', press:'#C7610A', glow:'rgba(255,154,43,.55)' }),
+      matrixA: this.buildMatrix(),
+      statusA:A.status, statusDotA:A.statusDot, statusTextA:A.statusText, hostingA:A.hosting, codeA:A.code, hasErrorA:A.hasError, errorA:A.error, joinValueA:A.join,
+      onHostA:()=>this.host('mA'), onJoinA:()=>this.join('mA'), onInputA:(e)=>this.input('mA',e), onQuitA:()=>this.quit('mA'), onLeaveA:()=>this.leave('mA'),
+    };
+  }
+}
+</script>
+</body>
+</html>
