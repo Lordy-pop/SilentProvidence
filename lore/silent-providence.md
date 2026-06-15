@@ -301,6 +301,14 @@ The philosophical conflict is not alien vs. human. It is human vs. human over wh
 
 Both came from the same faith. Both believe the other betrayed it. Neither is simply wrong.
 
+**The Zealots:**
+
+Not everyone who broke from the White Throne chose the Murmur's patience. A second branch of the same fracture — same grievance, same origin, opposite instinct — answers the crusade the way the crusade answers everything: with force. Sabotage. Raids. Strikes dressed as liberation. They call themselves **The Zealots**, after the old word for those who would not wait for the law to be fulfilled and tried to end it themselves.
+
+The Murmur and the Zealots do not fight each other the way either fights the White Throne, but they do fight. The Murmur sees in the Zealots' methods the same mistake the White Throne made at galactic scale: force protecting what was only ever meant to be given freely, judgment in service of grace. The Zealots see in the Murmur's patience a kind of surrender — grace that lets the law keep operating because no one will stop it. Both are right about the other's risk. Neither has stopped.
+
+**Alien allies:** Among the species fighting alongside the resistance is a bioelectric species — small, jellyfish-like, and ferociously intelligent — whose neural architecture can interface directly with human-built robotic bodies. What the White Throne's army built to extend its reach, this species can reach into and turn around. *(Full species file: TBD — more to come.)*
+
 **The theological architecture of the White Throne:**
 
 *Does sin only exist in humans? Does the expansion of human grace also expand judgment onto the aliens?*
@@ -343,13 +351,17 @@ The Murmur does not argue with the White Throne's math. It simply keeps doing th
 
 ## The Mobius Drive
 
-The first warp drive — humanity's invention. Named for its topology: a path that doubles back, that turns the impossible distance into something traversable.
+The first true warp drive ever built. Named for its topology: a path that doubles back, that turns the impossible distance into something traversable. Earlier eras crossed the dark on slower engines — the Mobius Drive is something new, and something the White Throne built on purpose.
 
-Before the White Throne war, the Mobius Drive was the thing that made the galaxy small enough to hold together. During it — the thing that lets the crusade reach further. Controlling it means controlling the pace of judgment.
+It was forged inside a White Throne facility, by engineers working under the Throne itself. In Throne hands, it would not just move ships — it would let the crusade arrive everywhere at once, collapsing the distance that has kept the Murmur and the Zealots alive this long. Controlling it means controlling the pace of judgment — and in Throne hands, it would mean removing the pace altogether.
 
-*The original game is set in the White Throne era: Tato survivors of a failed Murmur heist — carrying the stolen Mobius Drive, hunted by the White Throne's annihilation army across the galaxy.*
+Its theft was not luck, and not a Murmur operation. The Zealots paid a mercenary crew — a "family" in the mafia sense, taking jobs for the reward rather than the cause — to break into the facility and take it before it could be deployed.
 
-**The Ember Moths** — the White Throne's annihilation army. Named for the ember that starts the fire of annihilation. The thing that burns what grace left behind. Their game designation: Project Mobius.
+*The original game is set in the immediate aftermath: that crew, hunted by the White Throne's annihilation army across the galaxy, carrying the stolen Mobius Drive.*
+
+**The crew:** None of its members know what they actually are — Tatos, riding inside human-built robot bodies, running jobs for the family because the run is the only joy left to find in a hunted galaxy. The Zealots' contract was just the latest score until the Drive made them the most wanted thing alive. By the end, whatever the job paid, they give the Drive up rather than let the Throne take it back — the same instinct that once put Mundo on a hull, run through a body that doesn't know its own name.
+
+**The Ember Moths** — the White Throne's annihilation army. Named for the ember that starts the fire of annihilation. The thing that burns what grace left behind. Their game designation for the hunt: Project Mobius.
 
 ---
 
@@ -363,10 +375,13 @@ Before the White Throne war, the Mobius Drive was the thing that made the galaxy
 - The physically superior alien species — who are they
 - Does the White Throne war end — and how — *partial answer: the Tatos protecting the Murmur close the ledger; see theology.md*
 - What is the theological legacy of the Holding by the millennium — faction, religion, or mythology
-- Who leads the human resistance faction — name, background, motivation
-- Campaign era — to be chosen together
+- ~~Who leads the human resistance faction — name, background, motivation~~ *Partial answer: the resistance is two branches, the Murmur (hidden, patient) and the Zealots (active, militant), who clash over method as much as they fight the Throne. Named leaders for either branch — still TBD.*
+- ~~Campaign era — to be chosen together~~ *Answered: Era V, "The Ledger" — the immediate aftermath of the Mobius Drive heist.*
 - ~~The Flattening — cure for the Hollowing, or its final symptom?~~ *Answered: symptom AND vehicle. The Hollowing's second act, dressed as resolution. Earth voted for the exit in the full exercise of its Hollowed values. The nail that sticks out gets pulled, and Earth called it a win.*
 - Full ordering of the Earth-and-flight eras: Hollowing → Flattening → Holding/Great Space War → Departure → Crossing → Inheritance → Arrival — confirm sequence
+- Name of the bioelectric jellyfish-like alien species allied with the resistance — more detail coming
+- Name of the mercenary "family" (the player crew) and its head
+- When/why the Murmur and Zealots first diverged
 
 ---
 
