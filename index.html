@@ -1911,12 +1911,13 @@
 
       /* Main content layout adjustments */
       #main {
-        padding: 24px 16px !important;
+        padding: 24px 16px calc(48px + env(safe-area-inset-bottom)) 16px !important;
         margin-left: 2.5vw !important;
         margin-right: 2.5vw !important;
         margin-top: calc(3.8vh + 60px) !important;
         margin-bottom: 3.8vh !important;
         height: calc(100vh - 7.6vh - 60px) !important;
+        height: calc(100dvh - 7.6vh - 60px) !important;
       }
 
       /* Align viewport marks to mobile margins */
