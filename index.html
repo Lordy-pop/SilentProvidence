@@ -53,7 +53,7 @@
       --mob-ease-exit: cubic-bezier(0.4, 0, 1, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent !important; -webkit-tap-highlight-color: rgba(0,0,0,0) !important; outline: none !important; }
 
     body {
       background: #000000; /* Dark space around TV bezel */
@@ -1796,6 +1796,182 @@
       bottom: -14px;
       z-index: 10;
     }
+
+    /* Hide mobile menu elements by default on desktop */
+    @media (min-width: 768px) {
+      #mobile-menu-trigger, #mobile-menu-overlay {
+        display: none !important;
+      }
+    }
+
+    /* ── Responsive Text Utility ── */
+    .desktop-text {
+      display: inline;
+    }
+    .mobile-text {
+      display: none;
+    }
+
+    /* ── Mobile Viewport Adaptations ── */
+    @media (max-width: 767px) {
+      .desktop-text {
+        display: none !important;
+      }
+      .mobile-text {
+        display: inline !important;
+      }
+
+      /* Symmetrically position mobile menu trigger and monitor controls */
+      #mobile-menu-trigger {
+        position: absolute;
+        top: calc(3.8vh + 12px);
+        left: calc(2.2vw + 16px);
+        z-index: 120;
+        display: none; /* initialized in JS by class .visible */
+        align-items: center;
+        background: rgba(7, 11, 19, 0.85);
+        border: 1px solid var(--border);
+        color: var(--secondary-blue);
+        cursor: pointer;
+        font-family: 'Space Mono', monospace;
+        font-size: 11px;
+        padding: 6px 12px;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        user-select: none;
+        transition: all var(--mob-dur-fast) var(--mob-ease-standard);
+        touch-action: manipulation;
+        border-radius: 0;
+        outline: none;
+      }
+      #mobile-menu-trigger.visible {
+        display: flex;
+      }
+      #mobile-menu-trigger::after {
+        content: "";
+        position: absolute;
+        top: 14px;
+        left: 0;
+        right: 0;
+        bottom: -14px;
+        z-index: 10;
+      }
+      #mobile-menu-trigger:hover {
+        color: var(--text);
+        text-shadow: 0 0 4px var(--secondary-blue);
+      }
+      #mobile-menu-trigger:active {
+        transform: scale(0.95);
+      }
+
+      #monitor-controls {
+        top: calc(3.8vh + 12px) !important;
+        right: calc(2.2vw + 16px) !important;
+        gap: 8px !important;
+        padding: 6px 10px !important;
+      }
+
+      /* Sliding Glassmorphic Navigation Drawer */
+      #sidebar {
+        position: fixed !important;
+        z-index: 1000 !important;
+        left: 0 !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        width: 280px !important;
+        min-width: 280px !important;
+        background: rgba(10, 15, 24, 0.92) !important;
+        backdrop-filter: blur(20px) !important;
+        border-right: 1px solid var(--border) !important;
+        transform: translateX(-100%) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        padding: calc(3.8vh + 50px) 24px 40px !important;
+        box-shadow: 15px 0 35px rgba(0, 0, 0, 0.6) !important;
+      }
+      #sidebar.open {
+        transform: translateX(0) !important;
+      }
+
+      /* Backdrop Overlay */
+      #mobile-menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+      }
+      #mobile-menu-overlay.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* Main content layout adjustments */
+      #main {
+        padding: 24px 16px !important;
+        margin-left: 2.5vw !important;
+        margin-right: 2.5vw !important;
+        margin-top: calc(3.8vh + 60px) !important;
+        margin-bottom: 3.8vh !important;
+        height: calc(100vh - 7.6vh - 60px) !important;
+      }
+
+      /* Align viewport marks to mobile margins */
+      .viewport-tl { left: 2.5vw !important; top: 3.8vh !important; }
+      .viewport-bl { left: 2.5vw !important; bottom: 3.8vh !important; }
+      .viewport-tr { right: 2.5vw !important; top: 3.8vh !important; }
+      .viewport-br { right: 2.5vw !important; bottom: 3.8vh !important; }
+
+      /* Hero typography scaling */
+      .home-hero h1 {
+        font-size: clamp(2.5rem, 8vw, 4rem) !important;
+        line-height: 1.1 !important;
+      }
+      .home-hero .tagline {
+        font-size: 14px !important;
+      }
+
+      /* Stack two-column grids */
+      .g2 {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+      }
+
+      /* Stack Codex Log Archives */
+      .archives-layout {
+        flex-direction: column !important;
+        height: auto !important;
+        align-items: stretch !important;
+        gap: 16px !important;
+      }
+      .archives-sidebar {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: 200px !important;
+      }
+      .terminal-screen {
+        height: 380px !important;
+      }
+
+      /* Adjust lobby simulator elements for tight viewports */
+      .lobby {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+      .lobby .arrow {
+        text-align: center !important;
+        transform: rotate(90deg) !important;
+        margin: 4px 0 !important;
+      }
+      
+      /* Make sure inputs and interactive elements are touch friendly */
+      input, select, button, .nav-item {
+        touch-action: manipulation;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1891,13 +2067,28 @@
     <div id="boot-diagnostics" style="display: none; width: 100%; white-space: pre-wrap; margin-top: 20px;"></div>
   </div>
 
+  <!-- Mobile Menu Drawer Overlay -->
+  <div id="mobile-menu-overlay"></div>
+
+  <!-- Mobile Menu Trigger -->
+  <button id="mobile-menu-trigger" title="Toggle Menu">[ MENU ]</button>
+
   <!-- Floating Monitor Controls -->
   <div id="monitor-controls">
-    <button class="monitor-btn" id="btn-zoom-out" title="Zoom Out">[ ZOOM - ]</button>
+    <button class="monitor-btn" id="btn-zoom-out" title="Zoom Out">
+      <span class="desktop-text">[ ZOOM - ]</span>
+      <span class="mobile-text">[ - ]</span>
+    </button>
     <span id="zoom-display" title="Click to reset zoom">100%</span>
-    <button class="monitor-btn" id="btn-zoom-in" title="Zoom In">[ ZOOM + ]</button>
-    <span style="color: var(--border); margin: 0 4px;">|</span>
-    <button class="monitor-btn" id="btn-toggle-aberration" title="Toggle Chromatic Aberration">[ CHROMATIC: ON ]</button>
+    <button class="monitor-btn" id="btn-zoom-in" title="Zoom In">
+      <span class="desktop-text">[ ZOOM + ]</span>
+      <span class="mobile-text">[ + ]</span>
+    </button>
+    <span class="desktop-text" style="color: var(--border); margin: 0 4px;">|</span>
+    <button class="monitor-btn" id="btn-toggle-aberration" title="Toggle Chromatic Aberration">
+      <span class="desktop-text" id="chromatic-desktop-text">[ CHROMATIC: ON ]</span>
+      <span class="mobile-text" id="chromatic-mobile-text">[ FX: ON ]</span>
+    </button>
   </div>
 
   <!-- Screen Layout Zoom Wrapper -->
@@ -3515,9 +3706,13 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     // Fade out boot screen
     bootScreen.classList.add('powered-on');
     
-    // Show zoom monitor controls
+    // Show zoom monitor controls and mobile menu trigger
     if (controls) {
       controls.classList.add('visible');
+    }
+    const menuTrigger = document.getElementById('mobile-menu-trigger');
+    if (menuTrigger) {
+      menuTrigger.classList.add('visible');
     }
     
     // Activate starfield
@@ -3627,16 +3822,26 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     }
   }
 
+  function updateAberrationButtonText() {
+    const desktopSpan = document.getElementById('chromatic-desktop-text');
+    const mobileSpan = document.getElementById('chromatic-mobile-text');
+    const btn = document.getElementById('btn-toggle-aberration');
+    if (desktopSpan) {
+      desktopSpan.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
+    }
+    if (mobileSpan) {
+      mobileSpan.textContent = `[ FX: ${aberrationActive ? 'ON' : 'OFF'} ]`;
+    }
+    if (!desktopSpan && !mobileSpan && btn) {
+      btn.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
+    }
+  }
+
   function toggleAberration() {
     aberrationActive = !aberrationActive;
     sessionStorage.setItem('terminalAberration', aberrationActive);
     
-    // Update button visual text
-    const btn = document.getElementById('btn-toggle-aberration');
-    if (btn) {
-      btn.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
-    }
-    
+    updateAberrationButtonText();
     updateFilters();
   }
 
@@ -3719,9 +3924,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     if (savedAberration !== null) {
       aberrationActive = savedAberration === 'true';
     }
-    if (btnAberration) {
-      btnAberration.textContent = `[ CHROMATIC: ${aberrationActive ? 'ON' : 'OFF'} ]`;
-    }
+    updateAberrationButtonText();
     updateFilters();
     
     if (btnOut) {
@@ -3756,6 +3959,49 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     }
   }
 
+  // ── Mobile Navigation Drawer Menu ──
+  function toggleMobileMenu(forceState) {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    if (!sidebar || !overlay) return;
+    
+    const isOpen = sidebar.classList.contains('open');
+    const nextState = (typeof forceState === 'boolean') ? forceState : !isOpen;
+    
+    if (nextState) {
+      sidebar.classList.add('open');
+      overlay.classList.add('open');
+    } else {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+  }
+
+  function initMobileMenu() {
+    const trigger = document.getElementById('mobile-menu-trigger');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const navItems = document.querySelectorAll('.nav-item');
+    
+    if (trigger) {
+      trigger.addEventListener('click', () => {
+        toggleMobileMenu();
+      });
+    }
+    
+    if (overlay) {
+      overlay.addEventListener('click', () => {
+        toggleMobileMenu(false);
+      });
+    }
+    
+    // Auto-close menu when navigation links are clicked on mobile
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        toggleMobileMenu(false);
+      });
+    });
+  }
+
   // Check state on startup
   window.addEventListener('DOMContentLoaded', () => {
     const bootScreen = document.getElementById('boot-screen');
@@ -3769,10 +4015,15 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     // Initialize monitor controls (zoom and chromatic aberration toggle)
     initMonitorControls();
     
+    // Initialize mobile menu trigger and handlers
+    initMobileMenu();
+    
     if (isPowered) {
       // Bypass boot screen
       bootScreen.style.display = 'none';
       if (controls) controls.classList.add('visible');
+      const menuTrigger = document.getElementById('mobile-menu-trigger');
+      if (menuTrigger) menuTrigger.classList.add('visible');
       starfieldActive = true;
       warpFactor = 1;
     } else {
