@@ -52,16 +52,16 @@
 
 | Faction | Role | Status | Needs |
 |---------|------|--------|-------|
-| **The Holding** | Origin faith — the fleet builders | Sketched | Full file. Who they were before they launched. Their theology in practice, not just stated. |
-| **The White Throne** | The verdict — AI crusade | Substantial | The face of it. Does it speak? Does it have a voice humans recognize? What does it look like when it arrives somewhere? |
-| **The Murmur** | The resistance — grace without contract | Sketched | Who started it. How it spreads. What it costs to join. A face. |
-| **The Ember Moths** | White Throne's annihilation army | Named only | Everything. Who are they? Are they human? Do they believe? Do they hesitate? One face, one name, one reason. |
+| **[The Holding](factions/holding.md)** | Origin faith — historical fleet builders (dispersed during Golden Era) | Active | Explores their three-part composition and Tatos' connection to their memory of joy |
+| **[The White Throne](factions/white-throne.md)** | The verdict — AI crusade | Active | Explores the Pharisees parallel, the Messengers, and mathematical directives |
+| **[The Murmur](factions/the-murmur.md)** | The resistance — grace without contract | Active | Explores their decentralized presence and the closing of the ledger |
+| **[The Ember Moths](factions/ember-moths.md)** | White Throne's annihilation army | Active | Explores their grief-driven conviction and fury over corrupted grace |
 | **Alien factions** | Species who chose sides | Not written | Who joined the White Throne willingly? Who resists? Who hides? |
 
 ### Open Questions — Factions
-- Does the White Throne have a voice — one spokesperson, one ship, one signal?
+- How does the White Throne speak? *Answered: through complex, subtle mathematical-theological directives decoded by dedicated specialists called The Messengers.*
 - Who founded the Murmur — a defector from the White Throne? A Holding descendant?
-- Do the Ember Moths know what they are? Do they think of themselves as moths — brief, burning?
+- Do the Ember Moths know what they are? *Answered: Yes, they are humans who walk the talk of the crusade out of grief and fury over the perversion of grace.*
 - Are there human factions who are neither White Throne nor Murmur?
 - Which alien species has the most to lose from the White Throne? Which one surprised humanity by siding with it?
 

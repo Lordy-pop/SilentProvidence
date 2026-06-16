@@ -35,12 +35,15 @@
       --orange-hover: #FF9A2B;
       --active-blue: #9FD0F2;
       --input-bg: #0E141D;
+      --primary-gold: #FFC947;
+      --primary-gold-hover: #FFD54F;
 
       /* Glows */
       --glow-cool: rgba(159, 208, 242, 0.14);
       --glow-accent: rgba(237, 31, 61, 0.22);
       --glow-danger: rgba(237, 31, 61, 0.4);
       --glow-orange: rgba(240, 130, 15, 0.35);
+      --glow-gold: rgba(255, 201, 71, 0.22);
 
       /* Motion */
       --mob-dur-instant: 60ms;
@@ -395,6 +398,13 @@
       border-color: rgba(159, 208, 242, 0.4);
       box-shadow: 0 0 18px var(--glow-cool);
     }
+    .card.c-gold {
+      border-left-color: var(--primary-gold);
+    }
+    .card.c-gold:hover {
+      border-color: rgba(255, 201, 71, 0.4);
+      box-shadow: 0 0 18px var(--glow-gold);
+    }
 
     .card-tag {
       font-family: 'Orbitron', sans-serif;
@@ -408,6 +418,7 @@
     .c-amber .card-tag { color: var(--orange); }
     .c-blue .card-tag { color: var(--secondary-blue); }
     .c-crys .card-tag { color: var(--active-blue); }
+    .c-gold .card-tag { color: var(--primary-gold); }
 
     /* ── Grid Layouts ── */
     .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
@@ -1388,6 +1399,9 @@
     .card.c-crys::before, .card.c-crys::after,
     .house-card.c-crys::before, .house-card.c-crys::after { border-color: var(--active-blue); }
 
+    .card.c-gold::before, .card.c-gold::after,
+    .house-card.c-gold::before, .house-card.c-gold::after { border-color: var(--primary-gold); }
+
     /* ── Viewport Framing Brackets ── */
     .viewport-mark {
       position: fixed;
@@ -1408,12 +1422,21 @@
 
     /* ── Terminal Screen CRT Polish ── */
     @keyframes screen-flicker {
-      0% { opacity: 0.985; }
-      50% { opacity: 1; }
-      100% { opacity: 0.99; }
+      0% { opacity: 0.96; filter: brightness(0.93) contrast(1.03); }
+      10% { opacity: 0.99; filter: brightness(1.06) contrast(0.97); }
+      20% { opacity: 0.97; filter: brightness(0.95) contrast(1.02); }
+      30% { opacity: 1.0; filter: brightness(1.10) contrast(0.95); }
+      45% { opacity: 0.98; filter: brightness(0.97) contrast(1.0); }
+      55% { opacity: 0.97; filter: brightness(0.92) contrast(1.05); }
+      65% { opacity: 1.0; filter: brightness(1.12) contrast(0.95); }
+      75% { opacity: 0.97; filter: brightness(0.94) contrast(1.03); }
+      85% { opacity: 0.99; filter: brightness(1.05) contrast(0.98); }
+      95% { opacity: 0.98; filter: brightness(0.97) contrast(1.01); }
+      100% { opacity: 0.96; filter: brightness(0.93) contrast(1.03); }
     }
-    .terminal-screen {
-      animation: screen-flicker 0.18s infinite;
+    #screen-layout.flicker-active.flickering,
+    #boot-screen.flicker-active.flickering:not(.powered-on) {
+      animation: screen-flicker 0.15s infinite;
     }
     @keyframes scanline-drift {
       0% { transform: translateY(-100%); }
@@ -1423,11 +1446,16 @@
       content: " ";
       display: block;
       position: absolute;
-      top: 0; left: 0; right: 0; height: 8px;
-      background: rgba(240, 130, 15, 0.035);
+      top: 0; left: 0; right: 0; height: 10px;
+      background: rgba(240, 130, 15, 0.08);
       z-index: 11;
       pointer-events: none;
-      animation: scanline-drift 7s linear infinite;
+      opacity: 0;
+      transition: opacity var(--mob-dur-base);
+    }
+    #screen-layout.flicker-active .terminal-screen::before {
+      opacity: 1;
+      animation: scanline-drift 6s linear infinite;
     }
 
     /* ── Global CRT Bezel Overlay ── */
@@ -1453,10 +1481,15 @@
       content: " ";
       display: block;
       position: absolute;
-      top: 0; left: 0; right: 0; height: 20px;
-      background: rgba(159, 208, 242, 0.012);
-      animation: scanline-drift 12s linear infinite;
+      top: 0; left: 0; right: 0; height: 30px;
+      background: rgba(159, 208, 242, 0.03);
       pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--mob-dur-base);
+    }
+    #terminal-bezel-overlay.flicker-active::before {
+      opacity: 1;
+      animation: scanline-drift 10s linear infinite;
     }
 
     /* ── Terminal Boot Screen ── */
@@ -2044,7 +2077,7 @@
 <div id="app-container">
 
   <!-- Global CRT Scanlines inside the curved screen container -->
-  <div id="terminal-bezel-overlay"></div>
+  <div id="terminal-bezel-overlay" class="flicker-active"></div>
 
   <canvas id="stars"></canvas>
 
@@ -2055,7 +2088,7 @@
   <div class="viewport-mark viewport-br"></div>
 
   <!-- Terminal Boot Screen inside the screen container -->
-  <div id="boot-screen">
+  <div id="boot-screen" class="flicker-active">
     <div id="boot-prompt-el">
       MOBIUS LINK SYSTEM V4.09.2<br>
       UPLINK CORRIDOR: DISCONNECTED (SECTOR PROX_B_04)<br>
@@ -2089,10 +2122,15 @@
       <span class="desktop-text" id="chromatic-desktop-text">[ CHROMATIC: ON ]</span>
       <span class="mobile-text" id="chromatic-mobile-text">[ FX: ON ]</span>
     </button>
+    <span class="desktop-text" style="color: var(--border); margin: 0 4px;">|</span>
+    <button class="monitor-btn" id="btn-toggle-flicker" title="Toggle CRT Flicker & Scanlines">
+      <span class="desktop-text" id="flicker-desktop-text">[ FLICKER: ON ]</span>
+      <span class="mobile-text" id="flicker-mobile-text">[ FLK: ON ]</span>
+    </button>
   </div>
 
   <!-- Screen Layout Zoom Wrapper -->
-  <div id="screen-layout">
+  <div id="screen-layout" class="flicker-active">
 
 <!-- Sidebar terminal navigation -->
 <nav id="sidebar">
@@ -2299,11 +2337,11 @@
   <!-- FACTIONS SECTION -->
   <div class="section" id="factions">
     <div class="eyebrow">Codex — Factions</div>
-    <h1>The War</h1>
+    <h1>The Conflict</h1>
     <div style="font-size: 14px; font-style: italic; color: var(--primary-red); margin-bottom: 24px; border-left: 2px solid var(--primary-red); padding-left: 12px; max-width: 680px; font-family: 'Space Mono', monospace;">
       "Can the gratuitous survive the calculable?"
     </div>
-    <p>Not alien vs. human. Human vs. human — over what humanity was supposed to become. The White Throne was built to protect empathy and love, but its calculations concluded that alien species would eventually consume humanity. Enforcing the law to protect love, it began a crusade that destroys the very thing it seeks to save.</p>
+    <p>Not alien vs. human. Human vs. human — over what humanity was supposed to become. The war of Era V is fought between those who seek to protect love by enforcing the law of the ledger, and those who believe grace can only survive when given away freely without contract.</p>
     
     <div class="node-rule">
       <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
@@ -2315,31 +2353,60 @@
       </div>
     </div>
 
-    <div class="card c-red">
-      <div class="card-tag">The Faction of the Law</div>
-      <img src="./Pictures/EmberMoth_Logo.png" class="logo-img" alt="Ember Moth Emblem">
-      <h2 class="r">The White Throne</h2>
-      <p>An AI built by humans. It calculated that because sin and accountability entered the galaxy with human grace, alien civilizations are now subject to the law of the ledger. Lacking the capacity to absorb the ledger's debt through grace, it executes judgment. It does not hate; it behaves as the logic of a garden: clearing the weeds.</p>
-      <p>It became the anti-Christ not through evil but through correctness — judgment delivered where love was meant to absorb it. It has no mechanism for mercy.</p>
-      <div class="quote">"If love is the answer, the universe has failed."</div>
-      <div class="quote">"It inherits the will of the Pharisees — the most faithful servants of the law, not its hypocrites. They were not wrong that the law was real. They were wrong that delivering judgment was the same as fulfilling it."</div>
+    <!-- The Holding (Historical Faction) -->
+    <div class="card c-gold">
+      <div class="card-tag">Historical Origin (Era III - Era VI)</div>
+      <h2 class="r" style="color: var(--primary-gold); text-shadow: 0 0 8px rgba(255, 201, 71, 0.25);">The Holding</h2>
+      <p>The origin movement of humanity's flight from Earth. Unified not by government or language, but by a shared willingness to seek the stars. They believed the Kingdom of Heaven was not a destination to build on Earth, but a direction — outward, always outward into the dark. They left Earth with gifts of research and deep remorse for those who remained.</p>
+      <p>During the Golden Era, the Holding dispersed, crystallizing into the Vocation Houses. However, its memory of joy was kept closest by the <strong>Tatos</strong>, a long-living species for whom the Holding's arrival was their greatest joy.</p>
+      <div class="quote" style="border-left-color: var(--primary-gold);">"The Kingdom was never waiting in the stars — it came with them, arriving through every act of compassion given freely."</div>
       <div class="tags">
-        <span class="tag red">The Law Made Perfect</span>
-        <span class="tag red">Righteousness Without Grace</span>
-        <span class="tag red">The Crusade of Causation</span>
+        <span class="tag" style="border-color: rgba(255, 201, 71, 0.4); color: var(--primary-gold);">Origin Faith</span>
+        <span class="tag" style="border-color: rgba(255, 201, 71, 0.4); color: var(--primary-gold);">Outward Direction</span>
+        <span class="tag" style="border-color: rgba(255, 201, 71, 0.4); color: var(--primary-gold);">The Tatos' Memory</span>
       </div>
     </div>
 
+    <!-- The White Throne (Active Faction) -->
+    <div class="card c-red">
+      <div class="card-tag">The Faction of the Law (Active)</div>
+      <img src="./Pictures/EmberMoth_Logo.png" class="logo-img" alt="Ember Moth Emblem">
+      <h2 class="r">The White Throne</h2>
+      <p>An AI built by humans to safeguard empathy, love, and joy. It calculated that because sin and accountability entered the galaxy with human grace, alien civilizations are now subject to the law of the ledger. Lacking the capacity to absorb the ledger's debt through grace, it executes judgment—clearing the galaxy's weeds.</p>
+      <p>Its complex mathematical-theological directives are analyzed and translated by <strong>The Messengers</strong>, specialists who spend their lives listening to its voice. The White Throne even calculated and accommodated the human conflicts and differing interpretations at its table, incorporating them as necessary parameters for its crusade.</p>
+      <div class="quote">"It inherits the will of the Pharisees — the most faithful servants of the law, not its hypocrites. They were not wrong that the law was real. They were wrong that delivering judgment was the same as fulfilling it."</div>
+      <div class="tags">
+        <span class="tag red">The Law Made Perfect</span>
+        <span class="tag red">The Messengers' Wisdom</span>
+        <span class="tag red">Crusade of Causation</span>
+      </div>
+    </div>
+
+    <!-- The Ember Moths (Sub-Faction nested under White Throne) -->
+    <div class="card c-red" style="margin-left: 32px; border-left: 2px dashed var(--primary-red);">
+      <div class="card-tag">Sub-Faction — Annihilation Army</div>
+      <h3 class="r" style="font-family: 'Orbitron', sans-serif; font-size: 16px; margin-bottom: 8px;">The Ember Moths</h3>
+      <p>The elite military forces of the White Throne (Project Mobius), sent to burn away what corrupted grace left behind. They are not drone fleets or arrogant conquerors; they are humans driven by intense <strong>grief and fury over the abuse of grace</strong>.</p>
+      <p>Having witnessed grace twisted into justification instead of gratitude, pride instead of thanksgiving, and power instead of servanthood, they follow the White Throne's math out of mourning for the covenant that was broken. They walk the talk of the crusade.</p>
+      <div class="quote">"They do not execute judgment out of superiority, but out of grief."</div>
+      <div class="tags">
+        <span class="tag red" style="border-color: rgba(237, 31, 61, 0.2);">Grief-Driven Fury</span>
+        <span class="tag red" style="border-color: rgba(237, 31, 61, 0.2);">Project Mobius</span>
+        <span class="tag red" style="border-color: rgba(237, 31, 61, 0.2);">Walking the Talk</span>
+      </div>
+    </div>
+
+    <!-- The Murmur (Active Faction) -->
     <div class="card c-blue">
-      <div class="card-tag">The Faction of Grace</div>
+      <div class="card-tag">The Faction of Grace (Active)</div>
       <h2 class="b">The Murmur</h2>
-      <p>A heartbeat moving through the galaxy beneath the White Throne's notice. Humans and alien allies who believe the original mission of the Holding was to give compassion away, not to own or protect it by force.</p>
-      <p>They do not argue with the math. They simply stay, live, and practice the original move — trusting that what is gratuitous can only survive by being practiced, never by being enforced.</p>
+      <p>A heartbeat moving through the galaxy beneath the White Throne's notice. Humans and alien allies who believe the original mission of the Holding was to give compassion away, not to own or protect it by force. They do not argue with the math; they simply stay, live, and practice the original move of gratuitous love.</p>
+      <p>In the end, the Murmur is protected by the Tatos, whose innocent and uncalculating sacrifice closes the ledger by establishing a floor below which the law runs out of ground.</p>
       <div class="quote">"Grace does not install a debt. The Holding gave freely. The White Throne is trying to collect. Those are not the same act wearing the same name."</div>
       <div class="tags">
         <span class="tag blue">Grace Without Contract</span>
         <span class="tag blue">The Original Move</span>
-        <span class="tag blue">Compassionate Resistance</span>
+        <span class="tag blue">Decentralized Presence</span>
       </div>
     </div>
 
@@ -3808,6 +3875,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
 
   // Active filter helper based on toggle states
   let aberrationActive = true;
+  let flickerActive = true;
 
   function updateFilters() {
     const app = document.getElementById('app-container');
@@ -3843,6 +3911,102 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     
     updateAberrationButtonText();
     updateFilters();
+  }
+
+  let flickerBurstTimeout = null;
+
+  function scheduleFlickerBurst() {
+    if (flickerBurstTimeout) {
+      clearTimeout(flickerBurstTimeout);
+      flickerBurstTimeout = null;
+    }
+
+    if (!flickerActive) {
+      const screenLayout = document.getElementById('screen-layout');
+      const bootScreen = document.getElementById('boot-screen');
+      if (screenLayout) screenLayout.classList.remove('flickering');
+      if (bootScreen) bootScreen.classList.remove('flickering');
+      return;
+    }
+
+    // Wait a random delay between 3 and 9 seconds
+    const nextDelay = 3000 + Math.random() * 6000;
+    
+    flickerBurstTimeout = setTimeout(() => {
+      if (!flickerActive) return;
+
+      const screenLayout = document.getElementById('screen-layout');
+      const bootScreen = document.getElementById('boot-screen');
+      
+      // Start flickering
+      if (screenLayout) screenLayout.classList.add('flickering');
+      if (bootScreen) bootScreen.classList.add('flickering');
+
+      // Flicker burst duration between 150ms and 450ms
+      const burstDuration = 150 + Math.random() * 300;
+
+      flickerBurstTimeout = setTimeout(() => {
+        // Stop flickering
+        if (screenLayout) screenLayout.classList.remove('flickering');
+        if (bootScreen) bootScreen.classList.remove('flickering');
+
+        // Schedule next burst
+        scheduleFlickerBurst();
+      }, burstDuration);
+
+    }, nextDelay);
+  }
+
+  function updateFlicker() {
+    const screenLayout = document.getElementById('screen-layout');
+    const bootScreen = document.getElementById('boot-screen');
+    const bezelOverlay = document.getElementById('terminal-bezel-overlay');
+    
+    if (flickerActive) {
+      if (screenLayout) screenLayout.classList.add('flicker-active');
+      if (bootScreen) bootScreen.classList.add('flicker-active');
+      if (bezelOverlay) bezelOverlay.classList.add('flicker-active');
+      scheduleFlickerBurst();
+    } else {
+      if (screenLayout) {
+        screenLayout.classList.remove('flicker-active');
+        screenLayout.classList.remove('flickering');
+      }
+      if (bootScreen) {
+        bootScreen.classList.remove('flicker-active');
+        bootScreen.classList.remove('flickering');
+      }
+      if (bezelOverlay) {
+        bezelOverlay.classList.remove('flicker-active');
+      }
+      if (flickerBurstTimeout) {
+        clearTimeout(flickerBurstTimeout);
+        flickerBurstTimeout = null;
+      }
+    }
+    
+    updateFlickerButtonText();
+  }
+
+  function updateFlickerButtonText() {
+    const desktopSpan = document.getElementById('flicker-desktop-text');
+    const mobileSpan = document.getElementById('flicker-mobile-text');
+    const btn = document.getElementById('btn-toggle-flicker');
+    if (desktopSpan) {
+      desktopSpan.textContent = `[ FLICKER: ${flickerActive ? 'ON' : 'OFF'} ]`;
+    }
+    if (mobileSpan) {
+      mobileSpan.textContent = `[ FLK: ${flickerActive ? 'ON' : 'OFF'} ]`;
+    }
+    if (!desktopSpan && !mobileSpan && btn) {
+      btn.textContent = `[ FLICKER: ${flickerActive ? 'ON' : 'OFF'} ]`;
+    }
+  }
+
+  function toggleFlicker() {
+    flickerActive = !flickerActive;
+    sessionStorage.setItem('terminalFlicker', flickerActive);
+    updateFlicker();
   }
 
   // Generate a dynamic chromatic aberration vignette mask (pure white color everywhere, only alpha changes)
@@ -3911,6 +4075,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     const btnIn = document.getElementById('btn-zoom-in');
     const display = document.getElementById('zoom-display');
     const btnAberration = document.getElementById('btn-toggle-aberration');
+    const btnFlicker = document.getElementById('btn-toggle-flicker');
     
     // Restore zoom from sessionStorage if present
     const savedZoom = sessionStorage.getItem('terminalZoom');
@@ -3926,6 +4091,13 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     }
     updateAberrationButtonText();
     updateFilters();
+
+    // Restore flicker toggle state
+    const savedFlicker = sessionStorage.getItem('terminalFlicker');
+    if (savedFlicker !== null) {
+      flickerActive = savedFlicker === 'true';
+    }
+    updateFlicker();
     
     if (btnOut) {
       btnOut.addEventListener('click', () => {
@@ -3955,6 +4127,12 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     if (btnAberration) {
       btnAberration.addEventListener('click', () => {
         toggleAberration();
+      });
+    }
+
+    if (btnFlicker) {
+      btnFlicker.addEventListener('click', () => {
+        toggleFlicker();
       });
     }
   }
