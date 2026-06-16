@@ -55,17 +55,19 @@
 | **[The Holding](factions/holding.md)** | Origin faith — historical fleet builders (dispersed during Golden Era) | Active | Explores their three-part composition and Tatos' connection to their memory of joy |
 | **[The White Throne](factions/white-throne.md)** | The verdict — AI crusade | Active | Explores the Pharisees parallel, the Messengers, and mathematical directives |
 | **[The Murmur](factions/the-murmur.md)** | The resistance — grace without contract | Active | Explores their decentralized presence and the closing of the ledger |
-| **The Zealots** | The resistance — direct action against the Throne | Sketched | Same origin as the Murmur, opposite instinct. Who founded it. The shape of the conflict between the two branches. A face. |
+| **[The Zealots](factions/the-zealots.md)** | The resistance — direct action against the Throne | Active | Explores Ephraim's leadership, the split from the Murmur, their competitive technology, and the Family heist contract |
 | **[The Ember Moths](factions/ember-moths.md)** | White Throne's annihilation army | Active | Explores their grief-driven conviction and fury over corrupted grace |
+| **[The Solitudes](factions/the-solitudes.md)** | The isolationists — absolute rejection of human framework | Active | Explores their lack of Imago Dei, rejection of grace/law/love, and direct action of severance |
 | **Alien factions** | Species who chose sides | Not written | Who joined the White Throne willingly? Who resists? Who hides? |
 
 ### Open Questions — Factions
 - How does the White Throne speak? *Answered: through complex, subtle mathematical-theological directives decoded by dedicated specialists called The Messengers.*
 - Who founded the Murmur — a defector from the White Throne? A Holding descendant?
-- Who founded the Zealots, and when did they split from the Murmur's branch of the resistance?
+- Who founded the Zealots, and when did they split from the Murmur's branch of the resistance? *Answered: Founded by Ephraim (House of the Covenant) early in the Crusade when the White Throne condemned an allied alien colony and the Murmur chose to flee instead of defend.*
 - Do the Ember Moths know what they are? *Answered: Yes, they are humans who walk the talk of the crusade out of grief and fury over the perversion of grace.*
 - ~~Are there human factions who are neither White Throne nor Murmur?~~ *Answered: the Zealots — a militant resistance branch that shares the Murmur's grievance but fights back directly.*
 - Which alien species has the most to lose from the White Throne? Which one surprised humanity by siding with it?
+- Can the Solitudes successfully collapse the warp network in their sectors, and what does this look like for trapped fleets?
 
 ---
 

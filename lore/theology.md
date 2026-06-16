@@ -196,6 +196,25 @@ The Tatos are the floor.
 
 ---
 
+## The Solitudes — The Rejection of the Imago Dei
+
+While the conflict between the White Throne, the Murmur, and the Zealots is fought over the *interpretation* and *execution* of the Covenant, **The Solitudes** reject the entire human framework: the Law, the Covenant, the Grace, and the Love itself.
+
+### The Weight of the Unseen
+Humans, having been created in the image of God (*Imago Dei*), possess a native, structural capacity to bear the weight of covenant, faith, and sacrificial love. Even in their most hollowed-out states, the human soul recognizes these structures. 
+
+The Solitudes do not share this divine image. To their physiology and psychology, the uncertainty of a metaphysical covenant — faith in an unseen promise, a commitment without immediate material calculation — is a terrifying, destabilizing force. They do not have the interior equipment to process faith. 
+
+### Love as a Defect
+To the Solitudes, selfless, sacrificial love is not a higher virtue. It is a biological anomaly, a suicidal vulnerability that violates the natural laws of survival. They question the very validity of love. Why would a species expend its own survival capability to preserve another? 
+
+### The Pathogen of Grace
+Before humanity's arrival, the galaxy was amoral. Cruelty and the consumption of the weak were not sins; they were simply nature. 
+
+By introducing grace and love, humanity introduced the knowledge of the good. And with that knowledge came the law of the ledger and the inevitability of the White Throne's judgment. The Solitudes view human compassion not as a gift, but as an invasive moral pathogen. They seek to return to the wilderness — a galaxy of isolated species left in their own bubbles, operating under their own native, amoral survival laws.
+
+---
+
 ## Open Theological Questions
 *(Things the story hasn't earned the answer to yet)*
 

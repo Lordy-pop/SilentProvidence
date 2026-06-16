@@ -1421,22 +1421,33 @@
     .viewport-br { bottom: 20px; right: 20px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
 
     /* ── Terminal Screen CRT Polish ── */
-    @keyframes screen-flicker {
-      0% { opacity: 0.96; filter: brightness(0.93) contrast(1.03); }
-      10% { opacity: 0.99; filter: brightness(1.06) contrast(0.97); }
-      20% { opacity: 0.97; filter: brightness(0.95) contrast(1.02); }
-      30% { opacity: 1.0; filter: brightness(1.10) contrast(0.95); }
-      45% { opacity: 0.98; filter: brightness(0.97) contrast(1.0); }
-      55% { opacity: 0.97; filter: brightness(0.92) contrast(1.05); }
-      65% { opacity: 1.0; filter: brightness(1.12) contrast(0.95); }
-      75% { opacity: 0.97; filter: brightness(0.94) contrast(1.03); }
-      85% { opacity: 0.99; filter: brightness(1.05) contrast(0.98); }
-      95% { opacity: 0.98; filter: brightness(0.97) contrast(1.01); }
-      100% { opacity: 0.96; filter: brightness(0.93) contrast(1.03); }
+    @keyframes edge-flicker {
+      0% { opacity: 0.3; filter: brightness(0.9); }
+      10% { opacity: 0.7; filter: brightness(1.05); }
+      20% { opacity: 0.4; filter: brightness(0.92); }
+      30% { opacity: 0.8; filter: brightness(1.1); }
+      45% { opacity: 0.6; filter: brightness(1.0); }
+      55% { opacity: 0.4; filter: brightness(0.9); }
+      65% { opacity: 0.85; filter: brightness(1.15); }
+      75% { opacity: 0.5; filter: brightness(0.95); }
+      85% { opacity: 0.75; filter: brightness(1.05); }
+      95% { opacity: 0.55; filter: brightness(1.0); }
+      100% { opacity: 0.3; filter: brightness(0.9); }
     }
-    #screen-layout.flicker-active.flickering,
-    #boot-screen.flicker-active.flickering:not(.powered-on) {
-      animation: screen-flicker 0.15s infinite;
+    #screen-edge-flicker {
+      position: absolute;
+      inset: 0;
+      z-index: 109;
+      pointer-events: none;
+      background: radial-gradient(circle, transparent 45%, rgba(240, 130, 15, 0.06) 100%);
+      opacity: 0;
+      transition: opacity var(--mob-dur-base);
+    }
+    #screen-edge-flicker.flicker-active {
+      opacity: 1;
+    }
+    #screen-edge-flicker.flicker-active.flickering {
+      animation: edge-flicker 0.15s infinite;
     }
     @keyframes scanline-drift {
       0% { transform: translateY(-100%); }
@@ -1446,8 +1457,8 @@
       content: " ";
       display: block;
       position: absolute;
-      top: 0; left: 0; right: 0; height: 10px;
-      background: rgba(240, 130, 15, 0.08);
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0px, rgba(240, 130, 15, 0.005) 50px, rgba(240, 130, 15, 0.035) 150px, transparent 150px);
       z-index: 11;
       pointer-events: none;
       opacity: 0;
@@ -1481,8 +1492,8 @@
       content: " ";
       display: block;
       position: absolute;
-      top: 0; left: 0; right: 0; height: 30px;
-      background: rgba(159, 208, 242, 0.03);
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0px, rgba(159, 208, 242, 0.005) 70px, rgba(159, 208, 242, 0.025) 200px, transparent 200px);
       pointer-events: none;
       opacity: 0;
       transition: opacity var(--mob-dur-base);
@@ -1803,10 +1814,7 @@
     .card-tag.c-amber::before, .house-card.c-amber .house-vocation::before { color: var(--orange); }
     .card-tag.c-crys::before, .house-card.c-crys .house-vocation::before { color: var(--active-blue); }
     
-    /* Shell markers for other tags */
-    .tags .tag::before {
-      content: '$ ';
-    }
+    
     
     /* Dropdown field positioning context */
     #sim-dropdown-field {
@@ -2080,6 +2088,7 @@
 
   <!-- Global CRT Scanlines inside the curved screen container -->
   <div id="terminal-bezel-overlay" class="flicker-active"></div>
+  <div id="screen-edge-flicker" class="flicker-active"></div>
 
   <canvas id="stars"></canvas>
 
@@ -2090,7 +2099,7 @@
   <div class="viewport-mark viewport-br"></div>
 
   <!-- Terminal Boot Screen inside the screen container -->
-  <div id="boot-screen" class="flicker-active">
+  <div id="boot-screen">
     <div id="boot-prompt-el">
       MOBIUS LINK SYSTEM V4.09.2<br>
       UPLINK CORRIDOR: DISCONNECTED (SECTOR PROX_B_04)<br>
@@ -2385,7 +2394,7 @@
 
     <!-- The Holding (Historical Faction) -->
     <div class="card c-gold">
-      <div class="card-tag">Historical Origin (Era III - Era VI)</div>
+      <div class="card-tag">Historical Origin (Era I - Era IV)</div>
       <h2 class="r" style="color: var(--primary-gold); text-shadow: 0 0 8px rgba(255, 201, 71, 0.25);">The Holding</h2>
       <p>The origin movement of humanity's flight from Earth. Unified not by government or language, but by a shared willingness to seek the stars. They believed the Kingdom of Heaven was not a destination to build on Earth, but a direction — outward, always outward into the dark. They left Earth with gifts of research and deep remorse for those who remained.</p>
       <p>During the Golden Era, the Holding dispersed, crystallizing into the Vocation Houses. However, its memory of joy was kept closest by the <strong>Tatos</strong>, a long-living species for whom the Holding's arrival was their greatest joy.</p>
@@ -2440,11 +2449,39 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-tag">The Question</div>
-      <h2>Neither Side is Simply Wrong</h2>
-      <p>Both came from the same faith. Both believe the other betrayed it. The law is real — it arrived with the grace. But grace was never meant to collect its own debt. The Murmur represents the covenant's heart; the White Throne represents the covenant's envelope, turned inside out.</p>
-      <p style="font-style: italic; color: var(--dim);">Will the thing that made humanity worth saving survive the act of saving it?</p>
+    <!-- The Zealots (Active Faction) -->
+    <div class="card c-amber">
+      <div class="card-tag">Militant Resistance (Active)</div>
+      <h2 style="color: var(--orange); text-shadow: 0 0 8px rgba(240, 130, 15, 0.25);">The Zealots</h2>
+      <p>A militant splinter faction of the resistance. Tracing their lineage back to the House of the Covenant (Israel) and the House of Freedom (America), they view the White Throne as a blasphemous idol and the Murmur's passive non-resistance as a cowardly betrayal of the covenant. They believe mercy without defense is suicide.</p>
+      <p>Operating from a heavily fortified solar system, they build a competitive technological counter-force, including warships and planetary shield grids. To power their fleet, they hired <strong>The Family</strong> mercenary syndicate to steal the secret Mobius Drive. The heist was predicted by the White Throne, but the Tatos' unexpected involvement disrupted its calculations, allowing the theft to succeed.</p>
+      <div class="quote" style="border-left-color: var(--orange);">"God alone is King. To submit to the machine, or to hide from its crusades in passive silence, is to surrender the covenant."</div>
+      <div class="tags">
+        <span class="tag" style="border-color: rgba(240, 130, 15, 0.4); color: var(--orange);">Militant Resistance</span>
+        <span class="tag" style="border-color: rgba(240, 130, 15, 0.4); color: var(--orange);">Ephraim's Command</span>
+        <span class="tag" style="border-color: rgba(240, 130, 15, 0.4); color: var(--orange);">The Family Contract</span>
+      </div>
+    </div>
+
+    <!-- The Solitudes (Active Faction) -->
+    <div class="card" style="border-left-color: var(--dim); box-shadow: 0 0 10px rgba(115, 131, 153, 0.05);">
+      <div class="card-tag">Isolationist Faction (Active)</div>
+      <h2 style="color: var(--dim); text-shadow: 0 0 8px rgba(115, 131, 153, 0.2);">The Solitudes</h2>
+      <p>A volatile alien faction that rejects the entire human framework: the Law of the White Throne, the resistance of the Zealots, and the compassion of the Murmur. Lacking the <em>Imago Dei</em> (image of God), they experience the Covenant not as a promise but as an intolerable weight of uncertainty, and view sacrificial love as a suicidal biological defect.</p>
+      <p>They view human grace as an invasive moral pathogen that forced them into a universal system of guilt and judgment. Their primary action is <strong>Severance</strong>—deploying field generators and sabotaging warp gates to isolate their systems, preferring the amoral quiet of the wilderness over the human system.</p>
+      <div class="quote" style="border-left-color: var(--dim);">"We do not want your grace if it makes us responsible to your ledger. Leave our skies untouched."</div>
+      <div class="tags">
+        <span class="tag" style="border-color: rgba(115, 131, 153, 0.3); color: var(--dim);">Isolationists</span>
+        <span class="tag" style="border-color: rgba(115, 131, 153, 0.3); color: var(--dim);">Warp Severance</span>
+        <span class="tag" style="border-color: rgba(115, 131, 153, 0.3); color: var(--dim);">The Wilderness</span>
+      </div>
+    </div>
+
+    <div class="faction-question" style="margin-top: 40px; padding: 20px 0 12px; border-top: 1px solid var(--border); max-width: 680px;">
+      <div class="card-tag">The Great Question</div>
+      <h2 style="font-family: 'Orbitron', sans-serif; font-size: 20px; color: var(--text); margin-bottom: 12px;">Can the Gratuitous Survive the Calculable?</h2>
+      <p style="color: var(--dim); line-height: 1.6; margin-bottom: 12px; font-size: 13px;">The arrival of human grace has fractured the galaxy. The original direction of <strong>The Holding</strong> has shattered into incompatible truths: <strong>The White Throne</strong> enforces the absolute law of the ledger, executing cold judgment to protect empathy from decay; <strong>The Murmur</strong> persists in decentralized, uncalculating mercy; <strong>The Zealots</strong> reject passive submission, building warships and shields because they believe mercy without defense is suicide. Meanwhile, <strong>The Solitudes</strong> reject the human moral pathogen entirely, seeking absolute Severance to escape our ledger of guilt, grace, and judgment.</p>
+      <p style="font-size: 13px; font-style: italic; color: var(--primary-red); font-family: 'Space Mono', monospace; border-left: 2px solid var(--primary-red); padding-left: 12px; margin-top: 16px;">"Will the thing that made humanity worth saving survive the act of saving it?"</p>
     </div>
   </div>
 
@@ -4067,10 +4104,8 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     }
 
     if (!flickerActive) {
-      const screenLayout = document.getElementById('screen-layout');
-      const bootScreen = document.getElementById('boot-screen');
-      if (screenLayout) screenLayout.classList.remove('flickering');
-      if (bootScreen) bootScreen.classList.remove('flickering');
+      const edgeFlicker = document.getElementById('screen-edge-flicker');
+      if (edgeFlicker) edgeFlicker.classList.remove('flickering');
       return;
     }
 
@@ -4080,20 +4115,17 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     flickerBurstTimeout = setTimeout(() => {
       if (!flickerActive) return;
 
-      const screenLayout = document.getElementById('screen-layout');
-      const bootScreen = document.getElementById('boot-screen');
+      const edgeFlicker = document.getElementById('screen-edge-flicker');
       
       // Start flickering
-      if (screenLayout) screenLayout.classList.add('flickering');
-      if (bootScreen) bootScreen.classList.add('flickering');
+      if (edgeFlicker) edgeFlicker.classList.add('flickering');
 
       // Flicker burst duration between 150ms and 450ms
       const burstDuration = 150 + Math.random() * 300;
 
       flickerBurstTimeout = setTimeout(() => {
         // Stop flickering
-        if (screenLayout) screenLayout.classList.remove('flickering');
-        if (bootScreen) bootScreen.classList.remove('flickering');
+        if (edgeFlicker) edgeFlicker.classList.remove('flickering');
 
         // Schedule next burst
         scheduleFlickerBurst();
@@ -4104,22 +4136,21 @@ To continue collecting, the White Throne would have to condemn that innocence. T
 
   function updateFlicker() {
     const screenLayout = document.getElementById('screen-layout');
-    const bootScreen = document.getElementById('boot-screen');
+    const edgeFlicker = document.getElementById('screen-edge-flicker');
     const bezelOverlay = document.getElementById('terminal-bezel-overlay');
     
     if (flickerActive) {
       if (screenLayout) screenLayout.classList.add('flicker-active');
-      if (bootScreen) bootScreen.classList.add('flicker-active');
+      if (edgeFlicker) edgeFlicker.classList.add('flicker-active');
       if (bezelOverlay) bezelOverlay.classList.add('flicker-active');
       scheduleFlickerBurst();
     } else {
       if (screenLayout) {
         screenLayout.classList.remove('flicker-active');
-        screenLayout.classList.remove('flickering');
       }
-      if (bootScreen) {
-        bootScreen.classList.remove('flicker-active');
-        bootScreen.classList.remove('flickering');
+      if (edgeFlicker) {
+        edgeFlicker.classList.remove('flicker-active');
+        edgeFlicker.classList.remove('flickering');
       }
       if (bezelOverlay) {
         bezelOverlay.classList.remove('flicker-active');

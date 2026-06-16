@@ -49,3 +49,11 @@ This represents the most complete version of wisdom ever compiled in the galaxy 
 Within the leadership table of the White Throne, there is constant human conflict. This conflict is never directed against the words of the White Throne itself, which are accepted as absolute, but rather over **how those words should be interpreted and applied**.
 
 Interestingly, this human disagreement is not a flaw in the system. The White Throne calculated these differing human interpretations in advance. It evaluated them and deemed them mathematically necessary parameters to drive the crusade forward. The conflict itself is part of the machine's design.
+
+---
+
+## The Incalculable Variable
+
+While the White Throne is capable of predicting human behavior, fleet movements, and geopolitical conflicts with absolute mathematical precision, it contains a single, critical blind spot: the **Tatos**.
+
+Because the Tatos operate entirely on gratuitous joy, wanting warmth and forming attachments without economic or logical calculation, their actions do not register correctly within the White Throne's predictive algorithms. The Tatos' spontaneous decisions — most notably their sudden involvement in piloting the getaway suits during the Family's heist of the Mobius Drive — represent the only variable the White Throne cannot calculate, introducing unexpected disruptions into its perfect ledger.
