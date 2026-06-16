@@ -185,7 +185,7 @@ What South Korea lives in the present moment, Iceland has already finished. Both
 
 *"The mission does not need a homeland. It needs a people who have already learned to live without one."*
 
-Not a nation — a posture. The Exile is the house that forms when everything territorial has been stripped away and something essential remains that cannot be put down.
+The Exile is the house that forms when everything territorial has been stripped away and something essential remains that cannot be put down.
 
 Its primary civilizational anchor is the displaced Mexican population — demolished by the American system, offered a direction by the Holding's founder, and given the labor of building the ships in orbit. But the vocation reached wider: the Armenian Christians who preserved their faith through genocide and diaspora without a nation to house it, and others distributed across history who learned the same lesson by necessity. What they share is not an origin. It is having already grieved the origin.
 
@@ -201,7 +201,7 @@ Their vocation: **exodus**. They carry the mission in their bodies because they 
 
 *"I don't know. I have never known. Here I am anyway."*
 
-Not a nation — a posture. The Honest assembled from wherever the principled skeptics, rationalists, stoics, and agnostics were: which was everywhere, distributed across every civilization, belonging to none of them. What they share is not a theology. It is the refusal to perform belief they do not have.
+The Honest assembled from wherever the principled skeptics, rationalists, stoics, and agnostics were: which was everywhere, distributed across every civilization, belonging to none of them. What they share is not a theology. It is the refusal to perform belief they do not have.
 
 Their inheritance is the Stoic tradition at its deepest: not nihilism, but discipline. The recognition that the universe does not owe meaning, and that this changes nothing about what duty requires. You stay on the ship not because the stars will redeem you, but because turning back would be a failure of the method. The Honest do not need a promised land to refuse to be broken.
 
