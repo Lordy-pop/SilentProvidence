@@ -191,7 +191,7 @@ Its primary civilizational anchor is the displaced Mexican population — demoli
 
 Every other house paid the psychological cost of departure — the weight of leaving, of dying before arrival. The Exile had already paid it. The dark between stars was not new grief. It was the familiar condition they had been surviving for generations. This made them, paradoxically, the most durable people on the Crossing — not because they were strongest, but because they had nothing left to lose to the dark that they had not already lost.
 
-Their vocation: **the exile**. They carry the mission in their bodies because they have no land to carry it in. This turned out to be the most portable form of keeping it.
+Their vocation: **exodus**. They carry the mission in their bodies because they have no land to carry it in. This turned out to be the most portable form of keeping it.
 
 *→ For the detailed history of Mexico's displacement and the three-part origin of the Holding, see Mexico — The Foundation Material below.*
 
@@ -211,7 +211,7 @@ Their inheritance is the Stoic tradition at its deepest: not nihilism, but disci
 
 **Their arrival at Proxima:** The Honest who survived the Crossing arrived at a planet that shouldn't have worked, found by a creature who shouldn't have mattered, through an act of irrational compassion that produced a thousand years of peace. This was not a data set they could fit into their existing framework. A few converted. Most deepened into something that resembled faith without being named it. None of them returned to where they had started.
 
-Their vocation: **the honest**. The house that could not pretend. Across generations, this turned out to be its own kind of faithfulness.
+Their vocation: **the needy**. The house that could not pretend. Across generations, this turned out to be its own kind of faithfulness.
 
 ---
 
@@ -284,8 +284,8 @@ That determination requires a judgment about meaning — what the act was *worth
 | Nigeria / West Africa + Brazil | House | The Living Word |
 | Poland | Conditional | Survives if faith escapes nationalism |
 | South Korea / Iceland | Conditional | The House of the Contradiction — two faces of the same disease; fate open |
-| The Exile (Mexico + others) | Surviving | Posture house — trans-national; faith carried in people, not land |
-| The Honest (trans-national) | Conditional | Posture house — the principled skeptics; their doubt gave the faith outward movement |
+| The Exile / Exodus (Mexico + others) | Surviving | Posture house — trans-national; faith carried in people, not land |
+| The Honest / The Needy (trans-national) | Conditional | Posture house — the principled skeptics; their doubt gave the faith outward movement |
 | Canada | Absorbed | Point of no return passed |
 | Western Europe | Dissolved | Germany, France, Scandinavia, UK |
 | Iceland | See Contradiction | The pragmatism-as-faith arc feeds The House of the Contradiction |
