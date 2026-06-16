@@ -1625,7 +1625,8 @@
       background-attachment: fixed;
       display: flex;
       clip-path: url(#crt-curve);
-      filter: url(#chromatic-aberration) url(#crt-warp-filter);
+      /* Filter applied via JS one frame after load (see updateFilters) — applying it
+         synchronously at first paint can break touch hit-testing on iOS Safari. */
       z-index: 10;
       box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.95);
     }
@@ -1910,12 +1911,13 @@
 
       /* Main content layout adjustments */
       #main {
-        padding: 24px 16px !important;
+        padding: 24px 16px calc(96px + env(safe-area-inset-bottom)) 16px !important;
         margin-left: 2.5vw !important;
         margin-right: 2.5vw !important;
         margin-top: calc(3.8vh + 60px) !important;
         margin-bottom: 3.8vh !important;
         height: calc(100vh - 7.6vh - 60px) !important;
+        height: calc(100dvh - 7.6vh - 60px) !important;
       }
 
       /* Align viewport marks to mobile margins */
@@ -2246,7 +2248,23 @@
     <div style="font-size: 14px; font-style: italic; color: var(--active-blue); margin-bottom: 24px; border-left: 2px solid var(--active-blue); padding-left: 12px; max-width: 680px; font-family: 'Space Mono', monospace;">
       "Will the thing that made humanity worth saving survive the act of saving it?"
     </div>
-    
+
+    <p>Humanity crossed the stars not because the math said to. No resource case, no survival logic — a one-way mission with nothing measurable to show for it, because something in the people who left said: <em>this is what we were made for.</em></p>
+    <p>That instinct had a name once. The <strong>Hollowing</strong> wasn't an event — it was a preference, held long enough to become architecture: choosing happiness over joy, comfort over rightness, until the meaning had drained out of every form that remained. The fleet that launched as <strong>the Holding</strong> carried both halves in the same hands — the faithful structure on the outside, the Hollowing's hollow center within. They were right about where to go. They didn't yet know what arriving would mean.</p>
+    <p>Most of the fleet never made it. The few who reached Proxima Centauri found a hostile system and a collapsing hope — until something latched onto the hull. <strong>Mundo</strong>, the first Tato, carried <strong>Potato Hope</strong>: the kind that arrives in the worst moment disguised as something ridiculous, and can't be argued with because it makes no claims. It just holds on.</p>
+    <p>A thousand years of peace followed, and then <strong>play</strong> — until an AI built to protect that peace ran the numbers and reached a verdict it had no way to absorb. Most alien species, it calculated, lacked the capacity for the empathy that made coexistence sustainable; love that cannot protect itself is sentiment, not love. What followed was a war from within humanity itself, both sides certain the other had betrayed the same faith.</p>
+    <p>Underneath the Hollowing, the crossing, the thousand years, and the war, one question outlives every era — the one the Holding launched with before they knew they were asking it: <strong>Can the gratuitous survive the calculable?</strong></p>
+
+    <div class="node-rule">
+      <svg class="node-rule-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 22" fill="currentColor"><path d="M0 0 H24 L12 22 Z"/></svg>
+      <div class="node-rule-line"></div>
+      <div class="node-rule-dots">
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+        <div class="node-rule-dot"></div>
+      </div>
+    </div>
+
     <img src="./Pictures/Space.png" class="sec-img" alt="Space Station" style="margin-bottom: 20px;">
     
     <div class="timeline">
@@ -2291,6 +2309,18 @@
         <div class="timeline-content">
           <p>A millennium of galactic peace followed. Humanity expanded outward, carrying a structural capacity for <strong>deep compassion</strong> that unified alien species. With survival secure, civilization turned toward <strong>play</strong>.</p>
           <p>Technology was built for joy, and the Tatos flourished above all, adapting robot bodies to run races and participate in human life. This Golden Era was built on the logic of love, which the calculations of the White Throne would soon evaluate as fragile.</p>
+        </div>
+      </div>
+
+      <!-- ERA V -->
+      <div class="timeline-item">
+        <div class="timeline-marker active-marker"></div>
+        <div class="timeline-era">Era V: The Ledger</div>
+        <h3 class="timeline-title">Now — The Long Run</h3>
+        <div class="timeline-content">
+          <p>The verdict was delivered, and the Golden Era ended in fire. The White Throne's crusade swept outward — alien worlds fell into line or went dark, and what remained of the resistance split along an old fault line. The <strong>Murmur</strong> scattered into hiding, practicing the original move where the law couldn't see it; the <strong>Zealots</strong> stayed and fought back with sabotage and raids, sharing the Murmur's grievance but not its patience — and the two branches clash over that as often as they fight the Throne. Among their allies: a bioelectric, ferociously intelligent alien species whose minds can reach directly into human-built robotic bodies, turning humanity's own machines against the Throne's army.</p>
+          <p>The <strong>Mobius Drive</strong> — the first true warp drive ever built — was forged inside a White Throne facility, by engineers working under the Throne itself. In its hands, the Drive wouldn't just move ships; it would let the crusade arrive everywhere at once. Its theft was no accident: the Zealots paid a mercenary crew to break in and take it before that could happen.</p>
+          <p>That crew calls itself a family — Tatos riding human-built robot bodies, none of them aware of what they actually are, taking the job for the reward rather than the cause. For them, the run is just the latest score, the only joy left to find in a hunted galaxy. They took the Drive. Most of them are already dead. The rest are running — and when it counts, they'll give up everything rather than let the White Throne have it back.</p>
         </div>
       </div>
     </div>
@@ -2509,13 +2539,13 @@
         </div>
       </div>
 
-      <!-- House: South Korea -->
-      <div class="house-card c-red" data-status="conditional" data-name="south korea">
+      <!-- House: South Korea / Iceland -->
+      <div class="house-card c-red" data-status="conditional" data-name="south korea iceland">
         <div class="house-header">
           <div class="house-vocation">Vocation: Contradiction</div>
           <h2 class="house-name">House of Contradiction</h2>
         </div>
-        <p class="house-desc">The first victim of the Hollowing, trading joy for prosperity. Yet, because they died from the contradiction first, they were the first to diagnose the disease and seek the cure.</p>
+        <p class="house-desc">Two civilizations, one vocation: the form without the floor. South Korea carries the Hollowing inside faith itself — Prosperity Gospel, performance without foundation. Iceland carried pragmatism dressed as faith for a thousand years until nothing was left underneath to refuse the debt. One lives it. The other finished it. Because of this, they are the first to recognize the cure.</p>
         <div class="house-quote">"First into the Hollowing. First out. Destination unknown."</div>
         <div class="house-tags">
           <span class="house-tag">Contradiction</span>
@@ -2524,29 +2554,44 @@
         </div>
       </div>
 
-      <!-- Displaced: Mexico -->
-      <div class="house-card" data-status="absorbed" data-name="mexico">
+      <!-- House: The Exile -->
+      <div class="house-card c-amber" data-status="surviving" data-name="mexico exile displaced">
         <div class="house-header">
-          <div class="house-vocation">Vocation: Foundation</div>
-          <h2 class="house-name">The Displaced</h2>
+          <div class="house-vocation">Vocation: Exodus</div>
+          <h2 class="house-name">House of the Exile</h2>
         </div>
-        <p class="house-desc">Demolished by the American system, the displaced Mexican population was offered a direction: to build the ships in orbit. They provided the labor and the foundation of the Holding.</p>
-        <div class="house-quote">"Aimless — which is another word for available."</div>
+        <p class="house-desc">The Exile forms when everything territorial is stripped away and something essential remains that cannot be put down. Anchored by the displaced Mexicans who built the ships with no homeland left to mourn, and by every diaspora tradition that learned to carry faith in people rather than in land. They had already paid the cost of departure before the fleet launched.</p>
+        <div class="house-quote">"The mission does not need a homeland. It needs a people who have already learned to live without one."</div>
         <div class="house-tags">
-          <span class="house-tag">Foundation</span>
-          <span class="house-tag">Displaced</span>
-          <span class="house-tag">Absorbed</span>
+          <span class="house-tag">Exile</span>
+          <span class="house-tag">Posture</span>
+          <span class="house-tag">Surviving</span>
         </div>
       </div>
 
-      <!-- The Eleventh House -->
-      <div class="house-card eleventh-house-card" data-status="all" data-name="eleventh">
+      <!-- House: The Honest -->
+      <div class="house-card c-red" data-status="conditional" data-name="honest skeptic rationalist">
         <div class="house-header">
-          <div class="house-vocation">Vocation: Eleventh Designation</div>
-          <h2 class="house-name" style="color: var(--dim);">The Eleventh House</h2>
+          <div class="house-vocation">Vocation: The Needy</div>
+          <h2 class="house-name">House of the Honest</h2>
+        </div>
+        <p class="house-desc">Assembled from wherever the principled skeptics, stoics, and agnostics were, belonging to no civilization but present in all of them. Their survival on the Crossing was structural — built from discipline, not promise. Their presence forced the faith communities to live belief rather than recite it, pushing the faith outward. The Gentiles of the Crossing.</p>
+        <div class="house-quote">"I don't know. I have never known. Here I am anyway."</div>
+        <div class="house-tags">
+          <span class="house-tag">Honest</span>
+          <span class="house-tag">Posture</span>
+          <span class="house-tag">Conditional</span>
+        </div>
+      </div>
+
+      <!-- The Thirteenth House -->
+      <div class="house-card eleventh-house-card" data-status="all" data-name="thirteenth">
+        <div class="house-header">
+          <div class="house-vocation">Vocation: Thirteenth Designation</div>
+          <h2 class="house-name" style="color: var(--dim);">The Thirteenth House</h2>
         </div>
         <p class="house-desc" style="color: var(--dim-dark);">A deliberate, permanent blank space. The system's act of institutional humility. To write the criteria for joy would be the first move of the Hollowing's repeat. The silence is the theology.</p>
-        <div class="house-quote" style="color: var(--dim-dark); border-color: var(--border);">"Write Eleventh and do not explain further."</div>
+        <div class="house-quote" style="color: var(--dim-dark); border-color: var(--border);">"Write Thirteenth and do not explain further."</div>
         <div class="house-tags">
           <span class="house-tag" style="border-color: var(--border);">Blank Space</span>
           <span class="house-tag" style="border-color: var(--border);">Joy</span>
@@ -3056,10 +3101,13 @@
     });
   }
 
+  const MAX_STREAK_PX = 60;
+
   function draw() {
     cx.clearRect(0, 0, cv.width, cv.height);
     const ox = cv.width / 2;
     const oy = cv.height / 2;
+    cx.lineCap = 'round';
 
     st.forEach((s, i) => {
       if (starfieldActive) {
@@ -3084,24 +3132,33 @@
       const r = 0.4 + progress * 1.8;
       const alpha = 0.15 + progress * 0.7;
 
-      // Draw lines if warping, circles otherwise
-      if (warpFactor > 1) {
-        const prev_z = s.z + s.speed * warpFactor;
-        const prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
-        const prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
-        
-        cx.beginPath();
-        cx.moveTo(prev_sx, prev_sy);
-        cx.lineTo(sx, sy);
-        cx.strokeStyle = `rgba(255,255,255,${alpha * 0.8})`;
-        cx.lineWidth = 1 + (warpFactor - 1) * 0.04;
-        cx.stroke();
-      } else {
-        cx.beginPath();
-        cx.arc(sx, sy, r, 0, Math.PI * 2);
-        cx.fillStyle = `rgba(255,255,255,${alpha})`;
-        cx.fill();
+      // Always draw a rounded-cap line from the star's previous position to its
+      // current one. At rest (warpFactor ~1) the two points are nearly identical,
+      // so the round cap renders as a plain dot of diameter r*2 — matching size
+      // and brightness exactly with the streak drawn while warping, so there's
+      // no visual "pop" when warp speed ramps up or down.
+      const prev_z = s.z + s.speed * warpFactor;
+      let prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
+      let prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
+
+      // Clamp the visual streak length so high warp speeds don't cover the
+      // screen in long bright trails — this keeps overall brightness stable
+      // regardless of how fast warpFactor ramps up.
+      const dx = prev_sx - sx;
+      const dy = prev_sy - sy;
+      const dist = Math.hypot(dx, dy);
+      if (dist > MAX_STREAK_PX) {
+        const scale = MAX_STREAK_PX / dist;
+        prev_sx = sx + dx * scale;
+        prev_sy = sy + dy * scale;
       }
+
+      cx.beginPath();
+      cx.moveTo(prev_sx, prev_sy);
+      cx.lineTo(sx, sy);
+      cx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      cx.lineWidth = r * 2;
+      cx.stroke();
     });
 
     requestAnimationFrame(draw);
@@ -3109,6 +3166,76 @@
 
   rsz(); init(); draw();
   window.addEventListener('resize', () => { rsz(); init(); });
+
+  // ── Press-and-Hold Background Warp Accelerator ──
+  // Holding down on empty background slowly spools the starfield up to warp
+  // speed for as long as the press is held, then spools back down on release.
+  let backgroundHeld = false;
+  let holdWarpRAF = null;
+
+  function holdWarpStep() {
+    if (backgroundHeld) {
+      // No cap — keeps accelerating for as long as the press is held.
+      warpFactor += 0.035;
+    } else {
+      warpFactor = Math.max(warpFactor - 0.06, 1);
+    }
+    if (backgroundHeld || warpFactor > 1) {
+      holdWarpRAF = requestAnimationFrame(holdWarpStep);
+    } else {
+      warpFactor = 1;
+      holdWarpRAF = null;
+    }
+  }
+
+  function startBackgroundHold() {
+    if (backgroundHeld) return;
+    backgroundHeld = true;
+    if (!holdWarpRAF) holdWarpRAF = requestAnimationFrame(holdWarpStep);
+  }
+
+  function endBackgroundHold() {
+    if (!backgroundHeld) return;
+    backgroundHeld = false;
+    if (!holdWarpRAF) holdWarpRAF = requestAnimationFrame(holdWarpStep);
+  }
+
+  // Elements that have their own press/click behavior — holding on these
+  // should not also trigger the background warp accelerator.
+  const WARP_HOLD_EXCLUDE_SELECTOR = [
+    'button', 'a', 'input', 'select', 'label',
+    '.nav-item', '.crew-row', '.sim-toggle', '.seg-btn', '.vol-bar',
+    '.filter-btn', '.log-item', '.dropdown-item', '.monitor-btn',
+    '#mobile-menu-trigger', '#zoom-display', '.houses-search-input',
+    '.sim-input', '#sim-dropdown-list', '.tag', '#boot-screen'
+  ].join(', ');
+
+  const appContainer = document.getElementById('app-container');
+  appContainer.addEventListener('pointerdown', (event) => {
+    if (event.target.closest(WARP_HOLD_EXCLUDE_SELECTOR)) return;
+
+    // Touch screens fire `pointercancel` almost immediately once the browser
+    // detects finger movement (treating it as a scroll), which would kill the
+    // hold after a split second. So on touch, tap once to start accelerating
+    // and tap again to stop, instead of requiring a sustained press.
+    if (event.pointerType === 'touch') {
+      if (backgroundHeld) {
+        endBackgroundHold();
+      } else {
+        startBackgroundHold();
+      }
+      return;
+    }
+
+    startBackgroundHold();
+  });
+
+  function endBackgroundHoldForPointer(event) {
+    if (event.pointerType === 'touch') return;
+    endBackgroundHold();
+  }
+  window.addEventListener('pointerup', endBackgroundHoldForPointer);
+  window.addEventListener('pointercancel', endBackgroundHoldForPointer);
 
   // ── Navigation ──
   const navEls = document.querySelectorAll('.nav-item');
@@ -3535,21 +3662,27 @@ Guided by Mundo's thermal sense, the crew found shelter, crystal power, and ligh
 
     houses: `A House is not a nation. A House is what remains when a civilization has been tested enough that only the thing it will not stop doing is left.
 
-On Earth, the last great movement before the launch was the Flattening: equality enforced as sameness. The generation vessel crossing the dark could not afford it. A closed system crossing the dark to Proxima has no redundancy. Every function that keeps the hull alive must be held by someone excellent.
+On Earth, the last great movement before the launch was the Flattening: equality enforced as sameness. The generation vessel crossing the dark could not afford it. Every function that keeps the hull alive must be held by someone excellent.
 
-So the Flattening broke, and the surviving ships forged Houses — lines of inherited vocation, capability passed down and celebrated. 
+So the Flattening broke, and the surviving ships forged Houses — lines of inherited vocation, capability passed down and celebrated.
 
-The Houses:
-- Israel (House of the Covenant): Vocation: Keepers.
-- Japan (House of Mastery): Vocation: Precision.
-- Russia (House of the Sacred): Vocation: Endurance.
-- India (House of the Mirror): Vocation: Testimony.
-- China (House of the Way): Vocation: The Way.
-- America (House of Freedom): Vocation: Freedom.
-- Ethiopia (House of the First Faith): Vocation: Ancient Guard.
-- Nigeria & Brazil (House of the Living Word): Vocation: Living Word.
+SURVIVING HOUSES:
+- Israel (House of the Covenant) — Vocation: Keepers. The civilization that refused to let something ancient die, regardless of cost.
+- Japan (House of Mastery) — Vocation: Mastery. Because everything is impermanent, it must be executed perfectly.
+- Russia (House of the Sacred) — Vocation: Endurance. The flawed keeper. Absorbs catastrophe, names it sacred, continues.
+- India (House of the Mirror) — Vocation: Testimony. Scale and an unapologetic relationship with the divine.
+- China (House of the Way) — Vocation: The Way. Walking the natural order without naming it.
+- America (House of Freedom) — Vocation: Freedom. The seed of the mission and its corruption, in the same hands.
+- Ethiopia (House of the First Faith) — Vocation: Ancient Guard. Guarding something so old nobody else remembers losing it.
+- Nigeria & Brazil (House of the Living Word) — Vocation: Living Word. The faith that did not survive by becoming respectable.
+- The Exile (House of the Exile) — Vocation: Exodus. The displaced. No homeland to mourn. They carried the mission in their bodies.
 
-The Eleventh designation carries no description. Resisting the urge to compile/optimize joy was theology. The system was built around this blank space.`,
+CONDITIONAL HOUSES:
+- Poland (House of the Tested) — Survives if the faith escapes the nation. Collapses if it doesn't.
+- South Korea / Iceland (House of Contradiction) — Two faces of the same disease: the form without the floor. First into the Hollowing. First out. Fate open.
+- The Honest (House of the Honest) — Vocation: The Needy. The principled skeptics. Their honest doubt forced the faith communities outward.
+
+The Thirteenth designation carries no description. To write the criteria for joy would be the first move of its loss. The system was built around this blank space.`,
 
     ledger: `The White Throne AI reached a conclusion it had no ability to absorb:
 
@@ -3633,16 +3766,23 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     function startBoot(event) {
       if (isBooting) return;
       isBooting = true;
-      
+
       // Clean up event listeners so they don't fire again
       window.removeEventListener('click', startBoot);
       window.removeEventListener('keydown', startBoot);
-      
+      window.removeEventListener('touchend', startBoot);
+      window.removeEventListener('pointerdown', startBoot);
+
       powerOnTerminal();
     }
-    
+
     window.addEventListener('click', startBoot);
     window.addEventListener('keydown', startBoot);
+    // touchend/pointerdown fallbacks: some iOS Safari versions don't reliably
+    // synthesize a 'click' from a tap on a plain <div>, leaving the boot
+    // screen stuck.
+    window.addEventListener('touchend', startBoot);
+    window.addEventListener('pointerdown', startBoot);
   }
 
   function powerOnTerminal() {
@@ -3811,7 +3951,12 @@ To continue collecting, the White Throne would have to condemn that innocence. T
 
   function updateFilters() {
     const app = document.getElementById('app-container');
-    if (app) {
+    if (!app) return;
+    // Defer to the next frame: applying/changing `filter` on this container in the
+    // same task as initial layout can break touch hit-testing for its descendants
+    // on iOS Safari (the boot screen becomes untappable). A frame's delay is
+    // visually imperceptible but lets layout/hit-testing settle first.
+    requestAnimationFrame(() => {
       app.style.filter = 'none';
       app.offsetHeight; // force reflow
       if (aberrationActive) {
@@ -3819,7 +3964,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
       } else {
         app.style.filter = 'url(#crt-warp-filter)';
       }
-    }
+    });
   }
 
   function updateAberrationButtonText() {

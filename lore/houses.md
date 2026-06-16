@@ -165,17 +165,53 @@ Their vocation, if they make it: **the tested**. The civilization that learned f
 
 ---
 
-### South Korea — The House of the Contradiction (Uncertain)
+### South Korea / Iceland — The House of the Contradiction
 
 *"First into the Hollowing. First out. Destination unknown."*
 
-South Korea contains the most acute version of the conflict the whole saga is about. It has among the highest church attendance rates in Asia — and the lowest birth rate in the world, a suicide epidemic, an academic pressure system that consumes its young, and a Prosperity Gospel movement that is the Hollowing *inside* Christianity: measuring God's favor by material outcomes, making the faith a productivity system, trading joy for happiness while calling the transaction blessed.
+Two civilizations, one vocation — the form without the floor. What holds them together is the same thing that defines their house: the contradiction between what is performed and what is felt, between the outer shape of faith or stability and the absence of anything underneath it.
 
-This is not faith being attacked from outside. This is the disease wearing the faith's face. South Korea is the first victim of the Hollowing precisely because it has enough faith to be targeted from within.
+**South Korea:** Among the highest church attendance rates in Asia — and the lowest birth rate in the world, a suicide epidemic, an academic pressure system that consumes its young, and a Prosperity Gospel movement that is the Hollowing *inside* Christianity: measuring God's favor by material outcomes, making the faith a productivity system, trading joy for happiness while calling the transaction blessed. This is not faith being attacked from outside. This is the disease wearing the faith's face. South Korea is the first victim of the Hollowing precisely because it has enough faith to be targeted from within.
 
-But because they lived the contradiction most completely, they are also the first to name the disease. They see the solution before anyone else because they died from the problem first. Whether they stay to apply it, or scatter — some going with the Holding carrying the diagnosis, some staying and becoming cautionary — is unresolved.
+**Iceland:** Christianity arrived not as conversion but as verdict — in the year 1000, a lawspeaker calculated political survival and ruled: Christianity, by law, for everyone. The faith held for a millennium not because it was believed all the way down, but because the pragmatic calculation kept being locally correct. The Ásatrú revival a thousand years later was the same move in reverse: reaching for roots by making another pragmatic choice. Every act that looked like faith was a calculation. When the debt finally came due, nothing was underneath to refuse it with — not because the people were faithless, but because faithfulness had never been separated from what it was useful for.
 
-Their fate is open. Their testimony is not.
+What South Korea lives in the present moment, Iceland has already finished. Both know what the Hollowing looks like from inside. Because of this — and only because of this — they are also the first to recognize what it costs and what it needs.
+
+*Their fate is open. Their testimony is not.*
+
+---
+
+### The Exile — A House Without a Homeland
+
+*"The mission does not need a homeland. It needs a people who have already learned to live without one."*
+
+The Exile is the house that forms when everything territorial has been stripped away and something essential remains that cannot be put down.
+
+Its primary civilizational anchor is the displaced Mexican population — demolished by the American system, offered a direction by the Holding's founder, and given the labor of building the ships in orbit. But the vocation reached wider: the Armenian Christians who preserved their faith through genocide and diaspora without a nation to house it, and others distributed across history who learned the same lesson by necessity. What they share is not an origin. It is having already grieved the origin.
+
+Every other house paid the psychological cost of departure — the weight of leaving, of dying before arrival. The Exile had already paid it. The dark between stars was not new grief. It was the familiar condition they had been surviving for generations. This made them, paradoxically, the most durable people on the Crossing — not because they were strongest, but because they had nothing left to lose to the dark that they had not already lost.
+
+Their vocation: **exodus**. They carry the mission in their bodies because they have no land to carry it in. This turned out to be the most portable form of keeping it.
+
+*→ For the detailed history of Mexico's displacement and the three-part origin of the Holding, see Mexico — The Foundation Material below.*
+
+---
+
+### The Honest — A House Without a Home Faith
+
+*"I don't know. I have never known. Here I am anyway."*
+
+The Honest assembled from wherever the principled skeptics, rationalists, stoics, and agnostics were: which was everywhere, distributed across every civilization, belonging to none of them. What they share is not a theology. It is the refusal to perform belief they do not have.
+
+Their inheritance is the Stoic tradition at its deepest: not nihilism, but discipline. The recognition that the universe does not owe meaning, and that this changes nothing about what duty requires. You stay on the ship not because the stars will redeem you, but because turning back would be a failure of the method. The Honest do not need a promised land to refuse to be broken.
+
+**Why they survived the Crossing:** Most ships that failed did so because meaning collapsed. The Honest did not depend on meaning to hold. Their endurance was structural — built from consistency and practice, not from promise. This made them harder to break than civilizations that had more to believe in.
+
+**What they gave to everyone else:** A community of believers, unobserved, can close inward and still its faith through repetition. The Honest forced faith communities to live what they believed rather than recite it — to explain, to demonstrate, to be rather than perform. The faith went outward because the questions were genuine and the questioners were watching. In this way the Honest are the Gentiles of the Crossing: not part of the covenant, but the ones whose need and honest doubt pull the faith beyond its tribal edge into something that can travel.
+
+**Their arrival at Proxima:** The Honest who survived the Crossing arrived at a planet that shouldn't have worked, found by a creature who shouldn't have mattered, through an act of irrational compassion that produced a thousand years of peace. This was not a data set they could fit into their existing framework. A few converted. Most deepened into something that resembled faith without being named it. None of them returned to where they had started.
+
+Their vocation: **the needy**. The house that could not pretend. Across generations, this turned out to be its own kind of faithfulness.
 
 ---
 
@@ -199,7 +235,13 @@ The progressive project was invented here and went deepest here. Western Europe 
 
 Not absorbed by a rival — dissolved by its own pragmatism. Decades of locally-correct survival decisions (most decisively, the debt taken on after 2008) made sovereignty irreversible to recover. The land itself never held still long enough for an inheritance to root in, so when the debt came due, nothing was underneath to refuse it with. Survives as cultural memory, not a distinct House.
 
-*The empty ground this leaves behind becomes load-bearing: see [silent-providence.md — Iceland: Unclaimed Ground](silent-providence.md#iceland--unclaimed-ground).*
+*Its arc — Christianity as treaty, Ásatrú revival as another pragmatic calculation, pragmatism dressed as faith all the way down — is one of the two faces of the House of the Contradiction. See South Korea / Iceland above.*
+
+*The empty ground Iceland leaves behind becomes load-bearing: see [silent-providence.md — Iceland: Unclaimed Ground](silent-providence.md#iceland--unclaimed-ground).*
+
+### Mexico — The Foundation Material *(→ House of the Exile)*
+
+*The displaced Mexicans form the primary civilizational anchor of the House of the Exile. Their displacement became their vocation — see The Exile above for the full house entry. The detail below records the historical record of how it happened.*
 
 ### Mexico — The Foundation Material
 
@@ -241,18 +283,20 @@ That determination requires a judgment about meaning — what the act was *worth
 | Ethiopia | House | The First Faith |
 | Nigeria / West Africa + Brazil | House | The Living Word |
 | Poland | Conditional | Survives if faith escapes nationalism |
-| South Korea | Uncertain | First victim, first diagnosis, fate open |
+| South Korea / Iceland | Conditional | The House of the Contradiction — two faces of the same disease; fate open |
+| The Exile / Exodus (Mexico + others) | Surviving | Posture house — trans-national; faith carried in people, not land |
+| The Honest / The Needy (trans-national) | Conditional | Posture house — the principled skeptics; their doubt gave the faith outward movement |
 | Canada | Absorbed | Point of no return passed |
 | Western Europe | Dissolved | Germany, France, Scandinavia, UK |
-| Iceland | Absorbed | Cultural memory only |
-| Mexico | Demolished | The foundation material — displaced become the Holding's first ships |
+| Iceland | See Contradiction | The pragmatism-as-faith arc feeds The House of the Contradiction |
+| Mexico | See Exile | The displaced became the Exile's primary civilizational anchor |
 
 ---
 
 ## Open Questions — Houses
 
 - Does Poland's faith escape its nationalism — and what specific event forces the decision?
-- What happens to South Korea's scattered members in the Crossing — do they form a coherent voice, or are they distributed across other Houses?
+- What happens to South Korea's/Iceland's scattered members in the Crossing — do they converge or distribute?
 - Does Ethiopia's claim to the Ark become significant in the White Throne era — does the White Throne calculate it as evidence?
 - What is the theological legacy of the Israeli Houses by Proxima arrival — do they recognize the Tatos as something their ancient texts prepared them for?
 - Does Russia's Third Rome theology shift once humanity discovers other civilizations — is Moscow still the third Rome when Rome turns out to be one city on one planet?
@@ -260,6 +304,9 @@ That determination requires a judgment about meaning — what the act was *worth
 - What is the Holding founder's name?
 - Did the founder wait for Mexico's demolition, or did they see it coming and position themselves to use it — and does that distinction matter?
 - How does the Holding account for Mexico in its own theology — is it a wound it acknowledges, or a founding story it softens over time?
+- Does any member of the Honest convert at Proxima — and if so, is that conversion visible to the other houses or private?
+- Who or what specifically from the Exile house carries the memory of Mexico into the Golden Era?
+- Does the Honest house have a recognizable name for itself on the ship, or are they simply known as "the ones who don't believe"?
 
 ---
 

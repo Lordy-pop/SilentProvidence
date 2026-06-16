@@ -65,6 +65,8 @@ The difference: they were delighted by the gap. They were already doing the thin
 
 *The player doesn't lose when the robot fails at being human. They win at being a Tato.*
 
+**The Project Mobius twist:** in the White Throne era, a crew of Tatos rides human-built robot bodies as a mercenary "family" — taking jobs for the reward, chasing the only joy left in a hunted galaxy. In-fiction, none of them know they're Tatos. The player does. That gap — between what the crew thinks it's doing (a job, a score, a run) and what it actually is (the same creature that once latched onto a hull, still moving toward warmth) — is the story.
+
 ---
 
 ## The Sacred Text

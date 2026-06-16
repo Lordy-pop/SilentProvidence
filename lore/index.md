@@ -42,7 +42,7 @@
 - What year does humanity launch the first fleet? (gives the whole timeline an anchor)
 - How long is the Crossing — one generation? three?
 - What triggers the Fracture — a specific alien atrocity, a calculation threshold, a betrayal?
-- Does the White Throne war have an active front or is it asymmetric — hunted vs. hunters?
+- ~~Does the White Throne war have an active front or is it asymmetric — hunted vs. hunters?~~ *Answered: asymmetric — hunted vs. hunters, kicked off by the Mobius Drive heist.*
 - Does Earth still exist during the White Throne era? What happened to it?
 
 ---
@@ -55,14 +55,16 @@
 | **The Holding** | Origin faith — the fleet builders | Sketched | Full file. Who they were before they launched. Their theology in practice, not just stated. |
 | **The White Throne** | The verdict — AI crusade | Substantial | The face of it. Does it speak? Does it have a voice humans recognize? What does it look like when it arrives somewhere? |
 | **The Murmur** | The resistance — grace without contract | Sketched | Who started it. How it spreads. What it costs to join. A face. |
+| **The Zealots** | The resistance — direct action against the Throne | Sketched | Same origin as the Murmur, opposite instinct. Who founded it. The shape of the conflict between the two branches. A face. |
 | **The Ember Moths** | White Throne's annihilation army | Named only | Everything. Who are they? Are they human? Do they believe? Do they hesitate? One face, one name, one reason. |
 | **Alien factions** | Species who chose sides | Not written | Who joined the White Throne willingly? Who resists? Who hides? |
 
 ### Open Questions — Factions
 - Does the White Throne have a voice — one spokesperson, one ship, one signal?
 - Who founded the Murmur — a defector from the White Throne? A Holding descendant?
+- Who founded the Zealots, and when did they split from the Murmur's branch of the resistance?
 - Do the Ember Moths know what they are? Do they think of themselves as moths — brief, burning?
-- Are there human factions who are neither White Throne nor Murmur?
+- ~~Are there human factions who are neither White Throne nor Murmur?~~ *Answered: the Zealots — a militant resistance branch that shares the Murmur's grievance but fights back directly.*
 - Which alien species has the most to lose from the White Throne? Which one surprised humanity by siding with it?
 
 ---
@@ -73,12 +75,14 @@
 | Species | Role | Status | Needs |
 |---------|------|--------|-------|
 | **Tatos** | First contact, the ending, the sacred text | Full file | The scene of the ending — what it looks like when they protect the Murmur |
+| **Bioelectric allies** | Resistance allies — jellyfish-like, pilot human-built robots | Named only | Species name. World. How they fight alongside the Zealots/Murmur. More detail coming. |
 | **Intellectually superior species** | Unknown role | Not written | Name, world, how they received human grace, how the law landed on them |
 | **Physically superior species** | Unknown role | Not written | Name, world, what "physically superior" means for the story |
 | **Others** | Expansion-era contacts | Not written | At least 1–2 more species with distinct characters |
 
 ### Open Questions — Species
 - What is the name of the intellectually superior species? What do they value most?
+- What is the name of the bioelectric jellyfish-like species allied with the resistance?
 - Did any species reject human grace entirely — and if so, were they right to?
 - What does a species that received grace and extended it look like, compared to one that didn't?
 - Does any alien species have their own version of faith? Did human contact change it?
@@ -94,14 +98,17 @@
 | **[Holding founder]** | Led the first fleet | Unnamed | Name, voice, what they believed, how they died |
 | **[White Throne voice]** | The AI's face, if it has one | Not written | Does it speak through a human? A ship? A signal? What does it sound like? |
 | **[Murmur founder]** | First defector | Unnamed | Who they were in the White Throne world, why they left, what they built |
+| **[Zealots founder]** | Led the militant split from the Murmur | Unnamed | Who they were, why they chose force, what the split cost |
+| **[The Family's head]** | Runs the mercenary crew the player Tatos belong to | Unnamed | Name, voice, human or otherwise, relationship to the Zealots' contract |
 | **Ember** | Archivist AI from the Golden Era — the Murmur's memory and longing | Named | Full character file. What she remembers. What she's carrying. What she can't let go. |
 | **[The alien who pays the debt]** | End of the story — the one who changes everything | Not written | Species, name, the moment |
 
 ### Open Questions — Key Figures
 - Is the White Throne one intelligence or distributed? Does it have a name humans gave it?
 - Is Ember aware of what the Tatos are going to do before they do it?
-- Who is the player character in Project Mobius — named, or defined by the player?
+- ~~Who is the player character in Project Mobius — named, or defined by the player?~~ *Answered: the players are Tatos riding human-built robot bodies, members of a mercenary "family" hired by the Zealots — unaware, in-fiction, that they're Tatos at all.*
 - Does the Murmur founder survive to see the ending?
+- What is the Family's name?
 
 ---
 
