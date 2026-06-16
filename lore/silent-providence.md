@@ -158,7 +158,7 @@ Generations later, at Proxima, they would meet a creature that *was* joy without
 
 **The inheritance is the necessity. It is celebrated. The refusal is the Tato. It is joy. They do not know the Tatos yet — but they already know the joy.**
 
-**Why the structure alone is not enough:** The Houses can transmit everything except the thing the structure is built to protect. Covenant can be modeled. Mastery can be trained. The Way can be walked. Joy has no pedagogy — teaching it would do what the Hollowing did. The Crossing-era founders knew this. The Eleventh House designation carries no description and no criteria by design. The instruction is: write it, say nothing more. The silence is the theology. Building curriculum for joy is the first move of its loss.
+**Why the structure alone is not enough:** The Houses can transmit everything except the thing the structure is built to protect. Covenant can be modeled. Mastery can be trained. The Way can be walked. Joy has no pedagogy — teaching it would do what the Hollowing did. The Crossing-era founders knew this. The Thirteenth House designation carries no description and no criteria by design. The instruction is: write it, say nothing more. The silence is the theology. Building curriculum for joy is the first move of its loss.
 
 Joy cannot be placed downstream of the mission as reward. It must code from within the endurance — a property of faithful carrying, not its result. This is what the Covenant-House had to learn across generations: that the same faithfulness that trained them for the dark could still run dry if they had separated the interior from the act. The structure held. The integration required time.
 
