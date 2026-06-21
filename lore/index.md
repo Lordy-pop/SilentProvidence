@@ -20,6 +20,9 @@
 | [houses.md](houses.md) | The Houses — Earth's surviving civilizations, their philosophies, their vocations | Active |
 | [aliens/tatos.md](aliens/tatos.md) | Tatos species — Mundo, human robots, the sacred text, the ending | Active |
 | [stories/mundo.md](stories/mundo.md) | Mundo — the first Tato, from his perspective. Funny. The beginning of everything. | First draft |
+| [heighlunde.md](heighlunde.md) | **Driftbound campaign planet** — Early Expansion parable; the law arrives with the grace, and is refused | Active |
+| [aliens/sela.md](aliens/sela.md) | Sela — the living crust of HeighLunde; fills the "physically superior species" slot | Active |
+| [aliens/the-jarn.md](aliens/the-jarn.md) | The Jarn — HeighLunde's tyrant natives; Emperor Valdar; root of the Solitudes | Active |
 
 ---
 
@@ -32,7 +35,7 @@
 | **The Great Space War** | Before launch | Sketched in world bible | Full treatment — the shape of the war, key moments, why it ended without the Holding winning |
 | **The Crossing** | Generational | Sketched | Individual ship stories. Who turned back. Who went insane. Who held. |
 | **Proxima Arrival** | First contact | Written (world bible + Tatos) | Split into its own file. Mundo scene needs a proper telling. |
-| **Early Expansion** | Post-Proxima | Not written | Humanity spreading. First contact with new species. The law arriving with the grace. |
+| **Early Expansion** | Post-Proxima | First chapter written — [HeighLunde](heighlunde.md) | Humanity spreading. First contact. The law arriving with the grace — and refused. More chapters welcome. |
 | **The Golden Era** | Millennium of peace | Sketched | What did a thousand years of joy look like? The Tatos competing. Technology built for play. The thing that was worth protecting. |
 | **The Fracture** | End of Golden Era | Not written | When did the White Throne decide? What was the specific moment the math said: *now*? |
 | **The White Throne War** | Current game era | Sketched | What does life look like under judgment? A planet before and after the White Throne arrives. The Murmur underground. |
@@ -79,7 +82,7 @@
 | **Tatos** | First contact, the ending, the sacred text | Full file | The scene of the ending — what it looks like when they protect the Murmur |
 | **Bioelectric allies** | Resistance allies — jellyfish-like, pilot human-built robots | Named only | Species name. World. How they fight alongside the Zealots/Murmur. More detail coming. |
 | **Intellectually superior species** | Unknown role | Not written | Name, world, how they received human grace, how the law landed on them |
-| **Physically superior species** | Unknown role | Not written | Name, world, what "physically superior" means for the story |
+| **Sela** (physically superior) | The living crust of HeighLunde — the chained world-being | Written | See [aliens/sela.md](aliens/sela.md) |
 | **Others** | Expansion-era contacts | Not written | At least 1–2 more species with distinct characters |
 
 ### Open Questions — Species

@@ -2051,7 +2051,7 @@
       <feBlend in="b-offset" in2="rg" mode="screen" result="aberrated" />
       
       <!-- Vignette mask for chromatic aberration (only at screen edges) -->
-      <feImage id="chromatic-vignette-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="vignette" />
+      <feImage id="chromatic-vignette-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" href="./Pictures/chromatic_vignette.webp" xlink:href="./Pictures/chromatic_vignette.webp" result="vignette" />
       <!-- Blur the vignette mask to make the transition between clear center and aberrated edges completely seamless -->
       <feGaussianBlur in="vignette" stdDeviation="8" result="blurredVignette" />
       <feComposite in="aberrated" in2="blurredVignette" operator="in" result="aberrated-masked" />
@@ -2065,7 +2065,7 @@
     
     <!-- Barrel Distortion TV Warp Filter -->
     <filter id="crt-warp-filter" x="0%" y="0%" width="100%" height="100%">
-      <feImage id="crt-warp-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+      <feImage id="crt-warp-map" x="0%" y="0%" width="100%" height="100%" preserveAspectRatio="none" href="./Pictures/crt_warp_map.webp" xlink:href="./Pictures/crt_warp_map.webp" result="map" />
       <!-- Smooth out the coordinate map to eliminate pixel interpolation stepping/seams -->
       <feGaussianBlur in="map" stdDeviation="3" result="blurredMap" />
       <feDisplacementMap in="SourceGraphic" in2="blurredMap" scale="42" xChannelSelector="R" yChannelSelector="G" />
@@ -3183,6 +3183,7 @@
   let st = [];
   let starfieldActive = sessionStorage.getItem('terminalPowered') === 'true';
   let warpFactor = 1;
+  let isAnimating = false;
 
   function rsz() { cv.width = window.innerWidth; cv.height = window.innerHeight; }
 
@@ -3206,6 +3207,13 @@
   }
 
   const MAX_STREAK_PX = 60;
+
+  function startAnimation() {
+    if (!isAnimating) {
+      isAnimating = true;
+      requestAnimationFrame(draw);
+    }
+  }
 
   function draw() {
     cx.clearRect(0, 0, cv.width, cv.height);
@@ -3241,7 +3249,7 @@
       // so the round cap renders as a plain dot of diameter r*2 — matching size
       // and brightness exactly with the streak drawn while warping, so there's
       // no visual "pop" when warp speed ramps up or down.
-      const prev_z = s.z + s.speed * warpFactor;
+      const prev_z = s.z + (starfieldActive ? s.speed * warpFactor : 0);
       let prev_sx = ox + (s.x / prev_z) * cv.width * 0.5;
       let prev_sy = oy + (s.y / prev_z) * cv.height * 0.5;
 
@@ -3265,11 +3273,26 @@
       cx.stroke();
     });
 
-    requestAnimationFrame(draw);
+    if (starfieldActive || warpFactor > 1) {
+      requestAnimationFrame(draw);
+    } else {
+      isAnimating = false;
+    }
   }
 
-  rsz(); init(); draw();
-  window.addEventListener('resize', () => { rsz(); init(); });
+  rsz(); init();
+  if (starfieldActive) {
+    startAnimation();
+  } else {
+    draw();
+  }
+  window.addEventListener('resize', () => {
+    rsz();
+    init();
+    if (!isAnimating) {
+      draw();
+    }
+  });
 
   // ── Press-and-Hold Background Warp Accelerator ──
   // Holding down on empty background slowly spools the starfield up to warp
@@ -3286,6 +3309,7 @@
     }
     if (backgroundHeld || warpFactor > 1) {
       holdWarpRAF = requestAnimationFrame(holdWarpStep);
+      startAnimation();
     } else {
       warpFactor = 1;
       holdWarpRAF = null;
@@ -3454,6 +3478,7 @@
     if (starfieldActive) {
       toggle.classList.add('active');
       showToast('info', 'MOTION CUES ENABLED', 'Starfield animation resumed.');
+      startAnimation();
     } else {
       toggle.classList.remove('active');
       showToast('info', 'MOTION CUES DISABLED', 'Background starfield has been paused.');
@@ -3527,6 +3552,7 @@
     setQuality('HIGH');
     setVolumeValue(64);
     selectSimDropdown('REGIONAL RELAY');
+    startAnimation();
     showToast('info', 'SETTINGS RESET', 'Configuration restored to baseline.');
   }
 
@@ -3683,6 +3709,7 @@
       // Perform a stunning starfield warp jump effect!
       let duration = 2000; // 2 seconds
       let start = null;
+      startAnimation();
       
       function warp(timestamp) {
         if (!start) start = timestamp;
@@ -3838,15 +3865,17 @@ To continue collecting, the White Throne would have to condemn that innocence. T
       if (charIndex < content.length) {
         // Handle linebreaks nicely
         if (content.charAt(charIndex) === '\n') {
-          bodyEl.innerHTML += '<br>';
+          bodyEl.appendChild(document.createElement('br'));
         } else {
-          bodyEl.innerHTML += content.charAt(charIndex);
+          bodyEl.appendChild(document.createTextNode(content.charAt(charIndex)));
         }
         charIndex++;
         typewriterTimeout = setTimeout(typeWriter, speed);
       } else {
         // Add cursor blinking at the end
-        bodyEl.innerHTML += '<span class="terminal-cursor"></span>';
+        const cursor = document.createElement('span');
+        cursor.className = 'terminal-cursor';
+        bodyEl.appendChild(cursor);
         statusEl.textContent = 'STATUS: LINK SECURED';
         statusEl.style.color = 'var(--success)';
       }
@@ -3961,6 +3990,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     
     // Activate starfield
     starfieldActive = true;
+    startAnimation();
     
     // Trigger warp deceleration spool-up!
     let duration = 2000;
@@ -3995,60 +4025,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     window.location.reload();
   }
 
-  // Generate a procedural, mathematically perfect radial bulge map for barrel distortion
-  function generateDisplacementMap() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 1024;
-    const ctx = canvas.getContext('2d');
-    const imgData = ctx.createImageData(1024, 1024);
-    const data = imgData.data;
-    
-    for (let y = 0; y < 1024; y++) {
-      for (let x = 0; x < 1024; x++) {
-        // Mathematically centered normalized coordinates relative to center (-1.0 to 1.0)
-        const nx = (x / 1023) * 2 - 1;
-        const ny = (y / 1023) * 2 - 1;
-        
-        // Distance from center squared
-        const r2 = nx * nx + ny * ny;
-        
-        // Symmetrical barrel distortion displacement factor using a quartic curve (r^4)
-        // This ensures the central 70% of the screen remains completely un-distorted (factor ~ 0)
-        // preventing thin lines from breaking, while curving steeply at the edges.
-        // 0.22 is selected to prevent clamping seams and reduce hitbox shift.
-        const factor = r2 * r2 * 0.22;
-        
-        // Red channel (X displacement): 128 is neutral (no shift)
-        let red = 128 + (nx * factor * 127);
-        // Green channel (Y displacement): 128 is neutral (no shift)
-        let green = 128 + (ny * factor * 127);
-        
-        // Clamp values between 0 and 255
-        red = Math.max(0, Math.min(255, red));
-        green = Math.max(0, Math.min(255, green));
-        
-        const idx = (y * 1024 + x) * 4;
-        data[idx] = Math.round(red);
-        data[idx + 1] = Math.round(green);
-        data[idx + 2] = 0;   // Blue (unused)
-        data[idx + 3] = 255; // Alpha (fully opaque)
-      }
-    }
-    
-    ctx.putImageData(imgData, 0, 0);
-    
-    const dataUrl = canvas.toDataURL('image/png');
-    const feImage = document.getElementById('crt-warp-map');
-    if (feImage) {
-      feImage.setAttribute('href', dataUrl);
-      feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataUrl);
-    }
-    
-    // Force browser filter reflow to compile the newly generated data URI
-    const app = document.getElementById('app-container');
-    updateFilters();
-  }
+
 
   // Active filter helper based on toggle states
   let aberrationActive = true;
@@ -4185,49 +4162,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     updateFlicker();
   }
 
-  // Generate a dynamic chromatic aberration vignette mask (pure white color everywhere, only alpha changes)
-  function generateChromaticVignette() {
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext('2d');
-    const imgData = ctx.createImageData(512, 512);
-    const data = imgData.data;
-    
-    for (let y = 0; y < 512; y++) {
-      for (let x = 0; x < 512; x++) {
-        // Normalize coordinates relative to center (-1.0 to 1.0)
-        const nx = (x / 511) * 2 - 1;
-        const ny = (y / 511) * 2 - 1;
-        const r = Math.sqrt(nx * nx + ny * ny);
-        
-        // Calculate vignette alpha: 0 in center (r <= 0.55), ramping to 1 at edges (r >= 0.95)
-        let alpha = 0;
-        if (r > 0.55) {
-          alpha = (r - 0.55) / 0.4; // Linear ramp from 0 to 1
-          alpha = Math.max(0, Math.min(1.0, alpha));
-        }
-        
-        // Smoothstep interpolation for soft visual falloff
-        const smoothAlpha = alpha * alpha * (3 - 2 * alpha);
-        
-        const idx = (y * 512 + x) * 4;
-        data[idx] = 255;     // Red (pure white color vector)
-        data[idx + 1] = 255; // Green
-        data[idx + 2] = 255; // Blue
-        data[idx + 3] = Math.round(smoothAlpha * 255); // Alpha
-      }
-    }
-    
-    ctx.putImageData(imgData, 0, 0);
-    
-    const dataUrl = canvas.toDataURL('image/png');
-    const feImage = document.getElementById('chromatic-vignette-map');
-    if (feImage) {
-      feImage.setAttribute('href', dataUrl);
-      feImage.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', dataUrl);
-    }
-  }
+
 
   // Zoom Controls System
   const zoomLevels = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4];
@@ -4362,9 +4297,7 @@ To continue collecting, the White Throne would have to condemn that innocence. T
     const controls = document.getElementById('monitor-controls');
     const isPowered = sessionStorage.getItem('terminalPowered') === 'true';
     
-    // Procedurally render and apply the barrel distortion map and chromatic vignette
-    generateDisplacementMap();
-    generateChromaticVignette();
+
     
     // Initialize monitor controls (zoom and chromatic aberration toggle)
     initMonitorControls();

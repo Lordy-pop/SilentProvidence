@@ -11,6 +11,12 @@ While the other factions fight over how to interpret the Covenant or govern the 
 
 ---
 
+## Antecedents — The Jarn of HeighLunde
+
+The Solitudes did not invent their argument. Generations earlier, in the Early Expansion, a single proud species lived it to the end: the **Jarn** of HeighLunde, who heard humanity's compassion as an invasion, refused the grace offered them, and were consumed by their own refusal. The Jarn never theorized the position — they only died inside it. The Solitudes are what the same cry becomes when it grows cold, deliberate, and galactic: *grace is a pathogen; leave us to our own law.* *(See [the Jarn](../aliens/the-jarn.md), [HeighLunde](../heighlunde.md).)*
+
+---
+
 ## The Rejection of the Imago Dei
 
 The core conflict between the Solitudes and humanity is theological and psychological. Humans are created in the image of God (*Imago Dei*), which gives them a structural, native capacity for faith, covenant, and sacrificial love. Even in the depths of space, humans can hold onto an unseen promise.
